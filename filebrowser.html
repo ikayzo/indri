@@ -1,0 +1,105 @@
+<html>
+	<head>
+		<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+		<style type="text/css">
+			*, *:before, *:after {
+			  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+			 }
+
+			header, footer { background: #66f; padding: 5px;}
+
+			#browserui { background: gray; width: 75%; margin: 50px auto; padding: 1px;}
+
+			.fb-panel        	{ display: table; width: 100%; }
+			.fb-cell			{ display: table-cell; vertical-align: top; background: gray; }
+
+			.fb-control-panel-right		{float: right;}
+
+			#control-panel		{ padding: 5px; }
+			#location-display	{ display: inline;}
+			#refresh-nav		{ float: right; }
+
+			#contents-panel     	{ height: 350px; }
+
+			#favorites-controls     	{ width: 20%; display: none; }
+			#contents-display    		{ width: auto; background: white; }
+			#preview-display   			{ width: 20%; display: none; }
+
+			img {
+				max-width: 100%;
+				max-height: 100%;
+			}
+
+			#status-display {
+				text-transform: capitalize;
+			}
+
+			.fb-content-selected		{ background: CornflowerBlue;}
+
+			.fb-filelist				{ float: left; list-style-type: none; padding: 5; margin-top: 5;}
+			.fb-filelist > li 			{ float: left; width: 10em; margin-top: 1;}
+			.fb-filelist > li:hover		{ background: aqua;}
+
+			.fb-iconlist				 { float: left; list-style-type: none; }
+			li.fb-iconitem				 { float: left; width: 10em; text-align: center; margin-bottom: 25;} 
+
+			.fb-detailList				{ width: 100% }
+			th.fb-detailHeader			{ text-transform: capitalize; text-align: left; background: Cornsilk;}
+			tr.fb-detailList:hover		{ background: aqua;}
+		</style>
+	</head>
+<body>
+<div id="browserui">
+
+	<header class="fb-panel" id="header-display">File Dialog</header>
+
+	<div class="fb-panel" id="control-panel">
+
+		<div class="fb-cell" id="location-controls" >
+			<button id="parent-nav">Parent</button>
+			<div id="location-display">
+				Location: <input id="location-field"></input>
+			</div>
+			<button id="refresh-nav">Refresh</button>
+		</div>
+
+		<div class="fb-cell fb-control-panel-right" id="view-controls">
+		</div>
+	</div>
+
+	<div class="fb-panel" id="contents-panel">
+		<div class="fb-cell" id="favorites-controls">
+			<span id="favorites-title">Favorites</span>
+			<div id="favorites-display">
+				<ul>
+					
+				</ul>
+			</div>
+		</div>
+		<div class="fb-cell" id="contents-display">
+			<ul></ul>
+		</div>
+		<div class="fb-cell" id="preview-display"><img src="folder.jpg"></div>    
+	</div>
+
+	<div class="fb-panel" id="filename-panel">
+		<div class="fb-cell">
+			<center>
+				<input id="filename-control"></input>
+				<span id="filter-controls"></span>
+			</center>
+		</div>
+		<div class="fb-cell fb-control-panel-right">
+			<button>OK</button>
+			<button>Cancel</button>
+		</div>
+	</div>
+	
+	<div class="fb-panel" id="status-panel">
+		<div class="fb-cell" id="status-display">Current status</div>
+	</div>
+</div>
+</body>
+<script type="text/javascript" src="filebrowser.js"></script>
+
+</html>
