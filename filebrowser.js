@@ -510,4 +510,4 @@ var overrides = {
 	],
 };
 
-var fileBrowser = new FileBrowser(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), overrides);
+var fileBrowser = new FileBrowser(jQuery("#browserui"), new FileSystemManager("http://192.168.0.31:1337/"), overrides);
