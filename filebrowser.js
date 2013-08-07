@@ -31,7 +31,7 @@ FileSystemManager.prototype = {
 //			console.log("callback: " + textStatus);
 			callback(data.contents, textStatus);
 		}).fail(function(jqXHR, testStatus, errorThrown) {
-//			console.log(errorThrown);
+			console.log(errorThrown);
 		});	
 	},
 }

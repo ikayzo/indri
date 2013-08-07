@@ -1,5 +1,5 @@
 
-var rootDir = '/Library/WebServer/Documents/filesystem';
+var rootDir = '.';
 
 var fs = require('fs');
 var path = require('path');
@@ -9,7 +9,9 @@ function isValidFile(fileName) {
 }
 
 function constrainPath(path) {
-	return (path.indexOf(rootDir) != 0) ? rootDir : path;
+	// TODO Apply constraints
+	//return (path.indexOf(rootDir) != 0) ? rootDir : path;
+	return path;
 }
 
 function handleFileRequest(req, res) {
