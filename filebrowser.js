@@ -129,7 +129,7 @@ FileBrowser.prototype = {
 			}
 		}
 		else if(evt.type == "click") {
-			if(!evt.shiftKey) {
+			if(!evt.metaKey) {
 				this.currentSelection.length = 0;
 				this.currentSelection.push(contentItem);
 			}
@@ -510,4 +510,4 @@ var overrides = {
 	],
 };
 
-var fileBrowser = new FileBrowser(jQuery("#browserui"), new FileSystemManager("filesystem.php"), overrides);
+var fileBrowser = new FileBrowser(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), overrides);
