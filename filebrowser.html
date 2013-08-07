@@ -17,7 +17,7 @@
 
 			#control-panel		{ padding: 5px; }
 			#location-display	{ display: inline;}
-			#refresh-nav		{ float: right; }
+			#refresh-control		{ float: right; }
 
 			#contents-panel     	{ height: 350px; }
 
@@ -56,11 +56,11 @@
 	<div class="fb-panel" id="control-panel">
 
 		<div class="fb-cell" id="location-controls" >
-			<button id="parent-nav">Parent</button>
+			<button id="parent-control">Parent</button>
 			<div id="location-display">
 				Location: <input id="location-field"></input>
 			</div>
-			<button id="refresh-nav">Refresh</button>
+			<button id="refresh-control">Refresh</button>
 		</div>
 
 		<div class="fb-cell fb-control-panel-right" id="view-controls">
@@ -83,6 +83,11 @@
 	</div>
 
 	<div class="fb-panel" id="filename-panel">
+		<div class="fb-cell">
+			<button id="newfolder-control" disabled>New Folder</button>
+			<button id="delete-control" disabled>Delete</button>
+		</div>
+
 		<div class="fb-cell">
 			<center>
 				<input id="filename-control"></input>

@@ -21,7 +21,7 @@ FileSystemManager.prototype = {
 		});	
 	},
 
-	getContents : function(location, callback) {
+	getContents : function(location, success, error) {
 		var url = this.rootUrl;	// + "?loc=" + location;
 		if(location != "" && location != '.')
 			url += "?loc=" + encodeURIComponent(location);
@@ -29,9 +29,15 @@ FileSystemManager.prototype = {
 //		console.log("getContents: " + url);
 		jQuery.getJSON(url, function(data, textStatus, jqXHR) {
 //			console.log("callback: " + textStatus);
-			callback(data.contents, textStatus);
+			if(data.error) {
+				error(data.error);
+			}
+			else {
+				success(data.contents, textStatus);
+			}
 		}).fail(function(jqXHR, testStatus, errorThrown) {
 			console.log(errorThrown);
+			error(errorThrown);
 		});	
 	},
 }
@@ -53,8 +59,13 @@ function FileBrowser(rootElem, fileSystemManager, initializer) {
 
 	// TEMP some defaults
 	var fileBrowser = this;
-	this._getParentElem().click(function() { fileBrowser.navigateRelative("parent"); });
-	this._getRefreshElem().click(function() { fileBrowser.navigateToLocation(fileBrowser.currentLocation); });
+	this._getUiElem(this.uiNames.parent).click(function() { fileBrowser.navigateRelative("parent"); });
+	this._getUiElem(this.uiNames.refresh).click(function() { fileBrowser.navigateToLocation(fileBrowser.currentLocation); });
+	this._getUiElem(this.uiNames.contents).click(function(evt) {
+		if(evt.toElement == this) {
+			fileBrowser.clearSelection();
+		}
+	});
 
 	this.navigateToRoot();
 }
@@ -62,6 +73,8 @@ function FileBrowser(rootElem, fileSystemManager, initializer) {
 FileBrowser.prototype = {
 	currentLocation : {},
 	currentContents : [],
+
+	multiSelect : false,
 	currentSelection : [],
 
 	filter : null,
@@ -80,11 +93,16 @@ FileBrowser.prototype = {
 
 	navigateToLocation : function(location, status) {
 		this._updateLocation(location);
-		this.fsm.getContents(location, this._makeCallback(this._updateContents));
+		this.fsm.getContents(location, this._makeCallback(this._updateContents), this._makeCallback(this._updateStatus));
 	},
 
 	navigateRelative : function(direction) {
 		this.fsm.getRelativeLocation(this.currentLocation, direction, this._makeCallback(this.navigateToLocation));
+	},
+
+	clearSelection : function() {
+		this.currentSelection.length = 0;
+		this._selectionChanged();
 	},
 
 
@@ -95,10 +113,10 @@ FileBrowser.prototype = {
 		this.currentLocation = location;
 
 		if(this.locationRenderer) {
-			this.locationRenderer.render(this._getLocationElem(), this.currentLocation);
+			this.locationRenderer.render(this._getUiElem(this.uiNames.location), this.currentLocation);
 		}
 		else {
-			this._getLocationElem().html(this.currentLocation);
+			this._getUiElem(this.uiNames.location).html(this.currentLocation);
 		}
 	},
 
@@ -115,11 +133,14 @@ FileBrowser.prototype = {
 		var contents = this._applySorter(this._applyFilter(this.currentContents));
 
 		// use view to populate UI
-		this._getContentsElem().empty().append(this.contentRenderer.render(contents, this._makeCallback(this._handleContentEvent)));
-		this.contentRenderer.updateSelection(this.currentSelection);
+		this._getUiElem(this.uiNames.contents).empty().append(this.contentRenderer.render(contents, this._makeCallback(this._handleContentEvent)));
+		this._selectionChanged();
 	},
 
 	_handleContentEvent : function(contentItem, evt) {
+		if(evt == "clear") {
+			this.clearSelection();
+		}
 		if(evt.type == "dblclick") {
 			if(contentItem.isDir) {
 				this.navigateToLocation(contentItem.location);
@@ -129,7 +150,7 @@ FileBrowser.prototype = {
 			}
 		}
 		else if(evt.type == "click") {
-			if(!evt.metaKey) {
+			if(!evt.metaKey || !this.multiSelect) {
 				this.currentSelection.length = 0;
 				this.currentSelection.push(contentItem);
 			}
@@ -143,16 +164,16 @@ FileBrowser.prototype = {
 				}
 			}
 
-			this.contentRenderer.updateSelection(this.currentSelection);
+			this._selectionChanged();
 		}
 	},
 
 	_updateStatus : function(status) {
 		if(this.statusRenderer) {
-			this.statusRenderer.render(this._getStatusElem(), status);
+			this.statusRenderer.render(this._getUiElem(this.uiNames.status), status);
 		}
 		else {
-			this._getStatusElem().html(status);
+			this._getUiElem(this.uiNames.status).html(status);
 		}	
 	},
 
@@ -165,6 +186,17 @@ FileBrowser.prototype = {
 	_viewChanged : function() {
 		this._populateContentUI();
 	},
+
+	_selectionChanged : function() {
+		this.contentRenderer.updateSelection(this.currentSelection);
+		if(this.currentSelection.length != 0) {
+			jQuery(this._getUiElem(this.uiNames.delete)).removeAttr('disabled');
+		}
+		else  {
+			jQuery(this._getUiElem(this.uiNames.delete)).attr('disabled', 'true');
+		}
+	},
+
 
 	_filterChanged : function() {
 		this.currentSelection = [];
@@ -187,8 +219,10 @@ FileBrowser.prototype = {
 
 	// UI Accessors
 	uiNames : {
-		parent : '#parent-nav',
-		refresh : '#refresh-nav',
+		parent : '#parent-control',
+		refresh : '#refresh-control',
+		newFolder : '#newfolder-control',
+		delete : '#delete-control',
 		location : '#location-display',
 		viewControls : '#view-controls',
 		contents : '#contents-display',
@@ -196,32 +230,8 @@ FileBrowser.prototype = {
 		filter : '#filter-controls',
 	},
 
-	_getParentElem : function() {
-		return this.rootElem.find(this.uiNames.parent);
-	},
-
-	_getRefreshElem : function() {
-		return this.rootElem.find(this.uiNames.refresh);
-	},
-
-	_getLocationElem : function() {
-		return this.rootElem.find(this.uiNames.location);
-	},
-
-	_getViewControlsElem : function() {
-		return this.rootElem.find(this.uiNames.viewControls);
-	},
-
-	_getContentsElem : function() {
-		return this.rootElem.find(this.uiNames.contents);
-	},
-
-	_getStatusElem : function() {
-		return this.rootElem.find(this.uiNames.status);
-	},
-	
-	_getFilterElem : function() {
-		return this.rootElem.find(this.uiNames.filter);
+	_getUiElem : function(name) {
+		return this.rootElem.find(name);
 	},
 
 
@@ -244,6 +254,7 @@ FileBrowser.prototype = {
 			}
 		}
 
+		this.multiSelect = initializer.multiSelect;
 		this.locationRenderer = initializer.locationRenderer;
 		this.statusRenderer = initializer.statusRenderer;
 		this._initializeFiltering(initializer.filters);
@@ -252,7 +263,7 @@ FileBrowser.prototype = {
 
 	_initializeViews : function(settings) {
 		var fileBrowser = this;
-		var controlContainer = this._getViewControlsElem();
+		var controlContainer = this._getUiElem(this.uiNames.viewControls);
 
 		settings.forEach(function(settings) {
 			var button = jQuery(document.createElement("button")).html(settings.name).click(function() {
@@ -302,7 +313,7 @@ FileBrowser.prototype = {
 		});
 
 		// add selector to the dom
-		this._getFilterElem().append(select);
+		this._getUiElem(this.uiNames.filter).append(select);
 	}
 };
 
@@ -323,7 +334,7 @@ FileBrowser.prototype.DefaultInitializer = function() {
 			var renderer = this;
 			renderer.lookup = [];
 
-			renderer.$list = renderer._renderContainer();
+			renderer.$list = renderer._renderContainer(callback);
 			contents.forEach(function(contentItem) { 
 				renderer.$list.append(renderer._renderItem(renderer, contentItem, callback));
 			});
@@ -338,8 +349,10 @@ FileBrowser.prototype.DefaultInitializer = function() {
 			}, this);
 		},
 
-		_renderContainer : function() {
-			return jQuery(document.createElement("ul")).addClass("fb-filelist");
+		_renderContainer : function(callback) {
+			return jQuery(document.createElement("ul")).addClass("fb-filelist").click(function(evt) { 
+				if(evt.toElement == this) callback(null, 'clear');
+			});
 		},
 
 		_renderItem : function(renderer, contentItem, callback) {
@@ -381,6 +394,8 @@ FileBrowser.prototype.DefaultInitializer = function() {
 };
 
 var overrides = {
+	multiSelect : true,
+
 	additionalFilters : [ 
 		{ value: "\.(htm|html)$", text: "HTML files (*.htm, *.html)"}, 
 		{ value: "\.js$", text: "Javascript files (*.js)"}, 
@@ -395,7 +410,7 @@ var overrides = {
 				var renderer = this;
 				renderer.lookup = [];
 
-				renderer.$list = renderer._renderContainer();
+				renderer.$list = renderer._renderContainer(callback);
 				contents.forEach(function(contentItem) { 
 					renderer.$list.append(renderer._renderItem(renderer, contentItem, callback));
 				});
@@ -410,8 +425,10 @@ var overrides = {
 				}, this);
 			},
 
-			_renderContainer : function() {
-				return jQuery(document.createElement("ul")).addClass("fb-filelist fb-iconlist");
+			_renderContainer : function(callback) {
+				return jQuery(document.createElement("ul")).addClass("fb-filelist fb-iconlist").click(function(evt) {
+					if(evt.toElement == this) callback(null, 'clear');
+				});
 			},
 
 			_renderItem : function(renderer, contentItem, callback) {
@@ -440,7 +457,7 @@ var overrides = {
 				var renderer = this;
 				renderer.lookup = [];
 
-				renderer.$table = renderer._renderContainer();
+				renderer.$table = renderer._renderContainer(callback);
 				contents.forEach(function(contentItem) { 
 					renderer.$table.append(renderer._renderItem(renderer, contentItem, callback));
 				});
@@ -463,13 +480,13 @@ var overrides = {
 				});
 
 				return jQuery(document.createElement("table")).addClass("fb-filelist fb-detaillist")
-					.append(jQuery(document.createElement("thead"))).append($tr);
+						.append(jQuery(document.createElement("thead"))).append($tr);
 			},
 
 			_renderItem : function(renderer, contentItem, callback) {
 				var $tr = jQuery(document.createElement("tr")).addClass("fb-detaillist");
 				$tr.append(jQuery(document.createElement("td")).html(this._formatName(contentItem)));
-				$tr.append(jQuery(document.createElement("td")).html(this._formatSize(contentItem.size)));
+				$tr.append(jQuery(document.createElement("td")).html(contentItem.isDir ? "--" : this._formatSize(contentItem.size)));
 				$tr.append(jQuery(document.createElement("td")).html(this._formatDate(contentItem.created)));
 				$tr.append(jQuery(document.createElement("td")).html(this._formatDate(contentItem.modified)));
 
@@ -510,4 +527,4 @@ var overrides = {
 	],
 };
 
-var fileBrowser = new FileBrowser(jQuery("#browserui"), new FileSystemManager("http://192.168.0.31:1337/"), overrides);
+var fileBrowser = new FileBrowser(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), overrides);
