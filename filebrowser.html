@@ -35,6 +35,7 @@
 			}
 
 			.fb-content-selected		{ background: CornflowerBlue;}
+			.fb-editbox					{}
 
 			.fb-filelist				{ float: left; list-style-type: none; padding: 5; margin-top: 5;}
 			.fb-filelist > li 			{ float: left; width: 10em; margin-top: 1;}
@@ -44,6 +45,7 @@
 			li.fb-iconitem				 { float: left; width: 10em; text-align: center; margin-bottom: 25;} 
 
 			.fb-detailList				{ width: 100% }
+			.fb-detailList-dirname		{ font-weight: bold; }
 			th.fb-detailHeader			{ text-transform: capitalize; text-align: left; background: Cornsilk;}
 			tr.fb-detailList:hover		{ background: aqua;}
 		</style>
@@ -105,6 +107,31 @@
 	</div>
 </div>
 </body>
-<script type="text/javascript" src="filebrowser.js"></script>
+<script type="text/javascript" src="FileSystemManager.js"></script>
+<script type="text/javascript" src="ContentRenderer.js"></script>
+<script type="text/javascript" src="DefaultRenderers.js"></script>
+<script type="text/javascript" src="FileBrowser.js"></script>
 
+<script type="text/javascript">
+
+$(document).ready(function() {
+	var overrides = {
+		multiSelect : true,
+
+		additionalFilters : [ 
+			{ value: "\.(htm|html)$", text: "HTML files (*.htm, *.html)"}, 
+			{ value: "\.js$", text: "Javascript files (*.js)"}, 
+			{ value: "\.(jpg|png)", text: "Image files (*.jpg, *.png)"}, 
+		],
+
+		additionalViews : [
+			new IconRenderer(),
+			new DetailRenderer()
+		],
+	};
+
+	var fileBrowser = new FileBrowser(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), overrides);
+});
+
+</script>
 </html>
