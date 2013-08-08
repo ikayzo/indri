@@ -22,6 +22,8 @@ function FileBrowser(rootElem, fileSystemManager, initializer) {
 			fileBrowser.clearSelection();
 		}
 	});
+	this._getUiElem(this.uiNames.delete).click(function() { fileBrowser.deleteSelected(); });
+	this._getUiElem(this.uiNames.newFolder).click(function() { fileBrowser.createFolder(); });
 
 	this.navigateToRoot();
 }
@@ -47,7 +49,7 @@ FileBrowser.prototype = {
 		this.fsm.getRootLocation(this._makeCallback(this.navigateToLocation));
 	},
 
-	navigateToLocation : function(location, status) {
+	navigateToLocation : function(location) {
 		this._updateLocation(location);
 		this.fsm.getContents(location, this._makeCallback(this._updateContents), this._makeCallback(this._updateStatus));
 	},
@@ -59,6 +61,35 @@ FileBrowser.prototype = {
 	clearSelection : function() {
 		this.currentSelection.length = 0;
 		this._selectionChanged();
+	},
+
+	deleteSelected : function() {
+		var success = this._makeCallback(function(emptyContents, status) {
+			this.navigateToLocation(this.currentLocation);
+			this._updateStatus(status);
+		});
+		this.fsm.deleteItems(this.currentSelection, success, this._makeCallback(this._updateStatus));
+	},
+
+	createFolder : function() {
+		var success = this._makeCallback(function(newContents, status) {
+			this.navigateToLocation(this.currentLocation);
+			this._updateStatus(status);
+
+			// TODO Update selection
+		});
+		this.fsm.createFolder(this.currentLocation, "New Folder", success, this._makeCallback(this._updateStatus));
+	},
+
+	renameItem : function(contentItem, newName) {
+			var success = this._makeCallback(function(renamedContent, status) {
+				this.navigateToLocation(this.currentLocation);
+				this._updateStatus(status);
+
+				// TODO Update selection
+			});
+
+			this.fsm.renameItem(contentItem, newName, success, this._makeCallback(this._updateStatus));
 	},
 
 
@@ -78,7 +109,7 @@ FileBrowser.prototype = {
 
 	_updateContents : function(contents, status) {
 		this.currentContents = contents;
-		this.currentSelection = [];
+		this.currentSelection.length = 0;
 
 		this._populateContentUI();
 		this._updateStatus(status);
@@ -93,7 +124,7 @@ FileBrowser.prototype = {
 		this._selectionChanged();
 	},
 
-	_handleContentEvent : function(contentItem, evt) {
+	_handleContentEvent : function(contentItem, evt, newName) {
 		if(evt == "clear") {
 			this.clearSelection();
 		}
@@ -103,7 +134,10 @@ FileBrowser.prototype = {
 
 			this._selectionChanged();
 		}
-		if(evt.type == "dblclick") {
+		else if(evt == "rename") {
+			this.renameItem(contentItem, newName);
+		}
+		else if(evt.type == "dblclick") {
 			if(contentItem.isDir) {
 				this.navigateToLocation(contentItem.location);
 			}

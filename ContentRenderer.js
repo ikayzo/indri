@@ -27,6 +27,8 @@ ContentRenderer.prototype = {
 		            $editable.html(newText);
 		    		$input.replaceWith($editable);
 		    		evt.data._setupNormalEvents($listItem, contentItem);
+
+		    		evt.data.callback(contentItem, "rename", newText);
                 }
 	    	}).blur(this, function(evt) {
 	    		$input.replaceWith($editable);  

@@ -26,7 +26,28 @@ FileSystemManager.prototype = {
 		if(location != "" && location != '.')
 			url += "?loc=" + encodeURIComponent(location);
 
-//		console.log("getContents: " + url);
+		this._doQuery(url, success, error);
+	},
+
+	deleteItems : function(items, success, error) {
+		var url = this.rootUrl + "?action=delete&loc=";
+		items.forEach(function(item) { url += item.location + ';'; })
+
+		this._doQuery(url, success, error);
+	},
+
+	renameItem : function(item, newName, success, error) {
+		var url = this.rootUrl + "?action=rename&loc=" + item.location + "&newName=" + newName;
+		this._doQuery(url, success, error);
+	},
+
+	createFolder : function(location, name, success, error) {
+		var url = this.rootUrl + "?action=makedir&loc=" + location + "&name=" + name;
+		this._doQuery(url, success, error);
+	},
+
+	_doQuery : function(url, success, error) {
+		//		console.log("_doQuery: " + url);
 		jQuery.getJSON(url, function(data, textStatus, jqXHR) {
 //			console.log("callback: " + textStatus);
 			if(data.error) {
@@ -39,6 +60,6 @@ FileSystemManager.prototype = {
 			console.log(errorThrown);
 			error(errorThrown);
 		});	
-	},
+	}
 }
 
