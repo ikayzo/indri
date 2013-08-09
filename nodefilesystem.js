@@ -8,6 +8,19 @@ function isValidFile(fileName) {
 	return fileName[0] != '.';
 }
 
+function getFileInfo(fullPath) {
+	var stats = fs.statSync(fullPath);
+	return { 
+		name: path.basename(fullPath),
+		location: fullPath.slice(rootDir.length),
+		isDir: stats.isDirectory(),
+		size: (stats.isFile() ? stats.size : 0),
+		created: stats.ctime.getTime(),
+		modified: stats.mtime.getTime(),
+		id: stats.ino,
+	};
+}
+
 function constrainPath(path) {
 	// TODO Apply constraints
 	//return (path.indexOf(rootDir) != 0) ? rootDir : path;
@@ -36,16 +49,7 @@ function handleFileRequest(req, res) {
 			result.contents = [];
 			fs.readdirSync(result.realLoc).forEach(function(fileName) {
 				if(isValidFile(fileName)) {
-					var stats = fs.statSync(path.join(result.realLoc, fileName));
-					var fileInfo = { 
-						name: fileName,
-						location: path.join(loc, fileName),
-						isDir: stats.isDirectory(),
-						size: (stats.isFile() ? stats.size : 0),
-						created: stats.ctime.getTime(),
-						modified: stats.mtime.getTime(),
-					};
-					result.contents.push(fileInfo);
+					result.contents.push(getFileInfo(path.join(result.realLoc, fileName)));
 				}
 			});
 		}
@@ -67,15 +71,7 @@ function handleFileRequest(req, res) {
 					result.newFile = newFile;
 
 					fs.renameSync(oldFile, newFile);
-					var stats = fs.statSync(newFile);
-					result.contents = [{ 
-						name: newName,
-						location: newFile,
-						isDir: stats.isDirectory(),
-						size: (stats.isFile() ? stats.size : 0),
-						created: stats.ctime.getTime(),
-						modified: stats.mtime.getTime(),
-					}];
+					result.contents = [getFileInfo(newFile)];
 				}
 				else {
 					result.error = "File doesn't exist: " + loc;
@@ -92,8 +88,8 @@ function handleFileRequest(req, res) {
 			result.fileNames = fileNames;
 			result.attempt = [];
 			result.failure = {};
-			result.success = [];
 
+			result.contents = [];
 
 			fileNames.forEach(function(fileName) {
 				if(fileName.length) {
@@ -101,6 +97,8 @@ function handleFileRequest(req, res) {
 					result.attempt = fullPath;
 
 					try {
+						var fileInfo = getFileInfo(fullPath);
+
 						var stats = fs.statSync(fullPath);
 						if(stats.isFile()) {
 							fs.unlinkSync(fullPath);
@@ -109,7 +107,7 @@ function handleFileRequest(req, res) {
 							fs.rmdirSync(fullPath);
 						}
 
-						result.success.push(fullPath);
+						result.contents.push(fileInfo);
 					}
 					catch(ex) {
 						result.failure[fullPath] = ex;
@@ -122,16 +120,12 @@ function handleFileRequest(req, res) {
 			if(!parsedQuery.query.name) {
 				throw "Missing new folder name";
 			}
-			
+
 			var fullPath = path.join(rootDir, loc, parsedQuery.query.name);
 			result.attemp = fullPath;
 
 			fs.mkdirSync(fullPath);
-			result.contents = [{ 
-				name: parsedQuery.query.name,
-				location: fullPath}]
-			
-			result.success = fullPath;			
+			result.contents = [getFileInfo(fullPath)];
 		}
 		else {
 			result.error = "Invalid action";

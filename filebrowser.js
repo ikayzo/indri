@@ -30,7 +30,7 @@ function FileBrowser(rootElem, fileSystemManager, initializer) {
 
 FileBrowser.prototype = {
 	currentLocation : {},
-	currentContents : [],
+	currentContents : {},
 
 	multiSelect : false,
 	currentSelection : [],
@@ -64,34 +64,32 @@ FileBrowser.prototype = {
 	},
 
 	deleteSelected : function() {
-		var success = this._makeCallback(function(emptyContents, status) {
-			this.navigateToLocation(this.currentLocation);
-			this._updateStatus(status);
+		var success = this._makeCallback(function(deletedContents, status) {
+				this._modifyContents(deletedContents, true, status);
+
 		});
 		this.fsm.deleteItems(this.currentSelection, success, this._makeCallback(this._updateStatus));
 	},
 
 	createFolder : function() {
 		var success = this._makeCallback(function(newContents, status) {
-			this.navigateToLocation(this.currentLocation);
-			this._updateStatus(status);
-
-			// TODO Update selection
+				this._modifyContents(newContents, false, status);
 		});
 		this.fsm.createFolder(this.currentLocation, "New Folder", success, this._makeCallback(this._updateStatus));
 	},
 
 	renameItem : function(contentItem, newName) {
 			var success = this._makeCallback(function(renamedContent, status) {
-				this.navigateToLocation(this.currentLocation);
-				this._updateStatus(status);
-
-				// TODO Update selection
+				this._modifyContents(renamedContent, false, status);
 			});
 
 			this.fsm.renameItem(contentItem, newName, success, this._makeCallback(this._updateStatus));
 	},
 
+
+	_removeFromContents : function(oldItems)  {
+
+	},
 
 	/*
 		Internal methods
@@ -107,8 +105,29 @@ FileBrowser.prototype = {
 		}
 	},
 
+	_modifyContents : function(items, isDelete, status) {
+			items.forEach(function(item) {
+				if(isDelete)
+					delete this.currentContents[item.id];
+				else
+					this.currentContents[item.id] = item;
+
+			}, this);
+
+			this.currentSelection.length = 0;
+			if(!isDelete)
+				this.currentSelection.push(items[0]);
+
+
+			this._populateContentUI();
+			this._updateStatus(status);
+	},
+
 	_updateContents : function(contents, status) {
-		this.currentContents = contents;
+		this.currentContents = {};
+		contents.forEach(function(contentItem) { 
+			this.currentContents[contentItem.id] = contentItem;
+		}, this);
 		this.currentSelection.length = 0;
 
 		this._populateContentUI();
@@ -117,7 +136,11 @@ FileBrowser.prototype = {
 
 	_populateContentUI : function() {
 		// apply filter and sorter
-		var contents = this._applySorter(this._applyFilter(this.currentContents));
+		var contents = [];
+		for(contentId in this.currentContents) {
+			contents.push(this.currentContents[contentId]);
+		}
+		var contents = this._applySorter(this._applyFilter(contents));
 
 		// use view to populate UI
 		this._getUiElem(this.uiNames.contents).empty().append(this.contentRenderer.render(contents, this._makeCallback(this._handleContentEvent)));
@@ -239,6 +262,7 @@ FileBrowser.prototype = {
 	// Initialization methods
 	_initialize : function(overrides) {
 		var initializer = new this.DefaultInitializer();
+
 		if(overrides) {
 			jQuery.extend(initializer, overrides);
 
@@ -256,6 +280,8 @@ FileBrowser.prototype = {
 		}
 
 		this.multiSelect = initializer.multiSelect;
+		this.sorter = initializer.sorter;
+		
 		this.locationRenderer = initializer.locationRenderer;
 		this.statusRenderer = initializer.statusRenderer;
 		this._initializeFiltering(initializer.filters);
@@ -320,6 +346,17 @@ FileBrowser.prototype = {
 
 FileBrowser.prototype.DefaultInitializer = function() {
 	this.multiSelect = false;
+
+	this.sorter = {
+		apply : function(items) {
+			return items.sort(function(a, b) {
+				if(a.name == b.name)
+					return 0;
+				
+				return a.name < b.name ? -1 : 1;
+			});
+		}
+	}
 
 	this.filters = {
 		filters : [ 

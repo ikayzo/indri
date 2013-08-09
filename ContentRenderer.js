@@ -4,13 +4,17 @@ function ContentRenderer() {
 ContentRenderer.prototype = {
 
 	updateSelection : function(newSelection) {
-		for(name in this.lookup) {
-			this.lookup[name].removeClass("fb-content-selected");
+		for(id in this.lookup) {
+			this.lookup[id].removeClass("fb-content-selected");
 		}
 
 		newSelection.forEach(function(selectedItem) {
-			this.lookup[selectedItem.name].addClass("fb-content-selected");
+			this.lookup[selectedItem.id].addClass("fb-content-selected");
 		}, this);
+	},
+
+	_beginRender : function() {
+		this.lookup = {};
 	},
 
 	_setupEditingEvents : function($listItem, contentItem) {
@@ -40,11 +44,11 @@ ContentRenderer.prototype = {
 	},
 
 	_setupNormalEvents : function($listItem, contentItem) {
-		$listItem.one("dblclick", this, function(evt) {
+		$listItem.off("dblclick").on("dblclick", this, function(evt) {
 			if(evt.which == 1) {
 				evt.data.callback(contentItem, evt);
 			}
-		}).one("click", this, function(evt) {
+		}).off("click").on("click", this, function(evt) {
 			if(evt.which == 1) {
 				evt.data.callback(contentItem, evt);
 			}
