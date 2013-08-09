@@ -2,8 +2,7 @@ function ListRenderer() {
 	this.name = "List"
 }
 
-ListRenderer.prototype = new ContentRenderer();
-jQuery.extend(ListRenderer.prototype, {
+ListRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		render : function(contents) {
 			this._beginRender();
 
@@ -37,8 +36,7 @@ jQuery.extend(ListRenderer.prototype, {
 function IconRenderer() {
 	this.name = "Icon"
 }
-IconRenderer.prototype = new ContentRenderer();
-jQuery.extend(IconRenderer.prototype, {
+IconRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		render : function(contents) {
 			this._beginRender();
 
@@ -72,8 +70,7 @@ jQuery.extend(IconRenderer.prototype, {
 function DetailRenderer() {
 	this.name = "Details"
 }
-DetailRenderer.prototype = new ContentRenderer();
-jQuery.extend(DetailRenderer.prototype, {
+DetailRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 
 		render : function(contents) {
 			this._beginRender();
@@ -98,11 +95,11 @@ jQuery.extend(DetailRenderer.prototype, {
 		},
 
 		_renderItem : function(contentItem) {
-			var $tr = jQuery(document.createElement("tr")).addClass("fb-detaillist");
+			var $tr = jQuery(document.createElement("tr")).addClass("fb-detailitem");
 
 			var $label = jQuery(document.createElement("span")).addClass("fb-editable-name").html(contentItem.name);
 			if(contentItem.isDir) {
-				$label.addClass("fb-detaillist-dirname");
+				$label.addClass("fb-detailitem-dirname");
 			}
 			$tr.append(jQuery(document.createElement("td")).append($label));
 

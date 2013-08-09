@@ -31,7 +31,8 @@ FileSystemManager.prototype = {
 
 	deleteItems : function(items, success, error) {
 		var url = this.rootUrl + "?action=delete&loc=";
-		items.forEach(function(item) { url += item.location + ';'; })
+		var prefix = '';
+		items.forEach(function(item) { url += prefix + item.location; prefix = ';'; });
 
 		this._doQuery(url, success, error);
 	},

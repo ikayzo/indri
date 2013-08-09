@@ -41,13 +41,14 @@
 			.fb-filelist > li 			{ float: left; width: 10em; margin-top: 1;}
 			.fb-filelist > li:hover		{ background: aqua;}
 
-			.fb-iconlist				 { float: left; list-style-type: none; }
-			li.fb-iconitem				 { float: left; width: 10em; text-align: center; margin-bottom: 25;} 
+			.fb-iconlist				 { }
+			li.fb-iconitem				 { text-align: center; margin-bottom: 25;} 
 
 			.fb-detailList				{ width: 100% }
-			.fb-detailList-dirname		{ font-weight: bold; }
-			th.fb-detailHeader			{ text-transform: capitalize; text-align: left; background: Cornsilk;}
-			tr.fb-detailList:hover		{ background: aqua;}
+			.fb-detailHeader			{ text-transform: capitalize; text-align: left; background: Cornsilk;}
+			.fb-detailItem				{ width: 100% }
+			.fb-detailItem:hover		{ background: aqua;}
+			.fb-detailItem-dirname		{ font-weight: bold; }
 		</style>
 	</head>
 <body>
@@ -60,7 +61,7 @@
 		<div class="fb-cell" id="location-controls" >
 			<button id="parent-control">Parent</button>
 			<div id="location-display">
-				Location: <input id="location-field"></input>
+				Location: <span id="location-field"></span>
 			</div>
 			<button id="refresh-control">Refresh</button>
 		</div>

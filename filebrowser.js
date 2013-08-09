@@ -87,10 +87,6 @@ FileBrowser.prototype = {
 	},
 
 
-	_removeFromContents : function(oldItems)  {
-
-	},
-
 	/*
 		Internal methods
 	*/
@@ -106,21 +102,21 @@ FileBrowser.prototype = {
 	},
 
 	_modifyContents : function(items, isDelete, status) {
-			items.forEach(function(item) {
-				if(isDelete)
-					delete this.currentContents[item.id];
-				else
-					this.currentContents[item.id] = item;
+		items.forEach(function(item) {
+			if(isDelete)
+				delete this.currentContents[item.id];
+			else
+				this.currentContents[item.id] = item;
 
-			}, this);
+		}, this);
 
-			this.currentSelection.length = 0;
-			if(!isDelete)
-				this.currentSelection.push(items[0]);
+		this.currentSelection.length = 0;
+		if(!isDelete)
+			this.currentSelection.push(items[0]);
 
 
-			this._populateContentUI();
-			this._updateStatus(status);
+		this._populateContentUI();
+		this._updateStatus(status);
 	},
 
 	_updateContents : function(contents, status) {
@@ -196,10 +192,6 @@ FileBrowser.prototype = {
 		}	
 	},
 
-	_makeCallback : function(callback) {
-		var fileBrowser = this;
-		return function() { callback.apply(fileBrowser, arguments); }
-	},
 
 	// Component callbacks/support
 	_setRenderer : function(renderer) {
@@ -212,18 +204,29 @@ FileBrowser.prototype = {
 	},
 
 	_selectionChanged : function() {
+		// Have the content renderer update the content area
 		this.contentRenderer.updateSelection(this.currentSelection);
+
+		// Fill in the selected names
+		var prefix = '', filenameText = '';
+		this.currentSelection.forEach(function(item) { 
+			filenameText += prefix + item.name; 
+			prefix = ';'; 
+		});
+		this._getUiElem(this.uiNames.filename).val(filenameText);
+
+		// Enabled/disable the delete button
 		if(this.currentSelection.length != 0) {
-			jQuery(this._getUiElem(this.uiNames.delete)).removeAttr('disabled');
+			this._getUiElem(this.uiNames.delete).removeAttr('disabled');
 		}
 		else  {
-			jQuery(this._getUiElem(this.uiNames.delete)).attr('disabled', 'true');
+			this._getUiElem(this.uiNames.delete).attr('disabled', 'true');
 		}
 	},
 
 
 	_filterChanged : function() {
-		this.currentSelection = [];
+		this.currentSelection.length = 0;
 		this._populateContentUI();
 	},
 
@@ -240,6 +243,10 @@ FileBrowser.prototype = {
 		return this.sorter ? this.sorter.apply(items) : items;
 	},
 
+	_makeCallback : function(callback) {
+		var fileBrowser = this;
+		return function() { callback.apply(fileBrowser, arguments); }
+	},
 
 	// UI Accessors
 	uiNames : {
@@ -252,6 +259,7 @@ FileBrowser.prototype = {
 		contents : '#contents-display',
 		status : '#status-display',
 		filter : '#filter-controls',
+		filename : "#filename-control"
 	},
 
 	_getUiElem : function(name) {
@@ -281,9 +289,10 @@ FileBrowser.prototype = {
 
 		this.multiSelect = initializer.multiSelect;
 		this.sorter = initializer.sorter;
-		
+
 		this.locationRenderer = initializer.locationRenderer;
 		this.statusRenderer = initializer.statusRenderer;
+
 		this._initializeFiltering(initializer.filters);
 		this._initializeViews(initializer.views);
 	},
@@ -367,7 +376,7 @@ FileBrowser.prototype.DefaultInitializer = function() {
 
 	this.views = [
 		new ListRenderer(),
-		];
+	];
 
 	this.locationRenderer = {
 		render : function(elem, location) {
