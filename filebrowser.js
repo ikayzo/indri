@@ -310,36 +310,48 @@ FileBrowser.prototype = {
 };
 
 
-FileBrowser.prototype.DefaultInitializer = function() {
-	this.title = "File Chooser";
-	this.accept = "Save";
-	this.cancel = "Cancel";
+FileBrowser.prototype.DefaultInitializer = {
+	title : "File Chooser",
+	accept : "Save",
+	cancel : "Cancel",
 
-	this.mode = "Save";
-	this.directoriesOnly = false;
+	directoriesOnly : false,
+	multiSelect : false,
+	// fileMustExist : false,
 
-	this.multiSelect = false;
-
-	this.sorter = {
+	sorter : {
 		fieldName : "name",
+		ascending : true,
 
 		apply : function(items) {
 			if(this.fieldName) {
 				var fieldName = this.fieldName;
+				var inverter = this.ascending ? 1 : -1;
+				
 				return items.sort(function(a, b) {
 					var aValue = a[fieldName], bValue = b[fieldName];
 					if(aValue == bValue)
 						return 0;
 					
-					return aValue < bValue ? -1 : 1;
+					return aValue < bValue ? -1 * inverter : 1 * inverter;
 				});
 			}
 
 			return items;
-		}
-	}
+		},
 
-	this.filter = {
+		setSortField : function(fieldName) {
+			if(this.fieldName == fieldName) {
+				this.ascending = !this.ascending;
+			}
+			else {
+				this.fieldName = fieldName;
+				this.ascending = true;
+			}
+		}
+	},
+
+	filter : {
 		options : [ 
 			{ value: ".*", text: "All files (*.*)"}, 
 		],
@@ -374,9 +386,9 @@ FileBrowser.prototype.DefaultInitializer = function() {
 
 			return $select;
 		}
-	}
+	},
 
-	this.viewFactory = {
+	viewFactory : {
 		views : [
 			new ListRenderer(),
 		],
@@ -394,9 +406,9 @@ FileBrowser.prototype.DefaultInitializer = function() {
 
 			return controlContainer;
 		}
-	}
+	},
 
-	this.locationRenderer = {
+	locationRenderer : {
 		render : function(elem, location) {
 			if(!location || location == ".") {
 				location = "(root)";
@@ -406,14 +418,14 @@ FileBrowser.prototype.DefaultInitializer = function() {
 
 			elem.html(location);
 		}
-	};
+	},
 
-	this.statusRenderer = {
+	statusRenderer : {
 		render : function(elem, status) {
 			elem.html("<strong>" + status + "</strong>");
 		}
-	};
+	},
 
-	this.resultCallback = function(results) { console.log(results); }
+	resultCallback : function(results) { console.log(results); },
 };
 

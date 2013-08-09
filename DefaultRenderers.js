@@ -87,8 +87,15 @@ DetailRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		_renderContainer : function() {
 			var $tr = jQuery(document.createElement("tr"));
 			this._fieldNames.forEach(function(field) {
-				$tr.append(jQuery(document.createElement("th")).addClass("fb-detailheader").html(field));
-			});
+				var $th = jQuery(document.createElement("th")).addClass("fb-detailheader").html(field)
+				.click(this, function(evt){
+					if(evt.toElement == this && evt.which == 1) {
+						evt.data.browser.sorter.setSortField(field);
+						evt.data.browser._sortChanged();
+					}
+				});
+				$tr.append($th);
+			}, this);
 
 			return jQuery(document.createElement("table")).addClass("fb-filelist fb-detaillist")
 					.append(jQuery(document.createElement("thead"))).append($tr);
