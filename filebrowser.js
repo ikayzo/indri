@@ -24,6 +24,8 @@ function FileBrowser(rootElem, fileSystemManager, initializer) {
 	});
 	this._getUiElem(this.uiNames.delete).click(function() { fileBrowser.deleteSelected(); });
 	this._getUiElem(this.uiNames.newFolder).click(function() { fileBrowser.createFolder(); });
+	this._getUiElem(this.uiNames.accept).click(function() { initializer.resultCallback({ userCancelled: false, selection: fileBrowser.currentSelection }) });
+	this._getUiElem(this.uiNames.cancel).click(function() { initializer.resultCallback({ userCancelled: true, selection: [] }) });
 
 	this.navigateToRoot();
 }
@@ -245,47 +247,19 @@ FileBrowser.prototype = {
 
 	_makeCallback : function(callback) {
 		var fileBrowser = this;
-		return function() { callback.apply(fileBrowser, arguments); }
-	},
-
-	// UI Accessors
-	uiNames : {
-		parent : '#parent-control',
-		refresh : '#refresh-control',
-		newFolder : '#newfolder-control',
-		delete : '#delete-control',
-		location : '#location-display',
-		viewControls : '#view-controls',
-		contents : '#contents-display',
-		status : '#status-display',
-		filter : '#filter-controls',
-		filename : "#filename-control"
-	},
-
-	_getUiElem : function(name) {
-		return this.rootElem.find(name);
+		return function() { return callback.apply(fileBrowser, arguments); }
 	},
 
 
 	// Initialization methods
-	_initialize : function(overrides) {
-		var initializer = new this.DefaultInitializer();
-
-		if(overrides) {
-			jQuery.extend(initializer, overrides);
-
-			if(overrides.additionalFilters) {
-				overrides.additionalFilters.forEach(function(filter) {
-					initializer.filters.filters.push(filter);
-				});
-			}
-
-			if(overrides.additionalViews) {
-				overrides.additionalViews.forEach(function(view) {
-					initializer.views.push(view);
-				});
-			}
+	_initialize : function(initializer) {
+		if(!initializer) {
+			initializer = new this.DefaultInitializer();
 		}
+
+		this._getUiElem(this.uiNames.title).html(initializer.title);
+		this._getUiElem(this.uiNames.accept).html(initializer.accept);
+		this._getUiElem(this.uiNames.cancel).html(initializer.cancel);
 
 		this.multiSelect = initializer.multiSelect;
 		this.sorter = initializer.sorter;
@@ -293,90 +267,134 @@ FileBrowser.prototype = {
 		this.locationRenderer = initializer.locationRenderer;
 		this.statusRenderer = initializer.statusRenderer;
 
-		this._initializeFiltering(initializer.filters);
-		this._initializeViews(initializer.views);
+		this._initializeFiltering(initializer.filter);
+		this._initializeViews(initializer.viewFactory);
 	},
 
-	_initializeViews : function(settings) {
-		var fileBrowser = this;
-		var controlContainer = this._getUiElem(this.uiNames.viewControls);
 
-		settings.forEach(function(settings) {
-			var button = jQuery(document.createElement("button")).html(settings.name).click(function() {
-				fileBrowser._setRenderer(settings);
-			});
-			controlContainer.append(button);
-
-		});
-
-		this._setRenderer(settings[0]);
-	},
-
-	_initializeFiltering : function(settings) {
-		var fileBrowser = this;
-		if(settings.selectedFilter == null) {
-			settings.selectedFilter = new RegExp(settings.filters[0].value);
-		};	
-
-		// set up handler
-		this.filter = {
-			options : settings,
-
-			apply : function(items) {
-				var filteredItems = items.filter(function(item) {
-					return item.isDir || item.name.match(this.selectedFilter);
-				}, this.options);
-
-				return filteredItems;
-			}
-		}
-
-		// create selector
-		var select = $(document.createElement("select")).attr("id", "filterSelector");
-		select.change(function() {
-			settings.selectedFilter = new RegExp(select.find("option:selected").val());
-			fileBrowser._filterChanged();
-		});
-
-		// populate it
-		settings.filters.forEach(function(filter) {
-			var item = $(document.createElement("option")).attr("value", filter.value).html(filter.text);
-			if(settings.selectedFilter == filter) {
-				item.attr("selected", "selected");
-			}
-			select.append(item);
-		});
+	_initializeFiltering : function(filter) {
+		// set the data member
+		this.filter = filter;
 
 		// add selector to the dom
-		this._getUiElem(this.uiNames.filter).append(select);
-	}
+		this._getUiElem(this.uiNames.filter).empty().append(this.filter.render(this._makeCallback(this._filterChanged)));
+	},
+
+	_initializeViews : function(viewFactory) {
+		this._getUiElem(this.uiNames.viewControls).empty()
+			.append(viewFactory.render(this._makeCallback(function(view) { this._setRenderer(view); })));
+	},
+
+
+	// UI Accessors
+	uiNames : {
+		title 			: '#title-control',
+		accept 			: '#accept-control',
+		cancel 			: '#cancel-control',
+		parent 			: '#parent-control',
+		refresh 		: '#refresh-control',
+		newFolder 		: '#newfolder-control',
+		delete 			: '#delete-control',
+		location 		: '#location-display',
+		viewControls 	: '#view-controls',
+		contents 		: '#contents-display',
+		status 			: '#status-display',
+		filter 			: '#filter-controls',
+		filename 		: "#filename-control"
+	},
+
+	_getUiElem : function(name) {
+		return this.rootElem.find(name);
+	},
+
 };
 
 
 FileBrowser.prototype.DefaultInitializer = function() {
+	this.title = "File Chooser";
+	this.accept = "Save";
+	this.cancel = "Cancel";
+
+	this.mode = "Save";
+	this.directoriesOnly = false;
+
 	this.multiSelect = false;
 
 	this.sorter = {
+		fieldName : "name",
+
 		apply : function(items) {
-			return items.sort(function(a, b) {
-				if(a.name == b.name)
-					return 0;
-				
-				return a.name < b.name ? -1 : 1;
-			});
+			if(this.fieldName) {
+				var fieldName = this.fieldName;
+				return items.sort(function(a, b) {
+					var aValue = a[fieldName], bValue = b[fieldName];
+					if(aValue == bValue)
+						return 0;
+					
+					return aValue < bValue ? -1 : 1;
+				});
+			}
+
+			return items;
 		}
 	}
 
-	this.filters = {
-		filters : [ 
+	this.filter = {
+		options : [ 
 			{ value: ".*", text: "All files (*.*)"}, 
 		],
-		selectedFilter : null
-	};
 
-	this.views = [
-		new ListRenderer(),
-	];
+		_selectedFilter : null,
+
+		apply : function(items) {
+			var filter = this._selectedFilter;
+			var filteredItems = items.filter(function(item) {
+				return item.isDir || item.name.match(filter);
+			}, this.options);
+
+			return filteredItems;
+		},
+
+		render : function(callback) {
+			// create selector
+			var $select = jQuery(document.createElement("select")).attr("id", "filterSelector")
+			.change(this, function(evt) {
+				evt.data._selectedFilter = new RegExp(jQuery(this).find("option:selected").val());
+				callback();
+			});
+
+			// populate it
+			this.options.forEach(function(option) {
+				var item = jQuery(document.createElement("option")).attr("value", option.value).html(option.text);
+				$select.append(item);
+			});
+
+			// make sure we have a default
+			this._selectedFilter = new RegExp(this.options[0].value);
+
+			return $select;
+		}
+	}
+
+	this.viewFactory = {
+		views : [
+			new ListRenderer(),
+		],
+
+		render : function(callback) {
+			var controlContainer = jQuery(document.createElement("span"));
+
+			this.views.forEach(function(view) {
+				var button = jQuery(document.createElement("button")).html(view.name).click(function() {
+					callback(view);
+				});
+				controlContainer.append(button);
+			});
+			callback(this.views[0]);
+
+			return controlContainer;
+		}
+	}
 
 	this.locationRenderer = {
 		render : function(elem, location) {
@@ -395,5 +413,7 @@ FileBrowser.prototype.DefaultInitializer = function() {
 			elem.html("<strong>" + status + "</strong>");
 		}
 	};
+
+	this.resultCallback = function(results) { console.log(results); }
 };
 

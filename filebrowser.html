@@ -54,7 +54,7 @@
 <body>
 <div id="browserui">
 
-	<header class="fb-panel" id="header-display">File Dialog</header>
+	<header class="fb-panel" id="title-control">File Dialog</header>
 
 	<div class="fb-panel" id="control-panel">
 
@@ -66,8 +66,7 @@
 			<button id="refresh-control">Refresh</button>
 		</div>
 
-		<div class="fb-cell fb-control-panel-right" id="view-controls">
-		</div>
+		<div class="fb-cell fb-control-panel-right" id="view-controls"></div>
 	</div>
 
 	<div class="fb-panel" id="contents-panel">
@@ -98,8 +97,8 @@
 			</center>
 		</div>
 		<div class="fb-cell fb-control-panel-right">
-			<button>OK</button>
-			<button>Cancel</button>
+			<button id="accept-control">OK</button>
+			<button id="cancel-control">Cancel</button>
 		</div>
 	</div>
 	
@@ -116,22 +115,18 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-	var overrides = {
+	var initializer = jQuery.extend({}, new FileBrowser.prototype.DefaultInitializer(),{
 		multiSelect : true,
+	});
 
-		additionalFilters : [ 
-			{ value: "\.(htm|html)$", text: "HTML files (*.htm, *.html)"}, 
-			{ value: "\.js$", text: "Javascript files (*.js)"}, 
-			{ value: "\.(jpg|png)", text: "Image files (*.jpg, *.png)"}, 
-		],
+	initializer.filter.options.push({ value: "\.(htm|html)$", text: "HTML files (*.htm, *.html)"});
+	initializer.filter.options.push({ value: "\.js$", text: "Javascript files (*.js)"});
+	initializer.filter.options.push({ value: "\.(jpg|png)", text: "Image files (*.jpg, *.png)"});
 
-		additionalViews : [
-			new IconRenderer(),
-			new DetailRenderer()
-		],
-	};
+	initializer.viewFactory.views.push(new IconRenderer());
+	initializer.viewFactory.views.push(new DetailRenderer());
 
-	var fileBrowser = new FileBrowser(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), overrides);
+	var fileBrowser = new FileBrowser(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
 });
 
 </script>
