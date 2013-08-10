@@ -9,6 +9,11 @@ function isValidFile(fileName) {
 }
 
 function getFileInfo(fullPath) {
+
+	var ext = path.extname(fullPath);
+	var previewUrl = (ext == ".png") ? "http://icondrawer.com/img/flag_icons/Lebanon-flag-icon.png" : null;
+//	var previewUrl = (ext == ".png") ? fullPath.slice(rootDir.length) : null;
+
 	var stats = fs.statSync(fullPath);
 	return { 
 		name: path.basename(fullPath),
@@ -18,6 +23,7 @@ function getFileInfo(fullPath) {
 		created: stats.ctime.getTime(),
 		modified: stats.mtime.getTime(),
 		id: stats.ino,
+		previewUrl : previewUrl,
 	};
 }
 

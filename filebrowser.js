@@ -43,6 +43,7 @@ FileBrowser.prototype = {
 	locationRenderer : null,
 	contentRenderer : null,
 	statusRenderer : null,
+	previewRenderer : null,
 
 	/*
 		Primary API
@@ -224,6 +225,10 @@ FileBrowser.prototype = {
 		else  {
 			this._getUiElem(this.uiNames.delete).attr('disabled', 'true');
 		}
+
+		if(this.previewRenderer) {
+			this._getUiElem(this.uiNames.preview).empty().append(this.previewRenderer.render(this.currentSelection));
+		}
 	},
 
 
@@ -261,12 +266,17 @@ FileBrowser.prototype = {
 		this._getUiElem(this.uiNames.accept).html(initializer.accept);
 		this._getUiElem(this.uiNames.cancel).html(initializer.cancel);
 
+		if(initializer.showPreview) {
+			this._getUiElem(this.uiNames.preview).css("display", "block");
+		}
+
 		this.multiSelect = initializer.multiSelect;
 		this.sorter = initializer.sorter;
 		this.sorter.browser = this;
 
 		this.locationRenderer = initializer.locationRenderer;
 		this.statusRenderer = initializer.statusRenderer;
+		this.previewRenderer = initializer.previewRenderer;
 
 		this._initializeFiltering(initializer.filter);
 		this._initializeViews(initializer.viewFactory);
@@ -301,7 +311,8 @@ FileBrowser.prototype = {
 		contents 		: '#contents-display',
 		status 			: '#status-display',
 		filter 			: '#filter-controls',
-		filename 		: "#filename-control"
+		filename 		: "#filename-control",
+		preview 		: "#preview-panel"
 	},
 
 	_getUiElem : function(name) {
@@ -316,6 +327,8 @@ FileBrowser.prototype.DefaultInitializer = {
 	accept : "Save",
 	cancel : "Cancel",
 
+	showPreview : true,
+	showFavorites : false,
 	directoriesOnly : false,
 	multiSelect : false,
 	// fileMustExist : false,
@@ -427,6 +440,23 @@ FileBrowser.prototype.DefaultInitializer = {
 	statusRenderer : {
 		render : function(elem, status) {
 			elem.html("<strong>" + status + "</strong>");
+		}
+	},
+
+	previewRenderer : {
+		render : function(selection) {
+			if(selection.length == 0) {
+				return jQuery(document.createElement("span")).html("No items selected");
+			}
+			else if(selection.length > 1) {
+				return jQuery(document.createElement("span")).html("Multiple items selected");
+			}
+			else if(selection[0].previewUrl == null) {
+				return jQuery(document.createElement("span")).html("No preview available");
+			}
+			else {
+				return jQuery(document.createElement("img")).attr("src", selection[0].previewUrl);				
+			}
 		}
 	},
 

@@ -23,7 +23,7 @@
 
 			#favorites-controls     	{ width: 20%; display: none; }
 			#contents-display    		{ width: auto; background: white; }
-			#preview-display   			{ width: 20%; display: none; }
+			#preview-panel   			{ width: 20%; min-width: 200; display: none; }
 
 			img {
 				max-width: 100%;
@@ -81,7 +81,7 @@
 		<div class="fb-cell" id="contents-display">
 			<ul></ul>
 		</div>
-		<div class="fb-cell" id="preview-display"><img src="img/preview_folder.png"></div>    
+		<div class="fb-cell" id="preview-panel"><img src="img/preview_folder.png"></div>    
 	</div>
 
 	<div class="fb-panel" id="filename-panel">
@@ -117,6 +117,7 @@
 $(document).ready(function() {
 	var initializer = jQuery.extend({}, FileBrowser.prototype.DefaultInitializer, {
 		multiSelect : true,
+		showPreview : true,
 	});
 
 	initializer.filter.options.push({ value: "\.(htm|html)$", text: "HTML files (*.htm, *.html)"});
