@@ -91,7 +91,6 @@ DetailRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 				.click(this, function(evt){
 					if(evt.toElement == this && evt.which == 1) {
 						evt.data.browser.sorter.setSortField(field);
-						evt.data.browser._sortChanged();
 					}
 				});
 				$tr.append($th);

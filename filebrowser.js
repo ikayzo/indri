@@ -65,14 +65,6 @@ FileBrowser.prototype = {
 		this._selectionChanged();
 	},
 
-	deleteSelected : function() {
-		var success = this._makeCallback(function(deletedContents, status) {
-				this._modifyContents(deletedContents, true, status);
-
-		});
-		this.fsm.deleteItems(this.currentSelection, success, this._makeCallback(this._updateStatus));
-	},
-
 	createFolder : function() {
 		var success = this._makeCallback(function(newContents, status) {
 				this._modifyContents(newContents, false, status);
@@ -86,6 +78,14 @@ FileBrowser.prototype = {
 			});
 
 			this.fsm.renameItem(contentItem, newName, success, this._makeCallback(this._updateStatus));
+	},
+
+	deleteSelected : function() {
+		var success = this._makeCallback(function(deletedContents, status) {
+				this._modifyContents(deletedContents, true, status);
+
+		});
+		this.fsm.deleteItems(this.currentSelection, success, this._makeCallback(this._updateStatus));
 	},
 
 
@@ -263,6 +263,7 @@ FileBrowser.prototype = {
 
 		this.multiSelect = initializer.multiSelect;
 		this.sorter = initializer.sorter;
+		this.sorter.browser = this;
 
 		this.locationRenderer = initializer.locationRenderer;
 		this.statusRenderer = initializer.statusRenderer;
@@ -327,7 +328,7 @@ FileBrowser.prototype.DefaultInitializer = {
 			if(this.fieldName) {
 				var fieldName = this.fieldName;
 				var inverter = this.ascending ? 1 : -1;
-				
+
 				return items.sort(function(a, b) {
 					var aValue = a[fieldName], bValue = b[fieldName];
 					if(aValue == bValue)
@@ -348,6 +349,9 @@ FileBrowser.prototype.DefaultInitializer = {
 				this.fieldName = fieldName;
 				this.ascending = true;
 			}
+
+			// TODO  Hmmm...not pleased with this
+			this.browser._sortChanged();
 		}
 	},
 
