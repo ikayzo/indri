@@ -27,7 +27,12 @@ function FileBrowser(rootElem, fileSystemManager, initializer) {
 	this._getUiElem(this.uiNames.accept).click(function() { initializer.resultCallback({ userCancelled: false, selection: fileBrowser.currentSelection }) });
 	this._getUiElem(this.uiNames.cancel).click(function() { initializer.resultCallback({ userCancelled: true, selection: [] }) });
 
-	this.navigateToRoot();
+	if(initializer.showShortcuts) {
+		this.fsm.getShortcuts(this._makeCallback(this._updateShortcuts), this._makeCallback(this._updateStatus));
+	}
+	else {
+		this.navigateToRoot();
+	}
 }
 
 FileBrowser.prototype = {
@@ -44,6 +49,7 @@ FileBrowser.prototype = {
 	contentRenderer : null,
 	statusRenderer : null,
 	previewRenderer : null,
+	shortcutsRenderer : null,
 
 	/*
 		Primary API
@@ -186,6 +192,13 @@ FileBrowser.prototype = {
 		}
 	},
 
+	_updateShortcuts : function(shortcuts) {
+		if(this.shortcutsRenderer) {
+			this._getUiElem(this.uiNames.shortcuts).empty().append(
+				this.shortcutsRenderer.render(shortcuts, this._makeCallback(this.navigateToLocation)));
+		}
+	},
+
 	_updateStatus : function(status) {
 		if(this.statusRenderer) {
 			this.statusRenderer.render(this._getUiElem(this.uiNames.status), status);
@@ -270,6 +283,10 @@ FileBrowser.prototype = {
 			this._getUiElem(this.uiNames.preview).css("display", "block");
 		}
 
+		if(initializer.showShortcuts) {
+			this._getUiElem(this.uiNames.shortcuts).css("display", "block");
+		}
+
 		this.multiSelect = initializer.multiSelect;
 		this.sorter = initializer.sorter;
 		this.sorter.browser = this;
@@ -277,6 +294,7 @@ FileBrowser.prototype = {
 		this.locationRenderer = initializer.locationRenderer;
 		this.statusRenderer = initializer.statusRenderer;
 		this.previewRenderer = initializer.previewRenderer;
+		this.shortcutsRenderer = initializer.shortcutsRenderer;
 
 		this._initializeFiltering(initializer.filter);
 		this._initializeViews(initializer.viewFactory);
@@ -312,7 +330,8 @@ FileBrowser.prototype = {
 		status 			: '#status-display',
 		filter 			: '#filter-controls',
 		filename 		: "#filename-control",
-		preview 		: "#preview-panel"
+		preview 		: "#preview-panel",
+		shortcuts 		: "#shortcuts-display",
 	},
 
 	_getUiElem : function(name) {
@@ -328,7 +347,7 @@ FileBrowser.prototype.DefaultInitializer = {
 	cancel : "Cancel",
 
 	showPreview : true,
-	showFavorites : false,
+	showShortcuts : false,
 	directoriesOnly : false,
 	multiSelect : false,
 	// fileMustExist : false,
@@ -455,8 +474,27 @@ FileBrowser.prototype.DefaultInitializer = {
 				return jQuery(document.createElement("span")).html("No preview available");
 			}
 			else {
-				return jQuery(document.createElement("img")).attr("src", selection[0].previewUrl);				
+				return jQuery(document.createElement("img")).attr("src", this.baseUrl + selection[0].previewUrl);				
 			}
+		},
+
+		baseUrl : ""
+	},
+
+	shortcutsRenderer : {
+		render : function(shortcuts, callback) {
+			var $listContainer = jQuery(document.createElement("ul")).addClass("fb-shortcut-list");
+			shortcuts.forEach(function(shortcut) {
+				var $label = jQuery(document.createElement("span")).addClass("fb-shortcut-name").html(shortcut.name);
+				var $listItem = jQuery(document.createElement("li")).addClass("fb-listitem").append($label)
+				.click(function(evt) {
+					if(evt.which == 1) {
+						callback(shortcut.location);
+					}
+				});
+				$listContainer.append($listItem);
+			});
+			return $listContainer;
 		}
 	},
 

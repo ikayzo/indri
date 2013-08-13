@@ -17,7 +17,7 @@ function getFileInfo(fullPath) {
 	var stats = fs.statSync(fullPath);
 	return { 
 		name: path.basename(fullPath),
-		location: fullPath.slice(rootDir.length),
+		location: encodeLocation(fullPath.slice(rootDir.length)),
 		isDir: stats.isDirectory(),
 		size: (stats.isFile() ? stats.size : 0),
 		created: stats.ctime.getTime(),
@@ -33,20 +33,34 @@ function constrainPath(path) {
 	return path;
 }
 
+function parseLocation(location) {
+	return location ? JSON.parse(location) : "/";
+}
+
+function encodeLocation(location) {
+	return JSON.stringify(location);
+}
+
 function handleFileRequest(req, res) {
-	var parsedQuery = require('url').parse(req.url, true);
-
-	var action = parsedQuery.query.action || "browse";
-	var loc = parsedQuery.query.loc || "/";
-
 	var result = { };
 
 	try {
-		if(action == "parent") {
-			if(loc != "/") {
-				loc = path.dirname(loc);
+		var parsedQuery = require('url').parse(req.url, true);
+
+		var action = parsedQuery.query.action || "browse";
+		var loc = parseLocation(parsedQuery.query.loc);
+		console.log(parsedQuery.query.loc, ' -> ', loc);
+
+		if(action == "navigate") {
+			result.origLoc = loc;
+			var direction = parsedQuery.query.direction;
+			if(direction == "parent") {
+				if(loc != "/") {
+					loc = path.dirname(loc);
+				}
 			}
-			result.loc = loc;
+
+			result.loc = encodeLocation(loc);
 		}
 		else if(action == "browse") {
 			result.realLoc = constrainPath(path.join(rootDir, loc));
@@ -85,21 +99,22 @@ function handleFileRequest(req, res) {
 			}
 		}
 		else if(action == "delete") {
-			if(!parsedQuery.query.loc) {
-				throw "Missing location";
+			if(!parsedQuery.query.locs) {
+				throw "Missing locations to delete";
 			}
 
-			var fileNames = loc.split(";");
+			var locations = JSON.parse(parsedQuery.query.locs);
+			result.locations = locations;
 
-			result.fileNames = fileNames;
 			result.attempt = [];
 			result.failure = {};
 
 			result.contents = [];
 
-			fileNames.forEach(function(fileName) {
-				if(fileName.length) {
-					var fullPath = path.join(rootDir, fileName);
+			locations.forEach(function(location) {
+				location = parseLocation(location);
+				if(location.length) {
+					var fullPath = path.join(rootDir, location);
 					result.attempt = fullPath;
 
 					try {

@@ -71,6 +71,10 @@ ContentRenderer.prototype = {
 	},
 
 	_getIcon : function(contentItem, size) {
+		// if(contentItem.previewUrl) {
+		// 	return 'http://civilbeat_production.s3.amazonaws.com/' + contentItem.previewUrl;
+		// }
+
 		if(!size) {
 			size = "default"
 		}

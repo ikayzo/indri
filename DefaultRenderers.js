@@ -135,7 +135,7 @@ DetailRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		},
 
 		_formatDate : function(timestamp) {
-			return new Date(timestamp).toDateString();
+			return timestamp ? new Date(timestamp).toDateString() : '--';
 		},
 
 		_fieldNames : [ "name", "size", "created", "modified" ],
