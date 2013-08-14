@@ -1,10 +1,10 @@
 
 
 var delimiter = '/';
+var configurationPath = "./aws-credentials.json";
 
 var path = require('path');
 var AWS = require('aws-sdk');
-AWS.config.loadFromPath('./civilbeat-credentials.json');
 
 var defaultLocation = { bucket: "ikayzo-files", key : ""};
 
@@ -228,6 +228,11 @@ function handleFileRequest(req, res) {
 
 var serverName = (process.argv.length > 2) ? process.argv[2] : "localhost";
 var serverPort = (process.argv.length > 3) ? process.argv[3] : 1337;
+if(process.argv.length > 4)
+	configurationPath = process.argv[4];
+
+console.log("Connecting with ", configurationPath);
+AWS.config.loadFromPath(configurationPath);
 
 var http = require('http');
 http.createServer(function (req, res) {

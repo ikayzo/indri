@@ -19,7 +19,7 @@ function getFileInfo(fullPath) {
 		name: path.basename(fullPath),
 		location: encodeLocation(fullPath.slice(rootDir.length)),
 		isDir: stats.isDirectory(),
-		size: (stats.isFile() ? stats.size : 0),
+		size: (stats.isFile() ? stats.size : undefined),
 		created: stats.ctime.getTime(),
 		modified: stats.mtime.getTime(),
 		id: stats.ino,

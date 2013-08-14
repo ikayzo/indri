@@ -3,6 +3,17 @@ function ContentRenderer() {
 
 ContentRenderer.prototype = {
 
+	render : function(contents) {
+		this._beginRender();
+
+		$list = this._renderContainer();
+		contents.forEach(function(contentItem) { 
+			$list.append(this._renderItem(contentItem));
+		}, this);
+
+		return $list;
+	},
+	
 	updateSelection : function(newSelection) {
 		for(id in this.lookup) {
 			this.lookup[id].removeClass("fb-content-selected");
@@ -71,10 +82,6 @@ ContentRenderer.prototype = {
 	},
 
 	_getIcon : function(contentItem, size) {
-		// if(contentItem.previewUrl) {
-		// 	return 'http://civilbeat_production.s3.amazonaws.com/' + contentItem.previewUrl;
-		// }
-
 		if(!size) {
 			size = "default"
 		}

@@ -28,7 +28,11 @@ function FileBrowser(rootElem, fileSystemManager, initializer) {
 	this._getUiElem(this.uiNames.cancel).click(function() { initializer.resultCallback({ userCancelled: true, selection: [] }) });
 
 	if(initializer.showShortcuts) {
-		this.fsm.getShortcuts(this._makeCallback(this._updateShortcuts), this._makeCallback(this._updateStatus));
+		this.fsm.getShortcuts(this._makeCallback(this._updateShortcuts), 
+			this._makeCallback(function() { 
+				this._setVisible(this.uiNames.shortcuts, false);
+				this.navigateToRoot();
+			}));
 	}
 	else {
 		this.navigateToRoot();
@@ -59,8 +63,11 @@ FileBrowser.prototype = {
 	},
 
 	navigateToLocation : function(location) {
-		this._updateLocation(location);
-		this.fsm.getContents(location, this._makeCallback(this._updateContents), this._makeCallback(this._updateStatus));
+		var success = this._makeCallback(function(contents, status) {
+			this._updateLocation(location);
+			this._updateContents(contents, status);
+		});
+		this.fsm.getContents(location, success, this._makeCallback(this._updateStatus));
 	},
 
 	navigateRelative : function(direction) {
@@ -279,13 +286,8 @@ FileBrowser.prototype = {
 		this._getUiElem(this.uiNames.accept).html(initializer.accept);
 		this._getUiElem(this.uiNames.cancel).html(initializer.cancel);
 
-		if(initializer.showPreview) {
-			this._getUiElem(this.uiNames.preview).css("display", "block");
-		}
-
-		if(initializer.showShortcuts) {
-			this._getUiElem(this.uiNames.shortcuts).css("display", "block");
-		}
+		this._setVisible(this.uiNames.preview, initializer.showPreview);
+		this._setVisible(this.uiNames.shortcuts, initializer.showShortcuts);
 
 		this.multiSelect = initializer.multiSelect;
 		this.sorter = initializer.sorter;
@@ -331,13 +333,17 @@ FileBrowser.prototype = {
 		filter 			: '#filter-controls',
 		filename 		: "#filename-control",
 		preview 		: "#preview-panel",
-		shortcuts 		: "#shortcuts-display",
+		shortcuts 		: "#shortcuts-controls",
 	},
 
 	_getUiElem : function(name) {
 		return this.rootElem.find(name);
 	},
 
+	_setVisible : function(name, isVisible) {
+		var displayMode = isVisible ? 'block' : 'none';
+		this._getUiElem(name).css('display', displayMode);
+	},
 };
 
 

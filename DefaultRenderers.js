@@ -1,20 +1,14 @@
+/*
+	Standard content renderers
+*/
+
+/*
+	Displays the content items as a multi-column list with small icons
+*/
 function ListRenderer() {
 	this.name = "List"
 }
-
 ListRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
-		render : function(contents) {
-			this._beginRender();
-
-			var $list = this._renderContainer();
-			contents.forEach(function(contentItem) { 
-				$list.append(this._renderItem(contentItem));
-			}, this);
-
-			return $list;
-		},
-
-
 		_renderContainer : function() {
 			return jQuery(document.createElement("ul")).addClass("fb-filelist").click(this, function(evt) { 
 				if(evt.toElement == this) evt.data.callback(null, 'clear');
@@ -33,20 +27,13 @@ ListRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 	});
 
 
+/*
+	Displays content as a multi-column list with preview icons
+*/
 function IconRenderer() {
 	this.name = "Icon"
 }
 IconRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
-		render : function(contents) {
-			this._beginRender();
-
-			$list = this._renderContainer();
-			contents.forEach(function(contentItem) { 
-				$list.append(this._renderItem(contentItem));
-			}, this);
-
-			return $list;
-		},
 
 		_renderContainer : function() {
 			return jQuery(document.createElement("ul")).addClass("fb-filelist fb-iconlist").click(this, function(evt) {
@@ -67,22 +54,13 @@ IconRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 	});
 
 
+/*
+	Displays content in a table with sortable columns
+*/
 function DetailRenderer() {
 	this.name = "Details"
 }
 DetailRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
-
-		render : function(contents) {
-			this._beginRender();
-
-			var $table = this._renderContainer();
-			contents.forEach(function(contentItem) { 
-				$table.append(this._renderItem(contentItem));
-			}, this);
-
-			return $table;
-		},
-
 
 		_renderContainer : function() {
 			var $tr = jQuery(document.createElement("tr"));
@@ -109,7 +87,7 @@ DetailRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 			}
 			$tr.append(jQuery(document.createElement("td")).append($label));
 
-			$tr.append(jQuery(document.createElement("td")).html(contentItem.isDir ? "--" : this._formatSize(contentItem.size)));
+			$tr.append(jQuery(document.createElement("td")).html(this._formatSize(contentItem.size)));
 			$tr.append(jQuery(document.createElement("td")).html(this._formatDate(contentItem.created)));
 			$tr.append(jQuery(document.createElement("td")).html(this._formatDate(contentItem.modified)));
 
@@ -120,10 +98,14 @@ DetailRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		},
 
 		_formatName : function(contentFile) {
-			return contentFile.isDir ? ("<b>" + contentFile.name + "/</b>") : contentFile.name;
+			return contentFile.name;
 		},
 
 		_formatSize : function(size) {
+			if(!size) {
+				return "--";
+			}
+
 			if(size < 1024) {
 				return size + " " + ((size == 1) ? "byte" : "bytes");
 			}
