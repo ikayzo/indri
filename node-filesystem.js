@@ -148,6 +148,12 @@ function handleFileRequest(req, res) {
 			fs.mkdirSync(fullPath);
 			result.contents = [getFileInfo(fullPath)];
 		}
+		else if(action == 'shortcuts') {
+			result.contents = [];
+			result.contents.push({ name : 'Shortcut 1', location: encodeLocation('/')});
+			result.contents.push({ name : 'A Fun Shortcut', location: encodeLocation('/')});
+			result.contents.push({ name : 'A scary Shortcut', location: encodeLocation('/')});
+		}
 		else {
 			result.error = "Invalid action";
 			result.action = action;
