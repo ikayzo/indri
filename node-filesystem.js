@@ -1,5 +1,5 @@
 
-var rootDir = '/tmp';
+var rootDir = '/Users/arlynramos';
 
 var fs = require('fs');
 var path = require('path');

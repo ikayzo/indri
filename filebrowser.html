@@ -1,55 +1,7 @@
 <html>
 	<head>
 		<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
-		<style type="text/css">
-			*, *:before, *:after {
-			  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
-			 }
-
-			header, footer { background: #66f; padding: 5px;}
-
-			#browserui { background: gray; width: 75%; margin: 50px auto; padding: 1px;}
-
-			.fb-panel        	{ display: table; width: 100%; }
-			.fb-cell			{ display: table-cell; vertical-align: top; background: gray; }
-
-			.fb-control-panel-right		{float: right;}
-
-			#control-panel		{ padding: 5px; }
-			#location-display	{ display: inline;}
-			#refresh-control		{ float: right; }
-
-			#contents-panel     	{ height: 350px; }
-
-			#favorites-controls     	{ width: 20%; display: none; }
-			#contents-display    		{ width: auto; background: white; }
-			#preview-panel   			{ width: 20%; min-width: 200; display: none; }
-
-			img {
-				max-width: 100%;
-				max-height: 100%;
-			}
-
-			#status-display {
-				text-transform: capitalize;
-			}
-
-			.fb-content-selected		{ background: CornflowerBlue;}
-			.fb-editbox					{}
-
-			.fb-filelist				{ float: left; list-style-type: none; padding: 5; margin-top: 5;}
-			.fb-filelist > li 			{ float: left; width: 10em; margin-top: 1;}
-			.fb-filelist > li:hover		{ background: aqua;}
-
-			.fb-iconlist				 { }
-			li.fb-iconitem				 { text-align: center; margin-bottom: 25;} 
-
-			.fb-detailList				{ width: 100% }
-			.fb-detailHeader			{ text-transform: capitalize; text-align: left; background: Cornsilk;}
-			.fb-detailItem				{ width: 100% }
-			.fb-detailItem:hover		{ background: aqua;}
-			.fb-detailItem-dirname		{ font-weight: bold; }
-		</style>
+        <link href="css/styles.css" rel="stylesheet" type="text/css">
 	</head>
 <body>
 <div id="browserui">
@@ -58,11 +10,11 @@
 
 	<div class="fb-panel" id="control-panel">
 		<div class="fb-cell" id="location-controls" >
-			<button id="parent-control">Parent</button>
+			<button id="parent-control" class="btn">Parent</button>
 			<div id="location-display">
 				Location: <span id="location-field"></span>
 			</div>
-			<button id="refresh-control">Refresh</button>
+			<button id="refresh-control" class="btn">Refresh</button>
 		</div>
 
 		<div class="fb-cell fb-control-panel-right" id="view-controls"></div>
@@ -76,8 +28,8 @@
 
 	<div class="fb-panel" id="filename-panel">
 		<div class="fb-cell">
-			<button id="newfolder-control">New Folder</button>
-			<button id="delete-control" disabled>Delete</button>
+			<button id="newfolder-control" class="btn">New Folder</button>
+			<button id="delete-control" class="btn" disabled>Delete</button>
 		</div>
 
 		<div class="fb-cell">
@@ -87,8 +39,8 @@
 			</center>
 		</div>
 		<div class="fb-cell fb-control-panel-right">
-			<button id="accept-control">OK</button>
-			<button id="cancel-control">Cancel</button>
+			<button id="accept-control" class="btn primary">OK</button>
+			<button id="cancel-control" class="btn primary">Cancel</button>
 		</div>
 	</div>
 	
