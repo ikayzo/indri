@@ -489,10 +489,10 @@ FileBrowser.prototype.DefaultInitializer = {
 
 	shortcutsRenderer : {
 		render : function(shortcuts, callback) {
-			var $listContainer = jQuery(document.createElement("ul")).addClass("fb-shortcut-list");
+			var $listContainer = jQuery(document.createElement("ul")).addClass("ind-shortcut-list");
 			shortcuts.forEach(function(shortcut) {
-				var $label = jQuery(document.createElement("span")).addClass("fb-shortcut-name").html(shortcut.name);
-				var $listItem = jQuery(document.createElement("li")).addClass("fb-listitem").append($label)
+				var $label = jQuery(document.createElement("span")).addClass("ind-shortcut-name").html(shortcut.name);
+				var $listItem = jQuery(document.createElement("li")).addClass("ind-listitem").append($label)
 				.click(function(evt) {
 					if(evt.which == 1) {
 						callback(shortcut.location);
