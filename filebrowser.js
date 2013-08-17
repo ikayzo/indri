@@ -438,8 +438,10 @@ FileBrowser.prototype.DefaultInitializer = {
 		render : function(callback) {
 			var controlContainer = jQuery(document.createElement("span"));
 
+			var btnId = 0;
 			this.views.forEach(function(view) {
-				var button = jQuery(document.createElement("button")).html(view.name).click(function() {
+				var button = jQuery(document.createElement("button")).html(view.name)
+					.addClass('ind-viewbutton').attr('id', 'ind-viewbutton-' + btnId++).click(function() {
 					callback(view);
 				});
 				controlContainer.append(button);
