@@ -59,8 +59,8 @@
 $(document).ready(function() {
 	var initializer = jQuery.extend({}, FileBrowser.prototype.DefaultInitializer, {
 		multiSelect : true,
-		showPreview : true,
-		showShortcuts : true,
+		showPreview : false,
+		showShortcuts : false,
 	});
 
 	initializer.filter.options.push({ value: "\.(htm|html)$", text: "HTML files (*.htm, *.html)"});
