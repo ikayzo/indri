@@ -10,15 +10,15 @@ function ListRenderer() {
 }
 ListRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		_renderContainer : function() {
-			return jQuery(document.createElement("ul")).addClass("fb-filelist").click(this, function(evt) { 
+			return jQuery(document.createElement("ul")).addClass("ind-filelist").click(this, function(evt) { 
 				if(evt.toElement == this) evt.data.callback(null, 'clear');
 			});
 		},
 
 		_renderItem : function(contentItem) {
 			var $icon = jQuery(document.createElement("img")).attr("src", this._getIcon(contentItem, "small"));
-			var $label = jQuery(document.createElement("span")).addClass("fb-editable-name").html(contentItem.name);
-			var $listItem = jQuery(document.createElement("li")).addClass("fb-listitem").append($icon).append($label);
+			var $label = jQuery(document.createElement("span")).addClass("ind-editable-name").html(contentItem.name);
+			var $listItem = jQuery(document.createElement("li")).addClass("ind-listitem").append($icon).append($label);
 
 			this.lookup[contentItem.id] = $listItem;
 			this._setupNormalEvents($listItem, contentItem);
@@ -36,15 +36,15 @@ function IconRenderer() {
 IconRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 
 		_renderContainer : function() {
-			return jQuery(document.createElement("ul")).addClass("fb-filelist fb-iconlist").click(this, function(evt) {
+			return jQuery(document.createElement("ul")).addClass("ind-filelist ind-iconlist").click(this, function(evt) {
 				if(evt.toElement == this) evt.data.callback(null, 'clear');
 			});
 		},
 
 		_renderItem : function(contentItem) {
 			var $icon = jQuery(document.createElement("img")).attr("src", this._getIcon(contentItem));
-			var $label = jQuery(document.createElement("span")).addClass("fb-editable-name").html(contentItem.name);
-			var $listItem = jQuery(document.createElement("li")).addClass("fb-iconitem").append($icon).append("<br>").append($label);
+			var $label = jQuery(document.createElement("span")).addClass("ind-editable-name").html(contentItem.name);
+			var $listItem = jQuery(document.createElement("li")).addClass("ind-iconitem").append($icon).append("<br>").append($label);
 
 			this.lookup[contentItem.id] = $listItem;
 			this._setupNormalEvents($listItem, contentItem);
@@ -65,7 +65,7 @@ DetailRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		_renderContainer : function() {
 			var $tr = jQuery(document.createElement("tr"));
 			this._fieldNames.forEach(function(field) {
-				var $th = jQuery(document.createElement("th")).addClass("fb-detailheader").html(field)
+				var $th = jQuery(document.createElement("th")).addClass("ind-detailheader").html(field)
 				.click(this, function(evt){
 					if(evt.toElement == this && evt.which == 1) {
 						evt.data.browser.sorter.setSortField(field);
@@ -74,16 +74,16 @@ DetailRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 				$tr.append($th);
 			}, this);
 
-			return jQuery(document.createElement("table")).addClass("fb-filelist fb-detaillist")
+			return jQuery(document.createElement("table")).addClass("ind-filelist ind-detaillist")
 					.append(jQuery(document.createElement("thead"))).append($tr);
 		},
 
 		_renderItem : function(contentItem) {
-			var $tr = jQuery(document.createElement("tr")).addClass("fb-detailitem");
+			var $tr = jQuery(document.createElement("tr")).addClass("ind-detailitem");
 
-			var $label = jQuery(document.createElement("span")).addClass("fb-editable-name").html(contentItem.name);
+			var $label = jQuery(document.createElement("span")).addClass("ind-editable-name").html(contentItem.name);
 			if(contentItem.isDir) {
-				$label.addClass("fb-detailitem-dirname");
+				$label.addClass("ind-detailitem-dirname");
 			}
 			$tr.append(jQuery(document.createElement("td")).append($label));
 

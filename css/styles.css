@@ -9,10 +9,10 @@ header, footer { background: #3f7b96; padding: 10px 15px; color: white; font: 11
 
 #browserui { background: #e9e9e9; width: 75%; margin: 50px auto; padding: 1px;}
 
-.fb-panel        	{ display: table; width: 100%; }
-.fb-cell			{ display: table-cell; vertical-align: top; background: #e9e9e9; }
+.ind-panel        	{ display: table; width: 100%; }
+.ind-cell			{ display: table-cell; vertical-align: top; background: #e9e9e9; }
 
-.fb-control-panel-right		{float: right;}
+.ind-control-panel-right		{float: right;}
 
 #control-panel		{ padding: 15px 20px; }
 #location-display	{ display: inline; font: Helvetica Neue, Helvetica, Arial, sans-serif;}
@@ -32,24 +32,24 @@ header, footer { background: #3f7b96; padding: 10px 15px; color: white; font: 11
 
 img {	max-width: 100%; max-height: 100%; }
 
-.fb-content-selected		{ background: #aedeff;}
-.fb-editbox					{ font: Georgia, "Times New Roman", Times, serif; }
+.ind-content-selected		{ background: #aedeff;}
+.ind-editbox					{ font: Georgia, "Times New Roman", Times, serif; }
 
-.fb-filelist				{ float: left; list-style-type: none; padding: 10px; margin: 0; }
-.fb-filelist > li 			{ float: left; width: 10em; margin-top: 1;}
-.fb-filelist > li:hover		{ background: ;}
+.ind-filelist				{ float: left; list-style-type: none; padding: 10px; margin: 0; }
+.ind-filelist > li 			{ float: left; width: 10em; margin-top: 1;}
+.ind-filelist > li:hover		{ background: ;}
 
-.fb-iconlist				 { }
-li.fb-iconitem				 { text-align: center; margin-bottom: 25;} 
+.ind-iconlist				 { }
+li.ind-iconitem				 { text-align: center; margin-bottom: 25;} 
 
-.fb-detailList				{ width: 100% }
-.fb-detailHeader			{ font: 11px Helvetica Neue, Helvetica, Arial, sans-serif; color: white; text-transform: uppercase; letter-spacing: 0.2em; text-align: left; background: #8f9a9f; padding: 3px 7px;}
-.fb-detailItem				{ width: 100% }
-.fb-detailItem:hover		{ background: #def2ff;}
-.fb-detailItem-dirname		{ font-weight: bold; }
+.ind-detailList				{ width: 100% }
+.ind-detailHeader			{ font: 11px Helvetica Neue, Helvetica, Arial, sans-serif; color: white; text-transform: uppercase; letter-spacing: 0.2em; text-align: left; background: #8f9a9f; padding: 3px 7px;}
+.ind-detailItem				{ width: 100% }
+.ind-detailItem:hover		{ background: #def2ff;}
+.ind-detailItem-dirname		{ font-weight: bold; }
 
 
-.fb-listitem 				{ margin: 10px 0; }
+.ind-listitem 				{ margin: 10px 0; }
 
 
 .btn {
