@@ -59,8 +59,8 @@
 $(document).ready(function() {
 	var initializer = jQuery.extend({}, FileBrowser.prototype.DefaultInitializer, {
 		multiSelect : true,
-		showPreview : false,
-		showShortcuts : false,
+		showPreview : true,
+		showShortcuts : true,
 	});
 
 	initializer.filter.options.push({ value: "\.(htm|html)$", text: "HTML files (*.htm, *.html)"});
@@ -70,9 +70,9 @@ $(document).ready(function() {
 	initializer.viewFactory.views.push(new IconRenderer());
 	initializer.viewFactory.views.push(new DetailRenderer());
 
-	initializer.previewRenderer.baseUrl = 'http://civilbeat_production.s3.amazonaws.com/';
+	//initializer.previewRenderer.baseUrl = 'http://civilbeat_production.s3.amazonaws.com/';
 
-	var fileBrowser = new FileBrowser(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
+	var fileBrowser = new FileBrowser(jQuery("#browserui"), new FileSystemManager("http://192.168.0.31:1337/"), initializer);
 });
 
 </script>

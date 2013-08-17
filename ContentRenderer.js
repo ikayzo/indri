@@ -16,11 +16,11 @@ ContentRenderer.prototype = {
 	
 	updateSelection : function(newSelection) {
 		for(id in this.lookup) {
-			this.lookup[id].removeClass("ind-content-selected");
+			this.lookup[id].removeClass("fb-content-selected");
 		}
 
 		newSelection.forEach(function(selectedItem) {
-			this.lookup[selectedItem.id].addClass("ind-content-selected");
+			this.lookup[selectedItem.id].addClass("fb-content-selected");
 		}, this);
 	},
 
@@ -31,10 +31,10 @@ ContentRenderer.prototype = {
 	_setupEditingEvents : function($listItem, contentItem) {
 		var oldText, newText;
 		
-		var $editable = $listItem.find(".ind-editable-name");
+		var $editable = $listItem.find(".fb-editable-name");
 		oldText = $editable.html().replace(/"/g, "'");  
 
-		$input = jQuery(document.createElement("input")).addClass("ind-editbox").attr("type", "text").attr("value", oldText)
+		$input = jQuery(document.createElement("input")).addClass("fb-editbox").attr("type", "text").attr("value", oldText)
 			.keypress(this, function(evt) {
 				if(evt.which == 13) {
 		    		newText = $(this).val().replace(/"/g, "'");  
@@ -66,7 +66,7 @@ ContentRenderer.prototype = {
 		});
 
 		var pressTimer;
-		$listItem.find(".ind-editable-name")
+		$listItem.find(".fb-editable-name")
 		.mouseup(function(){
 			clearTimeout(pressTimer);
 		}).mousedown(this, function(evt){

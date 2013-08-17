@@ -181,12 +181,8 @@ FileBrowser.prototype = {
 			}
 		}
 		else if(evt.type == "click") {
-			if(!evt.metaKey || !this.multiSelect) {
-				this.currentSelection.length = 0;
-				this.currentSelection.push(contentItem);
-			}
-			else {
-				var index = jQuery.inArray(contentItem, this.currentSelection);
+			var index = jQuery.inArray(contentItem, this.currentSelection);
+			if(evt.metaKey && this.multiSelect) {
 				if(index == -1) {
 					this.currentSelection.push(contentItem);
 				}
@@ -194,6 +190,16 @@ FileBrowser.prototype = {
 					this.currentSelection.splice(index, 1);
 				}
 			}
+			else {
+				if(index != -1 && contentItem.isDir) {
+					this.navigateToLocation(contentItem.location);
+				}
+				else {
+					this.currentSelection.length = 0;
+					this.currentSelection.push(contentItem);
+				}
+			}
+			
 
 			this._selectionChanged();
 		}
