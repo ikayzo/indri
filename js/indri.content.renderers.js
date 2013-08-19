@@ -5,10 +5,10 @@
 /*
 	Displays the content items as a multi-column list with small icons
 */
-function ListRenderer() {
+function ListContentRenderer() {
 	this.name = "List"
 }
-ListRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
+ListContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		_renderContainer : function() {
 			return jQuery(document.createElement("ul")).addClass("ind-filelist").click(this, function(evt) { 
 				if(evt.toElement == this) evt.data.callback(null, 'clear');
@@ -30,10 +30,10 @@ ListRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 /*
 	Displays content as a multi-column list with preview icons
 */
-function IconRenderer() {
+function IconContentRenderer() {
 	this.name = "Icon"
 }
-IconRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
+IconContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 
 		_renderContainer : function() {
 			return jQuery(document.createElement("ul")).addClass("ind-filelist ind-iconlist").click(this, function(evt) {
@@ -57,10 +57,10 @@ IconRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 /*
 	Displays content in a table with sortable columns
 */
-function DetailRenderer() {
+function DetailContentRenderer() {
 	this.name = "Details"
 }
-DetailRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
+DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 
 		_renderContainer : function() {
 			var $tr = jQuery(document.createElement("tr"));
