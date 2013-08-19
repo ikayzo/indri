@@ -2,13 +2,14 @@
 <html>
 
 <head>
-	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="js/3rdparty/jquery-1.10.2.js"></script>
 	<link href="css/reset.css" rel="stylesheet" type="text/css">
-    <link href="css/styles.css" rel="stylesheet" type="text/css">
+    <link href="css/indri.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
-	<div id="browserui"><!-- This may not be needed. CSS removed for this -->
+	<!-- Marks the top-most DOM element for the javascript to be applied to -->
+	<div id="browserui">
 
 		<header id="header-wrapper" class="ind-wrapper">
 			<div id="title-control">File Dialog</div>
@@ -58,10 +59,10 @@
 		
 	</div><!-- End Main Wrapper -->
 </body>
-<script type="text/javascript" src="FileSystemManager.js"></script>
-<script type="text/javascript" src="ContentRenderer.js"></script>
-<script type="text/javascript" src="DefaultRenderers.js"></script>
-<script type="text/javascript" src="FileBrowser.js"></script>
+<script type="text/javascript" src="js/indri.fsm.js"></script>
+<script type="text/javascript" src="js/indri.content.renderer.base.js"></script>
+<script type="text/javascript" src="js/indri.content.renderers.js"></script>
+<script type="text/javascript" src="js/indri.main.js"></script>
 
 <script type="text/javascript">
 

@@ -1,1 +1,3 @@
 .DS_Store
+/aws-credentials.json
+/civilbeat-credentials.json
