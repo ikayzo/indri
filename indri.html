@@ -1,53 +1,63 @@
+<!DOCTYPE html>
 <html>
-	<head>
-		<script type="text/javascript" src="js/3rdparty/jquery-1.10.2.js"></script>
-        <link href="css/indri.css" rel="stylesheet" type="text/css">
-	</head>
+
+<head>
+	<script type="text/javascript" src="js/3rdparty/jquery-1.10.2.js"></script>
+	<link href="css/reset.css" rel="stylesheet" type="text/css">
+    <link href="css/indri.css" rel="stylesheet" type="text/css">
+</head>
+
 <body>
-<div id="browserui">
+	<!-- Marks the top-most DOM element for the javascript to be applied to -->
+	<div id="browserui">
 
-	<header class="ind-panel" id="title-control">File Dialog</header>
-
-	<div class="ind-panel" id="control-panel">
-		<div class="ind-cell" id="location-controls" >
-			<button id="parent-control" class="btn">Parent</button>
-			<button id="refresh-control" class="btn">Refresh</button>
-			<div id="location-display">
-				Location: <span id="location-field"></span>
+		<header id="header-wrapper" class="ind-wrapper">
+			<div id="title-control">File Dialog</div>
+			<div class="ind-panel" id="control-panel">
+				<div class="ind-cell" id="location-controls" >
+				<button id="parent-control" class="btn">Parent</button>
+				<div id="location-display">
+					Location: <span id="location-field"></span>
+				</div>
+				<button id="refresh-control" class="btn">Refresh</button>
 			</div>
-		</div>
+			<div class="ind-cell ind-control-panel-right" id="view-controls"></div>
+			</div>
+		</header><!-- End Header -->
 
-		<div class="ind-cell ind-control-panel-right" id="view-controls"></div>
-	</div>
+		<section id="section-wrapper" class="ind-wrapper">
+			<div class="ind-panel" id="contents-panel">
+				<div class="ind-cell" id="shortcuts-controls"></div>
+				<div class="ind-cell" id="contents-display"></div>
+				<div class="ind-cell" id="preview-panel"></div>  
+			</div>
+		</section><!-- End Content -->
 
-	<div class="ind-panel" id="contents-panel">
-		<div class="ind-cell" id="shortcuts-controls"></div>
-		<div class="ind-cell" id="contents-display"></div>
-		<div class="ind-cell" id="preview-panel"></div>  
-	</div>
+		<footer id="footer-wrapper" class="ind-wrapper">
+			<div class="ind-panel" id="filename-panel">
+				<div class="ind-cell">
+					<button id="newfolder-control" class="btn">New Folder</button>
+					<button id="delete-control" class="btn" disabled>Delete</button>
+				</div>
 
-	<div class="ind-panel" id="filename-panel">
-		<div class="ind-cell">
-			<button id="newfolder-control" class="btn">New Folder</button>
-			<button id="delete-control" class="btn" disabled>Delete</button>
-		</div>
+				<div class="ind-cell">
+					<center>
+						<input id="filename-control"></input>
+						<span id="filter-controls"></span>
+					</center>
+				</div>
+				<div class="ind-cell ind-control-panel-right">
+					<button id="accept-control" class="btn primary">OK</button>
+					<button id="cancel-control" class="btn primary">Cancel</button>
+				</div>
+			</div>
 
-		<div class="ind-cell">
-			<center>
-				<input id="filename-control"></input>
-				<span id="filter-controls"></span>
-			</center>
-		</div>
-		<div class="ind-cell ind-control-panel-right">
-			<button id="accept-control" class="btn primary">OK</button>
-			<button id="cancel-control" class="btn primary">Cancel</button>
-		</div>
-	</div>
-	
-	<div class="ind-panel" id="status-panel">
-		<div class="ind-cell" id="status-display">Current status</div>
-	</div>
-</div>
+			<div class="ind-panel" id="status-panel">
+				<div class="ind-cell" id="status-display">Current status</div>
+			</div>
+		</footer><!-- End Footer -->
+		
+	</div><!-- End Main Wrapper -->
 </body>
 <script type="text/javascript" src="js/indri.fsm.js"></script>
 <script type="text/javascript" src="js/indri.content.renderer.base.js"></script>
@@ -70,7 +80,7 @@ $(document).ready(function() {
 	initializer.viewFactory.views.push(new IconRenderer());
 	initializer.viewFactory.views.push(new DetailRenderer());
 
-	//initializer.previewRenderer.baseUrl = 'http://civilbeat_production.s3.amazonaws.com/';
+	initializer.previewRenderer.baseUrl = 'http://civilbeat_production.s3.amazonaws.com/';
 
 	var fileBrowser = new FileBrowser(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
 });

@@ -1,5 +1,5 @@
 
-var rootDir = '/Users';
+var rootDir = '/Users/christopherota/Desktop/Dropbox/Ikayzo Project';
 
 var fs = require('fs');
 var path = require('path');
