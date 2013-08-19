@@ -49,10 +49,9 @@ header, footer { color: white; text-transform: uppercase; letter-spacing: 0.2em;
 #refresh-control		{ }
 
 
-
-#favorites-controls     	{ width: 20%; display: none; }
-#contents-display    		{ width: auto; background: white; }
-#preview-panel   			{ width: 20%; min-width: 200; display: none; }
+#shortcuts-controls   { width: 20%; }
+#contents-display    	{ width: auto; background: white; }
+#preview-panel   			{ width: 20%; min-width: 200; }
 #filename-panel				{ padding: 15px 20px; }
 #filename-control			{ width: 300px; }
 #status-display				{ padding: 15px 20px; text-transform: capitalize;}

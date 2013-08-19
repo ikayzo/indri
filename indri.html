@@ -8,19 +8,17 @@
 </head>
 
 <body>
-	<div id="browserui"><!-- Marks the top-most DOM element for the javascript to be applied to -->
+	<div id="browserui"><!-- Marks the top-most DOM element for the javascript -->
 
 		<header id="header-wrapper" class="ind-wrapper">
 			<div id="title-control">File Dialog</div>
 			<div class="ind-panel" id="control-panel">
 				<div class="ind-cell" id="location-controls" >
-				<button id="parent-control" class="btn">Parent</button>
-				<div id="location-display">
-					Location: <span id="location-field"></span>
+					<button id="parent-control" class="btn">Parent</button>
+					<button id="refresh-control" class="btn">Refresh</button>
+					<div id="location-display">Location</div>
 				</div>
-				<button id="refresh-control" class="btn">Refresh</button>
-			</div>
-			<div class="ind-cell ind-control-panel-right" id="view-controls"></div>
+				<div class="ind-cell ind-control-panel-right" id="view-controls"></div>
 			</div>
 		</header><!-- End Header -->
 
@@ -61,6 +59,7 @@
 <script type="text/javascript" src="js/indri.fsm.js"></script>
 <script type="text/javascript" src="js/indri.content.renderer.base.js"></script>
 <script type="text/javascript" src="js/indri.content.renderers.js"></script>
+<script type="text/javascript" src="js/indri.location.renderers.js"></script>
 <script type="text/javascript" src="js/indri.main.js"></script>
 
 <script type="text/javascript">
@@ -72,6 +71,8 @@ $(document).ready(function() {
 		visibility : {
 			newFolder : true,
 			delete : true,
+//			preview : true,
+//			shortcuts : true,
 		},
 	});
 
@@ -79,10 +80,14 @@ $(document).ready(function() {
 	initializer.filter.options.push({ value: "\.js$", text: "Javascript files (*.js)"});
 	initializer.filter.options.push({ value: "\.(jpg|png)", text: "Image files (*.jpg, *.png)"});
 
-	initializer.viewFactory.views.push(new IconRenderer());
-	initializer.viewFactory.views.push(new DetailRenderer());
+	initializer.viewFactory.views.push(new IconContentRenderer());
+	initializer.viewFactory.views.push(new DetailContentRenderer());
 
-	initializer.previewRenderer.baseUrl = 'http://civilbeat_production.s3.amazonaws.com/';
+//	initializer.locationRenderer = new StringLocationRenderer();
+	initializer.locationRenderer = new SegmentedLocationRenderer();
+//	initializer.locationRenderer = new BucketLocationRenderer();
+
+//	initializer.previewRenderer.baseUrl = 'http://civilbeat_production.s3.amazonaws.com/';
 
 	var fileBrowser = new FileBrowser(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
 });

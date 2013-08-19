@@ -6,7 +6,7 @@ var configurationPath = "./aws-credentials.json";
 var path = require('path');
 var AWS = require('aws-sdk');
 
-var defaultLocation = { bucket: "ikayzo-files", key : ""};
+var defaultLocation = { bucket: "civilbeat_dev", key : ""};
 
 function parseLocation(location) {
 	if(!location && !defaultLocation) {
