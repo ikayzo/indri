@@ -1,7 +1,7 @@
 <html>
 	<head>
-		<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
-        <link href="css/styles.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript" src="js/3rdparty/jquery-1.10.2.js"></script>
+        <link href="css/indri.css" rel="stylesheet" type="text/css">
 	</head>
 <body>
 <div id="browserui">
@@ -11,10 +11,10 @@
 	<div class="ind-panel" id="control-panel">
 		<div class="ind-cell" id="location-controls" >
 			<button id="parent-control" class="btn">Parent</button>
+			<button id="refresh-control" class="btn">Refresh</button>
 			<div id="location-display">
 				Location: <span id="location-field"></span>
 			</div>
-			<button id="refresh-control" class="btn">Refresh</button>
 		</div>
 
 		<div class="ind-cell ind-control-panel-right" id="view-controls"></div>
@@ -49,10 +49,10 @@
 	</div>
 </div>
 </body>
-<script type="text/javascript" src="FileSystemManager.js"></script>
-<script type="text/javascript" src="ContentRenderer.js"></script>
-<script type="text/javascript" src="DefaultRenderers.js"></script>
-<script type="text/javascript" src="FileBrowser.js"></script>
+<script type="text/javascript" src="js/indri.fsm.js"></script>
+<script type="text/javascript" src="js/indri.content.renderer.base.js"></script>
+<script type="text/javascript" src="js/indri.content.renderers.js"></script>
+<script type="text/javascript" src="js/indri.main.js"></script>
 
 <script type="text/javascript">
 
