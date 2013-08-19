@@ -66,10 +66,13 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-	var initializer = jQuery.extend({}, FileBrowser.prototype.DefaultInitializer, {
+	var initializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
 		multiSelect : true,
-		showPreview : false,
-		showShortcuts : false,
+
+		visibility : {
+			newFolder : true,
+			delete : true,
+		},
 	});
 
 	initializer.filter.options.push({ value: "\.(htm|html)$", text: "HTML files (*.htm, *.html)"});

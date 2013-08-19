@@ -62,6 +62,8 @@ img {	max-width: 100%; max-height: 100%; }
 .ind-location-segment   { }
 .ind-location-bucket   { }
 
+.ind-viewbutton      { padding-left: 10px;}
+
 .ind-content-selected		{ background: #aedeff;}
 .ind-editbox					{ font: Georgia, "Times New Roman", Times, serif; }
 
