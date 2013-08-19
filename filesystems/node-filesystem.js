@@ -1,6 +1,4 @@
 
-var rootDir = '/Users/christopherota/Desktop/Dropbox/Ikayzo Project';
-
 var fs = require('fs');
 var path = require('path');
 
@@ -170,8 +168,11 @@ function handleFileRequest(req, res) {
 	res.end(JSON.stringify(result) + '\n');
 }
 
-var serverName = (process.argv.length > 2) ? process.argv[2] : "localhost";
-var serverPort = (process.argv.length > 3) ? process.argv[3] : 1337;
+
+var rootDir = (process.argv.length > 2) ? process.argv[2] : '/tmp';
+
+var serverName = (process.argv.length > 3) ? process.argv[3] : "localhost";
+var serverPort = (process.argv.length > 4) ? process.argv[4] : 1337;
 
 var http = require('http');
 http.createServer(function (req, res) {
@@ -179,3 +180,4 @@ http.createServer(function (req, res) {
   handleFileRequest(req, res);
 }).listen(serverPort, serverName);
 console.log('Server running at http://' + serverName + ':' + serverPort);
+console.log('Serving files from ', rootDir);

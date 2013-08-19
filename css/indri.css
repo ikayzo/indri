@@ -46,7 +46,7 @@ header, footer { color: white; text-transform: uppercase; letter-spacing: 0.2em;
 
 #location-display	{ display: inline;}
 #location-controls 	{ padding: 5px 0; }
-#refresh-control		{ float: right; }
+#refresh-control		{ }
 
 
 
@@ -59,6 +59,9 @@ header, footer { color: white; text-transform: uppercase; letter-spacing: 0.2em;
 
 
 img {	max-width: 100%; max-height: 100%; }
+
+.ind-location-segment   { }
+.ind-location-bucket   { }
 
 .ind-content-selected		{ background: #aedeff;}
 .ind-editbox					{ font: Georgia, "Times New Roman", Times, serif; }

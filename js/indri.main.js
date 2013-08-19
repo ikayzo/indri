@@ -110,7 +110,7 @@ FileBrowser.prototype = {
 		this.currentLocation = location;
 
 		if(this.locationRenderer) {
-			this.locationRenderer.render(this._getUiElem(this.uiNames.location), this.currentLocation);
+			this.locationRenderer.render(this._getUiElem(this.uiNames.location), this.currentLocation, this._makeCallback(this.navigateToLocation));
 		}
 		else {
 			this._getUiElem(this.uiNames.location).html(this.currentLocation);
@@ -438,7 +438,7 @@ FileBrowser.prototype.DefaultInitializer = {
 
 	viewFactory : {
 		views : [
-			new ListRenderer(),
+			new ListContentRenderer(),
 		],
 
 		render : function(callback) {
@@ -458,17 +458,7 @@ FileBrowser.prototype.DefaultInitializer = {
 		}
 	},
 
-	locationRenderer : {
-		render : function(elem, location) {
-			if(!location || location == ".") {
-				location = "(root)";
-			}
-
-			location = location.replace(/^\./, "(root)");
-
-			elem.html(location);
-		}
-	},
+	locationRenderer : new StringLocationRenderer(),
 
 	statusRenderer : {
 		render : function(elem, status) {
