@@ -30,6 +30,7 @@ FileBrowser.prototype = {
 	previewRenderer : null,
 	shortcutsRenderer : null,
 
+	allowMultipleResults : false,
 	resultCallback : null,
 
 	/*
@@ -223,11 +224,22 @@ FileBrowser.prototype = {
 		this.contentRenderer.updateSelection(this.currentSelection);
 
 		// Fill in the selected names
-		var prefix = '', filenameText = '';
-		this.currentSelection.forEach(function(item) { 
-			filenameText += prefix + item.name; 
-			prefix = ';'; 
-		});
+		var filenameText = '';
+		if(this.currentSelection.length == 1) {
+			filenameText = this.currentSelection[0].name;
+		}
+		else if(this.currentSelection.length > 0) {
+			if(this.allowMultipleResults) {
+				var prefix = '';
+				this.currentSelection.forEach(function(selectedItem) {
+					filenameText += prefix + selectedItem.name;
+					prefix = ';';
+				});
+			}
+			else {
+				filenameText = "<Multiple Selection>";
+			}
+		}
 		this._getUiElem(this.uiNames.filename).val(filenameText);
 
 		// Enabled/disable the buttons button
@@ -264,7 +276,12 @@ FileBrowser.prototype = {
 	},
 
 	_returnResults : function(filesSelected, results) {
-		this.resultCallback({ success: filesSelected, results: results });
+		if(filesSelected && !this.allowMultipleResults && results.length != 1) {
+			this._updateStatus("Error: Multiple selection is not allowed.")
+		}
+		else {
+			this.resultCallback({ success: filesSelected, results: results });
+		}
 	},
 
 
@@ -283,6 +300,8 @@ FileBrowser.prototype = {
 		}
 
 		this.multiSelect = initializer.multiSelect;
+		this.allowMultipleResults = initializer.allowMultipleResults;
+
 		this.sorter = initializer.sorter;
 		this.sorter.browser = this;
 
@@ -396,6 +415,7 @@ FileBrowser.prototype.DefaultInitializer = {
 
 	directoriesOnly : false,
 	multiSelect : false,
+	allowMultipleResults : false,
 	// fileMustExist : false,
 
 	sorter : {
@@ -567,6 +587,7 @@ FileBrowser.prototype.DefaultInitializer = {
 FileBrowser.prototype.DebugDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
 
 	multiSelect : true,
+	allowMultipleResults : true,
 
 	texts : {
 		title : "Test Dialog",
@@ -607,6 +628,7 @@ FileBrowser.prototype.SaveDialogInitializer = jQuery.extend(true, {}, FileBrowse
 FileBrowser.prototype.OpenDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
 
 	multiSelect : true,
+	allowMultipleResults : true,
 
 	texts : {
 		title : "Open File(s)",
