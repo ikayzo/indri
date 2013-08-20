@@ -231,20 +231,9 @@ FileBrowser.prototype = {
 		});
 		this._getUiElem(this.uiNames.filename).val(filenameText);
 
-		// Enabled/disable the delete button
-		if(this.currentSelection.length != 0) {
-			this._getUiElem(this.uiNames.delete).removeAttr('disabled');
-		}
-		else  {
-			this._getUiElem(this.uiNames.delete).attr('disabled', 'true');
-		}
-
-		if(this.currentSelection.length == 1) {
-			this._getUiElem(this.uiNames.rename).removeAttr('disabled');
-		}
-		else  {
-			this._getUiElem(this.uiNames.rename).attr('disabled', 'true');
-		}
+		// Enabled/disable the buttons button
+		this._setEnabled(this.uiNames.delete, this.currentSelection.length != 0);
+		this._setEnabled(this.uiNames.rename, this.currentSelection.length == 1);
 
 		if(this.previewRenderer) {
 			this._getUiElem(this.uiNames.preview).empty().append(this.previewRenderer.render(this.currentSelection));
@@ -370,6 +359,15 @@ FileBrowser.prototype = {
 	_setVisible : function(name, isVisible) {
 		var displayMode = isVisible ? '' : 'none';
 		this._getUiElem(name).css('display', displayMode);
+	},
+
+	_setEnabled : function(name, isEnabled) {
+		if(isEnabled) {
+			this._getUiElem(name).removeAttr('disabled');
+		}
+		else  {
+			this._getUiElem(name).attr('disabled', 'true');
+		}
 	},
 };
 

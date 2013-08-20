@@ -69,11 +69,17 @@ DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 			var $tr = jQuery(document.createElement("tr"));
 			this._fieldNames.forEach(function(field) {
 				var $th = jQuery(document.createElement("th")).addClass("ind-detailheader").html(field)
-				.click(this, function(evt){
-					if(evt.toElement == this && evt.which == 1) {
-						evt.data.browser.sorter.setSortField(field);
-					}
-				});
+					.click(this, function(evt){
+						if(evt.toElement == this && evt.which == 1) {
+							evt.data.browser.sorter.setSortField(field);
+						}
+					});
+
+				// If this is the column we're sorting by, add the appropriate class
+				if(field == this.browser.sorter.fieldName) {
+					$th.addClass(this.browser.sorter.ascending ? "ind-col-sort-asc" : "ind-col-sort-desc");					
+				}
+
 				$tr.append($th);
 			}, this);
 
