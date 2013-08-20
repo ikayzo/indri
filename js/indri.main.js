@@ -30,6 +30,8 @@ FileBrowser.prototype = {
 	previewRenderer : null,
 	shortcutsRenderer : null,
 
+	resultCallback : null,
+
 	/*
 		Primary API
 	*/
@@ -140,23 +142,20 @@ FileBrowser.prototype = {
 		if(evt == "clear") {
 			this.clearSelection();
 		}
+/*		
 		else if(evt == "longpress") {
 			this.currentSelection.length = 0;
 			this.currentSelection.push(contentItem);			
 
 			this._selectionChanged();
 		}
+*/
 		else if(evt == "rename") {
 			this.renameItem(contentItem, newName);
 		}
 		else if(evt.type == "dblclick") {
-			if(contentItem.isDir) {
-				this.navigateToLocation(contentItem.location);
-			}
-			else {
-				console.log("User chose item: " + contentItem.location);
-			}
-		}
+			this._returnResults(true, this.currentSelection);
+		}	
 		else if(evt.type == "click") {
 			var index = jQuery.inArray(contentItem, this.currentSelection);
 			if(evt.metaKey && this.multiSelect) {
@@ -231,20 +230,9 @@ FileBrowser.prototype = {
 		});
 		this._getUiElem(this.uiNames.filename).val(filenameText);
 
-		// Enabled/disable the delete button
-		if(this.currentSelection.length != 0) {
-			this._getUiElem(this.uiNames.delete).removeAttr('disabled');
-		}
-		else  {
-			this._getUiElem(this.uiNames.delete).attr('disabled', 'true');
-		}
-
-		if(this.currentSelection.length == 1) {
-			this._getUiElem(this.uiNames.rename).removeAttr('disabled');
-		}
-		else  {
-			this._getUiElem(this.uiNames.rename).attr('disabled', 'true');
-		}
+		// Enabled/disable the buttons button
+		this._setEnabled(this.uiNames.delete, this.currentSelection.length != 0);
+		this._setEnabled(this.uiNames.rename, this.currentSelection.length == 1);
 
 		if(this.previewRenderer) {
 			this._getUiElem(this.uiNames.preview).empty().append(this.previewRenderer.render(this.currentSelection));
@@ -275,6 +263,10 @@ FileBrowser.prototype = {
 		return function() { return callback.apply(fileBrowser, arguments); }
 	},
 
+	_returnResults : function(filesSelected, results) {
+		this.resultCallback({ success: filesSelected, results: results });
+	},
+
 
 	// Initialization methods
 	_initialize : function(initializer) {
@@ -298,6 +290,7 @@ FileBrowser.prototype = {
 		this.statusRenderer = initializer.statusRenderer;
 		this.previewRenderer = initializer.previewRenderer;
 		this.shortcutsRenderer = initializer.shortcutsRenderer;
+		this.resultCallback = initializer.resultCallback;
 
 		this._initializeFiltering(initializer.filter);
 		this._initializeViews(initializer.viewFactory);
@@ -305,7 +298,7 @@ FileBrowser.prototype = {
 		var fileBrowser = this;
 		this._getUiElem(this.uiNames.parent).click(function() { fileBrowser.navigateRelative("parent"); });
 		this._getUiElem(this.uiNames.refresh).click(function() { fileBrowser.navigateToLocation(fileBrowser.currentLocation); });
-		this._getUiElem(this.uiNames.contents).click(function(evt) {
+		this._getUiElem(this.uiNames.contentsPanel).click(function(evt) {
 			if(evt.toElement == this) {
 				fileBrowser.clearSelection();
 			}
@@ -313,8 +306,8 @@ FileBrowser.prototype = {
 		this._getUiElem(this.uiNames.delete).click(function() { fileBrowser.deleteSelected(); });
 		this._getUiElem(this.uiNames.newFolder).click(function() { fileBrowser.createFolder(); });
 		this._getUiElem(this.uiNames.rename).click(function() { fileBrowser._beginEditingContentItem(); });
-		this._getUiElem(this.uiNames.accept).click(function() { initializer.resultCallback({ userCancelled: false, selection: fileBrowser.currentSelection }) });
-		this._getUiElem(this.uiNames.cancel).click(function() { initializer.resultCallback({ userCancelled: true, selection: [] }) });
+		this._getUiElem(this.uiNames.accept).click(function() { fileBrowser._returnResults(true, fileBrowser.currentSelection); });
+		this._getUiElem(this.uiNames.cancel).click(function() { fileBrowser._returnResults(false); });
 
 		if(initializer.visibility['shortcuts']) {
 			this.fsm.getShortcuts(this._makeCallback(this._updateShortcuts), 
@@ -356,6 +349,7 @@ FileBrowser.prototype = {
 		location 		: '#location-display',
 		viewControls 	: '#view-controls',
 		contents 		: '#contents-display',
+		contentsPanel	: '#contents-panel',
 		status 			: '#status-display',
 		filter 			: '#filter-controls',
 		filename 		: "#filename-control",
@@ -371,13 +365,22 @@ FileBrowser.prototype = {
 		var displayMode = isVisible ? '' : 'none';
 		this._getUiElem(name).css('display', displayMode);
 	},
+
+	_setEnabled : function(name, isEnabled) {
+		if(isEnabled) {
+			this._getUiElem(name).removeAttr('disabled');
+		}
+		else  {
+			this._getUiElem(name).attr('disabled', 'true');
+		}
+	},
 };
 
 
 FileBrowser.prototype.DefaultInitializer = {
 	texts : {
 		title : "FileChooser",
-		accept : "Save",
+		accept : "OK",
 		cancel : "Cancel",
 	},
 
@@ -386,6 +389,9 @@ FileBrowser.prototype.DefaultInitializer = {
 		shortcuts : false,
 		newFolder : false,
 		delete : false,
+		rename : false,
+		filename : false,
+		filter : false,
 	},
 
 	directoriesOnly : false,
@@ -558,3 +564,59 @@ FileBrowser.prototype.DefaultInitializer = {
 	resultCallback : function(results) { console.log(results); },
 };
 
+FileBrowser.prototype.DebugDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
+
+	multiSelect : true,
+
+	texts : {
+		title : "Test Dialog",
+	},
+
+	visibility : {
+		preview : true,
+		shortcuts : true,
+		newFolder : true,
+		delete : true,
+		rename : true,
+		filename : true,
+		filter : true,
+	},
+});
+
+FileBrowser.prototype.SaveDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
+
+	multiSelect : false,
+
+	texts : {
+		title : "Save File",
+		accept : "Save",
+		cancel : "Cancel",
+	},
+
+	visibility : {
+		preview : false,
+		shortcuts : false,
+		newFolder : true,
+		delete : true,
+		rename : true,
+		filename : true
+	},
+});
+
+
+FileBrowser.prototype.OpenDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
+
+	multiSelect : true,
+
+	texts : {
+		title : "Open File(s)",
+		accept : "Open",
+		cancel : "Cancel",
+	},
+
+	visibility : {
+		preview : true,
+		shortcuts : false,
+		filter : true,
+	},
+});

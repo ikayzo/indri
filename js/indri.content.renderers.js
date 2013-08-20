@@ -37,6 +37,7 @@ function IconContentRenderer() {
 	this.text = "&#9871;"
 }
 IconContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
+		showIconPreview : false,
 
 		_renderContainer : function() {
 			return jQuery(document.createElement("ul")).addClass("ind-filelist ind-iconlist").click(this, function(evt) {
@@ -52,6 +53,15 @@ IconContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 
 			return $listItem;
 		},	
+
+		_getIcon : function(contentItem, size) {
+			if(this.showIconPreview && contentItem.previewUrl) {
+				return contentItem.previewUrl;
+			}
+
+			return ContentRenderer.prototype._getIcon.call(this, contentItem, size);
+		}
+
 	});
 
 
@@ -69,11 +79,17 @@ DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 			var $tr = jQuery(document.createElement("tr"));
 			this._fieldNames.forEach(function(field) {
 				var $th = jQuery(document.createElement("th")).addClass("ind-detailheader").html(field)
-				.click(this, function(evt){
-					if(evt.toElement == this && evt.which == 1) {
-						evt.data.browser.sorter.setSortField(field);
-					}
-				});
+					.click(this, function(evt){
+						if(evt.toElement == this && evt.which == 1) {
+							evt.data.browser.sorter.setSortField(field);
+						}
+					});
+
+				// If this is the column we're sorting by, add the appropriate class
+				if(field == this.browser.sorter.fieldName) {
+					$th.addClass(this.browser.sorter.ascending ? "ind-col-sort-asc" : "ind-col-sort-desc");					
+				}
+
 				$tr.append($th);
 			}, this);
 

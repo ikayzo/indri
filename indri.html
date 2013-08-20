@@ -69,16 +69,9 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-	var initializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
-		multiSelect : true,
+	var initializer = jQuery.extend(true, {}, FileBrowser.prototype.DebugDialogInitializer);
 
-		visibility : {
-			newFolder : true,
-			delete : true,
-			preview : true,
-			shortcuts : false,
-		},
-	});
+	initializer.visibility.shortcuts = false;
 
 	initializer.filter.options.push({ value: "\.(htm|html)$", text: "HTML files (*.htm, *.html)"});
 	initializer.filter.options.push({ value: "\.js$", text: "Javascript files (*.js)"});
@@ -94,14 +87,10 @@ $(document).ready(function() {
 	var fileBrowser = new FileBrowser(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
 
 	function initLocalFileSystem(initializer) {
-		initializer.visibility.preview = true;
-		initializer.visibility.shortcuts = false;
-
 		initializer.locationRenderer = new SegmentedLocationRenderer();
 	}
 
 	function initAwsFileSystem(initializer) {
-		initializer.visibility.preview = true;
 		initializer.visibility.shortcuts = true;
 
 		initializer.locationRenderer = new BucketLocationRenderer();
@@ -110,7 +99,6 @@ $(document).ready(function() {
 	}
 
 	function initCivilBeatFileSystem(initializer) {
-		initializer.visibility.preview = true;
 		initializer.visibility.shortcuts = true;
 
 		initializer.locationRenderer = new BucketLocationRenderer();
