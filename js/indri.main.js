@@ -319,8 +319,9 @@ FileBrowser.prototype = {
 	},
 
 	_initializeViews : function(viewFactory) {
-		this._getUiElem(this.uiNames.viewControls).empty()
-			.append(viewFactory.render(this._makeCallback(function(view) { this._setRenderer(view); })));
+//		this._getUiElem(this.uiNames.viewControls).empty()
+//			.append(viewFactory.render(this._makeCallback(function(view) { this._setRenderer(view); })));
+		viewFactory.render(this._makeCallback(function(view) { this._setRenderer(view); }), this._getUiElem(this.uiNames.viewControls));
 	},
 
 
@@ -449,30 +450,45 @@ FileBrowser.prototype.DefaultInitializer = {
 			new ListContentRenderer(),
 		],
 
-		render : function(callback) {
-			var controlContainer = jQuery(document.createElement("span"));
+		render : function(callback, container) {
+			if(container) {
+				container.empty();
+			}
+			else {
+				container = jQuery(document.createElement("div"));
+			}
 
 			var btnId = 0;
 			this.views.forEach(function(view) {
-				var anchor = jQuery(document.createElement("a")).addClass('ind-viewbutton').attr('id', 'ind-viewbutton-' + btnId++).click(function() {
+				var $anchor = jQuery(document.createElement("a")).addClass('ind-viewbutton entypo').attr('id', 'ind-viewbutton-' + btnId);
+				$anchor.click($anchor, function(evt) {
+					jQuery('.ind-viewbutton').removeClass('ind-btn-active');
+					jQuery(evt.data).addClass('ind-btn-active');
+
 					callback(view);
 				});
 
+				if(btnId == 0) {
+					$anchor.addClass('ind-btn-active');
+				}
+
 				if(view.img) {
-					anchor.append(jQuery(document.createElement("img")).attr('src', view.img));
+					$anchor.append(jQuery(document.createElement("img")).attr('src', view.img));
 				}
 				else if(view.text) {
-					anchor.append(jQuery(document.createElement("span")).html(view.text));
+					$anchor.append(jQuery(document.createElement("span")).html(view.text));
 				}
 				else {
-					anchor.append(jQuery(document.createElement("span")).html(view.name));
+					$anchor.append(jQuery(document.createElement("span")).html(view.name));
 				}
 
-				controlContainer.append(anchor);
+				container.append($anchor);
+				btnId++;
 			});
+
 			callback(this.views[0]);
 
-			return controlContainer;
+			return container;
 		}
 	},
 

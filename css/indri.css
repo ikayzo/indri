@@ -1,3 +1,15 @@
+/* Entypo pictograms by Daniel Bruce — www.entypo.com */
+@font-face {
+  font-family: "entypo";
+  src:  url("fonts/entypo.eot");
+  src:  url("fonts/entypo.eot?#iefix") format("embedded-opentype"),
+        url("fonts/entypo.woff") format("woff"),
+        url("fonts/entypo.ttf") format("truetype"),
+        url("fonts/entypo.svg#entypo") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
 
 *, *:before, *:after {
   -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
@@ -11,24 +23,42 @@ body        { font-family: Verdana, Tahoma, Arial, sans-serif; font-size: 13px; 
 
 Title Control             Gray          #666
 Title Control Border      Dark-Gray     #333
-Wrapper BGs               Light-Gray    #ddd
+Wrapper BGs               Light-Gray    #eee
 List View BG              Light-Blue    #f0f5f9
 
 */
 
+/* --- Universal Styles --- */
 header, footer { color: white; text-transform: uppercase; letter-spacing: 0.2em;}
 
 a { color: #333;}
 
+.entypo  { font-family: "entypo"; font-size: 3.25em; line-height: 0.9em;
+-webkit-user-select: none; -ms-user-select:none; user-select:none; /* Remove accidental text highlighting */}
+
+
+/* --- Controls --- */
+#view-controls  { background: #fff; text-align: center; overflow: hidden; position: relative;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px; }
+.ind-viewbutton { height: 35px; width: 35px; display: inline-block; zoom:1; *display:inline; 
+ border-left: 1px solid #ddd; }
+.ind-viewbutton:first-child { border-left: none;}
+.ind-btn-active   { background: #7dbfd7; color: #fff;}
+
+
+
+
 .ind-wrapper    { position:absolute; left: 0; right: 0; }
 
 #header-wrapper,
-#footer-wrapper { border-color: #aaa; border-style: solid; background: #ddd; overflow: hidden;  }
+#footer-wrapper { border-color: #aaa; border-style: solid; background: #eee; overflow: hidden;  }
 
 
 /* --- Header --- */
 #header-wrapper { border-width: 0 0 1px 0; top:0; height: 100px; }
-#title-control  { background: #666;text-align: center; border-bottom: 1px solid #333; padding: 10px 15px; }
+#title-control  { background: #323a45; text-align: center; border-bottom: 1px solid #333; padding: 10px 15px; }
 
 
 /* --- Content Window ---*/
@@ -52,7 +82,6 @@ a { color: #333;}
 
 #shortcuts-controls   { width: 20%; }
 #contents-display    	{ width: auto; background: white; }
-#preview-panel   			{ width: 20%; min-width: 200; }
 #filename-panel				{ padding: 15px 20px; }
 #filename-control			{ width: 300px; }
 #status-display				{ padding: 15px 20px; text-transform: capitalize;}
@@ -62,8 +91,6 @@ img {	max-width: 100%; max-height: 100%; }
 
 .ind-location-segment   { }
 .ind-location-bucket   { }
-
-.ind-viewbutton      { padding-left: 10px;}
 
 .ind-content-selected		{ background: #aedeff;}
 .ind-editbox					{ font: Georgia, "Times New Roman", Times, serif; }
@@ -96,6 +123,7 @@ li.ind-iconitem				 { text-align: center; margin-bottom: 25;}
 .ind-detailitem:hover		{ background: #def2ff;}
 .ind-detailitem-dirname		{ font-weight: bold; }
 
+#preview-panel { padding: 10px; width: 20%;}
 
 
 
