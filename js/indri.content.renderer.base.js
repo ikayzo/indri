@@ -1,3 +1,10 @@
+if (typeof KeyEvent == "undefined") {
+    var KeyEvent = {
+    	KEYCODE_ENTER : 13,
+		KEYCODE_ESC : 27,
+    };
+}
+
 function ContentRenderer() {
 }
 
@@ -46,9 +53,14 @@ ContentRenderer.prototype = {
 		var $editable = $listItem.find(".ind-editable-name");
 		oldText = $editable.html().replace(/"/g, "'");  
 
+		var endEditing = function(renderer) {
+    		$input.replaceWith($editable);  
+    		renderer._setupNormalEvents($listItem, contentItem);                	
+		};
+
 		$input = jQuery(document.createElement("input")).addClass("ind-editbox").attr("type", "text").attr("value", oldText)
-			.keypress(this, function(evt) {
-				if(evt.which == 13) {
+			.keyup(this, function(evt) {
+				if(evt.which == KeyEvent.KEYCODE_ENTER) {
 		    		newText = $(this).val().replace(/"/g, "'");  
 		            
 		            $editable.html(newText);
@@ -57,9 +69,11 @@ ContentRenderer.prototype = {
 
 		    		evt.data.callback(contentItem, "rename", newText);
                 }
+                else if(evt.which == KeyEvent.KEYCODE_ESC) {
+		    		endEditing(evt.data);               	
+                }
 	    	}).blur(this, function(evt) {
-	    		$input.replaceWith($editable);  
-	    		evt.data._setupNormalEvents($listItem, contentItem);
+	    		endEditing(evt.data);               	
 	    	}).click(false).dblclick(false);
 
 		$editable.replaceWith($input);
