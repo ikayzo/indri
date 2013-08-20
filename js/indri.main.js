@@ -56,8 +56,10 @@ FileBrowser.prototype = {
 
 	createFolder : function() {
 		var success = this._makeCallback(function(newContents, status) {
-				this._modifyContents(newContents, false, status);
+			this._modifyContents(newContents, false, status);
+			this._beginEditingContentItem(newContents[0]);
 		});
+
 		this.fsm.createFolder(this.currentLocation, "New Folder", success, this._makeCallback(this._updateStatus));
 	},
 
@@ -180,6 +182,16 @@ FileBrowser.prototype = {
 		}
 	},
 
+	_beginEditingContentItem : function(contentItem) {
+		if(!contentItem && this.currentSelection.length) {
+			contentItem = this.currentSelection[0];
+		}
+
+		if(contentItem) {
+			this.contentRenderer.editItem(contentItem);
+		}
+	},
+
 	_updateShortcuts : function(shortcuts) {
 		if(this.shortcutsRenderer) {
 			this._getUiElem(this.uiNames.shortcuts).empty().append(
@@ -225,6 +237,13 @@ FileBrowser.prototype = {
 		}
 		else  {
 			this._getUiElem(this.uiNames.delete).attr('disabled', 'true');
+		}
+
+		if(this.currentSelection.length == 1) {
+			this._getUiElem(this.uiNames.rename).removeAttr('disabled');
+		}
+		else  {
+			this._getUiElem(this.uiNames.rename).attr('disabled', 'true');
 		}
 
 		if(this.previewRenderer) {
@@ -293,6 +312,7 @@ FileBrowser.prototype = {
 		});
 		this._getUiElem(this.uiNames.delete).click(function() { fileBrowser.deleteSelected(); });
 		this._getUiElem(this.uiNames.newFolder).click(function() { fileBrowser.createFolder(); });
+		this._getUiElem(this.uiNames.rename).click(function() { fileBrowser._beginEditingContentItem(); });
 		this._getUiElem(this.uiNames.accept).click(function() { initializer.resultCallback({ userCancelled: false, selection: fileBrowser.currentSelection }) });
 		this._getUiElem(this.uiNames.cancel).click(function() { initializer.resultCallback({ userCancelled: true, selection: [] }) });
 
@@ -319,8 +339,6 @@ FileBrowser.prototype = {
 	},
 
 	_initializeViews : function(viewFactory) {
-//		this._getUiElem(this.uiNames.viewControls).empty()
-//			.append(viewFactory.render(this._makeCallback(function(view) { this._setRenderer(view); })));
 		viewFactory.render(this._makeCallback(function(view) { this._setRenderer(view); }), this._getUiElem(this.uiNames.viewControls));
 	},
 
@@ -334,6 +352,7 @@ FileBrowser.prototype = {
 		refresh 		: '#refresh-control',
 		newFolder 		: '#newfolder-control',
 		delete 			: '#delete-control',
+		rename 			: '#rename-control',
 		location 		: '#location-display',
 		viewControls 	: '#view-controls',
 		contents 		: '#contents-display',

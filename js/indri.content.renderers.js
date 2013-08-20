@@ -7,7 +7,8 @@
 */
 function ListContentRenderer() {
 	// List View
-	this.name = "&#9776;"
+	this.name = "List";
+	this.text = "&#9776;"
 }
 ListContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		_renderContainer : function() {
@@ -20,9 +21,8 @@ ListContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 			var $icon = jQuery(document.createElement("img")).attr("src", this._getIcon(contentItem, "small"));
 			var $label = jQuery(document.createElement("span")).addClass("ind-editable-name").html(contentItem.name);
 			var $listItem = jQuery(document.createElement("li")).addClass("ind-listitem").append($icon).append($label);
+			this._initItem($listItem, contentItem);
 
-			this.lookup[contentItem.id] = $listItem;
-			this._setupNormalEvents($listItem, contentItem);
 			return $listItem;
 		},
 	});
@@ -33,7 +33,8 @@ ListContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 */
 function IconContentRenderer() {
 	// Icon View
-	this.name = "&#9871;"
+	this.name = "Icon";
+	this.text = "&#9871;"
 }
 IconContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 
@@ -47,9 +48,7 @@ IconContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 			var $icon = jQuery(document.createElement("img")).attr("src", this._getIcon(contentItem));
 			var $label = jQuery(document.createElement("span")).addClass("ind-editable-name").html(contentItem.name);
 			var $listItem = jQuery(document.createElement("li")).addClass("ind-iconitem").append($icon).append("<br>").append($label);
-
-			this.lookup[contentItem.id] = $listItem;
-			this._setupNormalEvents($listItem, contentItem);
+			this._initItem($listItem, contentItem);
 
 			return $listItem;
 		},	
@@ -61,7 +60,8 @@ IconContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 */
 function DetailContentRenderer() {
 	// Detail View
-	this.name = "&#57349;"
+	this.name = "Detail";
+	this.text = "&#57349;"
 }
 DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 
@@ -93,9 +93,7 @@ DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 			$tr.append(jQuery(document.createElement("td")).html(this._formatSize(contentItem.size)));
 			$tr.append(jQuery(document.createElement("td")).html(this._formatDate(contentItem.created)));
 			$tr.append(jQuery(document.createElement("td")).html(this._formatDate(contentItem.modified)));
-
-			this.lookup[contentItem.id] = $tr;
-			this._setupNormalEvents($tr, contentItem);
+			this._initItem($tr, contentItem);
 
 			return $tr;
 		},

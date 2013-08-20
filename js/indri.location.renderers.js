@@ -24,26 +24,37 @@ SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 				location = '/';
 			}
 
-			var fullPath = '';
-
 			$elem.empty();
 
 			// Handle the root path case
-			$elem.append(jQuery(document.createElement("a")).html("(root)").addClass('ind-location-segment').click(JSON.stringify('/'), function(evt) {
-				callback(evt.data);
-			}));
+			var $rootAnchor = jQuery(document.createElement("a")).html("(root)").addClass('ind-location-segment');
+			$elem.append($rootAnchor);
 
 			// Add each other path component
-			location.split('/').forEach(function(segment) {
+			var fullPath = '';
+			location.split('/').forEach(function(segment, index, segments) {
 				if(segment.length) {
 					$elem.append(' / ');
-
 					fullPath += '/' + segment;
-					$elem.append(jQuery(document.createElement("a")).html(segment).addClass('ind-location-segment').click(JSON.stringify(fullPath), function(evt) {
-						callback(evt.data);
-					}));
+
+					var $anchor = jQuery(document.createElement("a")).html(segment).addClass('ind-location-segment');
+
+					// Only add a click handler if this isn't the last segment
+					if(index != segments.length - 1) {
+						$anchor.click(JSON.stringify(fullPath), function(evt) {
+							callback(evt.data);
+						});
+					}
+					$elem.append($anchor);
 				}
 			});
+
+			// Only add the click handler to the root path if there weren't any other segments
+			if(fullPath != '') {
+				$rootAnchor.click(JSON.stringify('/'), function(evt) {
+					callback(evt.data);
+				});
+			}
 		},
 	});
 
@@ -62,22 +73,36 @@ BucketLocationRenderer.prototype = jQuery.extend({}, {
 			$elem.empty();
 
 			// Create root link
-			var targetLocation = { bucket: bucketData.bucket, key : '' };
-			$elem.append(jQuery(document.createElement("a")).html(targetLocation.bucket).addClass('ind-location-bucket').click(JSON.stringify(targetLocation), function(evt) {
-				callback(evt.data);
-			}));
+			var $rootAnchor = jQuery(document.createElement("a")).html(bucketData.bucket).addClass('ind-location-segment');
+			$elem.append($rootAnchor);
+
 			$elem.append(' : ');
 
 			// Add all other links
-			bucketData.key.split('/').forEach(function(segment) {
+			var targetLocation = { bucket: bucketData.bucket, key : '' };
+			bucketData.key.split('/').forEach(function(segment, index, segments) {
 				if(segment.length) {
 					targetLocation.key += segment + '/';
-					$elem.append(jQuery(document.createElement("a")).html(segment).addClass('ind-location-segment').click(JSON.stringify(targetLocation), function(evt) {
-						callback(evt.data);
-					}));
-				
+
+					var $anchor = jQuery(document.createElement("a")).html(segment).addClass('ind-location-segment');
+
+					// Only add a click handler if this isn't the last segment
+					if(index != segments.length - 1) {
+						$anchor.click(JSON.stringify(targetLocation), function(evt) {
+							callback(evt.data);
+						});
+					}
+					
+					$elem.append($anchor);
 					$elem.append(' / ');
 				}
 			});
+
+			if(targetLocation.key != '') {
+				targetLocation = { bucket: bucketData.bucket, key : '' } 
+				$rootAnchor.click(JSON.stringify(targetLocation), function(evt) {
+					callback(evt.data);
+				});
+			}
 		},
 	});
