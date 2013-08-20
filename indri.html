@@ -35,6 +35,7 @@
 				<div class="ind-cell">
 					<button id="newfolder-control" class="btn">New Folder</button>
 					<button id="delete-control" class="btn" disabled>Delete</button>
+					<button id="rename-control" class="btn" disabled>Rename</button>
 				</div>
 
 				<div class="ind-cell">
@@ -71,8 +72,8 @@ $(document).ready(function() {
 		visibility : {
 			newFolder : true,
 			delete : true,
-//			preview : true,
-//			shortcuts : true,
+			preview : true,
+			shortcuts : false,
 		},
 	});
 
@@ -87,7 +88,7 @@ $(document).ready(function() {
 	initializer.locationRenderer = new SegmentedLocationRenderer();
 //	initializer.locationRenderer = new BucketLocationRenderer();
 
-//	initializer.previewRenderer.baseUrl = 'http://civilbeat_production.s3.amazonaws.com/';
+	initializer.previewRenderer.baseUrl = 'http://civilbeat_production.s3.amazonaws.com/';
 
 	var fileBrowser = new FileBrowser(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
 });
