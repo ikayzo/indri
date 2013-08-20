@@ -22,7 +22,7 @@
 				<div class="ind-cell" id="layout-controls">
 					<div id="view-controls" class="ind-layout-controls"></div>
 					<div id="detail-controls" class="ind-layout-controls">
-						<a class="ind-detailbutton entypo"><span>&#128269;</span></a>
+						<a id="detail-control" class="ind-detailbutton entypo"><span>&#128269;</span></a>
 					</div>
 				</div><!-- End RH Controls -->
 			</div>
@@ -73,7 +73,7 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-	var initializer = jQuery.extend(true, {}, FileBrowser.prototype.DebugDialogInitializer);
+	var initializer = jQuery.extend(true, {}, FileBrowser.prototype.OpenDialogInitializer);
 
 	initializer.visibility.shortcuts = false;
 
