@@ -122,16 +122,14 @@ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; -moz-user-select
 
 /* --- Layout --- */
 .ind-detaillist				{ width: 100%; }
-.ind-detailheader			{ text-transform: uppercase; letter-spacing: 0.1em; text-align: left; background: #eee; padding: 5px 10px; border-left: 1px solid #fff;}
+.ind-detailheader			{ text-transform: uppercase; letter-spacing: 0.1em; text-align: left; background: #eee; padding: 5px 10px; border-left: 1px solid #fff; position: relative;}
 .ind-detailheader:first-child { border-left: none;}
 .ind-detaillist tr td     { padding: 10px; }
 
 /* --- Controls --- */
 .ind-col-sort-asc,
 .ind-col-sort-desc  { background: #7dbfd7;}
-.ind-col-sort-asc   {}
-.ind-col-sort-desc  {}
-
+.ind-col-sort       { display: inline-block; zoom: 1; *display:inline; right: 10px; top: 0; line-height: 0.55em; position: absolute;}
 
 
 
