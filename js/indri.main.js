@@ -30,6 +30,8 @@ FileBrowser.prototype = {
 	previewRenderer : null,
 	shortcutsRenderer : null,
 
+	resultCallback : null,
+
 	/*
 		Primary API
 	*/
@@ -140,23 +142,20 @@ FileBrowser.prototype = {
 		if(evt == "clear") {
 			this.clearSelection();
 		}
+/*		
 		else if(evt == "longpress") {
 			this.currentSelection.length = 0;
 			this.currentSelection.push(contentItem);			
 
 			this._selectionChanged();
 		}
+*/
 		else if(evt == "rename") {
 			this.renameItem(contentItem, newName);
 		}
 		else if(evt.type == "dblclick") {
-			if(contentItem.isDir) {
-				this.navigateToLocation(contentItem.location);
-			}
-			else {
-				console.log("User chose item: " + contentItem.location);
-			}
-		}
+			this._returnResults(true, this.currentSelection);
+		}	
 		else if(evt.type == "click") {
 			var index = jQuery.inArray(contentItem, this.currentSelection);
 			if(evt.metaKey && this.multiSelect) {
@@ -264,6 +263,10 @@ FileBrowser.prototype = {
 		return function() { return callback.apply(fileBrowser, arguments); }
 	},
 
+	_returnResults : function(filesSelected, results) {
+		this.resultCallback({ success: filesSelected, results: results });
+	},
+
 
 	// Initialization methods
 	_initialize : function(initializer) {
@@ -287,6 +290,7 @@ FileBrowser.prototype = {
 		this.statusRenderer = initializer.statusRenderer;
 		this.previewRenderer = initializer.previewRenderer;
 		this.shortcutsRenderer = initializer.shortcutsRenderer;
+		this.resultCallback = initializer.resultCallback;
 
 		this._initializeFiltering(initializer.filter);
 		this._initializeViews(initializer.viewFactory);
@@ -294,7 +298,7 @@ FileBrowser.prototype = {
 		var fileBrowser = this;
 		this._getUiElem(this.uiNames.parent).click(function() { fileBrowser.navigateRelative("parent"); });
 		this._getUiElem(this.uiNames.refresh).click(function() { fileBrowser.navigateToLocation(fileBrowser.currentLocation); });
-		this._getUiElem(this.uiNames.contents).click(function(evt) {
+		this._getUiElem(this.uiNames.contentsPanel).click(function(evt) {
 			if(evt.toElement == this) {
 				fileBrowser.clearSelection();
 			}
@@ -302,8 +306,8 @@ FileBrowser.prototype = {
 		this._getUiElem(this.uiNames.delete).click(function() { fileBrowser.deleteSelected(); });
 		this._getUiElem(this.uiNames.newFolder).click(function() { fileBrowser.createFolder(); });
 		this._getUiElem(this.uiNames.rename).click(function() { fileBrowser._beginEditingContentItem(); });
-		this._getUiElem(this.uiNames.accept).click(function() { initializer.resultCallback({ userCancelled: false, selection: fileBrowser.currentSelection }) });
-		this._getUiElem(this.uiNames.cancel).click(function() { initializer.resultCallback({ userCancelled: true, selection: [] }) });
+		this._getUiElem(this.uiNames.accept).click(function() { fileBrowser._returnResults(true, fileBrowser.currentSelection); });
+		this._getUiElem(this.uiNames.cancel).click(function() { fileBrowser._returnResults(false); });
 
 		if(initializer.visibility['shortcuts']) {
 			this.fsm.getShortcuts(this._makeCallback(this._updateShortcuts), 
@@ -345,6 +349,7 @@ FileBrowser.prototype = {
 		location 		: '#location-display',
 		viewControls 	: '#view-controls',
 		contents 		: '#contents-display',
+		contentsPanel	: '#contents-panel',
 		status 			: '#status-display',
 		filter 			: '#filter-controls',
 		filename 		: "#filename-control",

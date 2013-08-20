@@ -67,16 +67,21 @@ ContentRenderer.prototype = {
 	},
 
 	_setupNormalEvents : function($listItem, contentItem) {
-		$listItem.off("dblclick").on("dblclick", this, function(evt) {
-			if(evt.which == 1) {
-				evt.data.callback(contentItem, evt);
-			}
-		}).off("click").on("click", this, function(evt) {
+		$listItem.off("click").on("click", this, function(evt) {
 			if(evt.which == 1) {
 				evt.data.callback(contentItem, evt);
 			}
 		});
 
+		if(!contentItem.isDir) {
+			$listItem.off("dblclick").on("dblclick", this, function(evt) {
+				if(evt.which == 1) {
+					evt.data.callback(contentItem, evt);
+				}
+			});
+		}
+
+/*
 		var pressTimer;
 		$listItem.find(".ind-editable-name")
 		.mouseup(function(){
@@ -91,6 +96,7 @@ ContentRenderer.prototype = {
 				}, 1000);
 			}
 		});
+*/		
 	},
 
 	_getIcon : function(contentItem, size) {
