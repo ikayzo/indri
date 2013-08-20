@@ -56,7 +56,7 @@
 		</footer><!-- End Footer -->
 		
 	</div><!-- End Main Wrapper -->
-</body>
+
 <script type="text/javascript" src="js/indri.fsm.js"></script>
 <script type="text/javascript" src="js/indri.content.renderer.base.js"></script>
 <script type="text/javascript" src="js/indri.content.renderers.js"></script>
@@ -103,7 +103,7 @@ $(document).ready(function() {
 
 		initializer.locationRenderer = new BucketLocationRenderer();
 
-		//initializer.previewRenderer.baseUrl = 'http://ikayzo_files.s3.amazonaws.com/';
+		initializer.previewRenderer.baseUrl = 'http://ikayzo-files.s3.amazonaws.com/';
 	}
 
 	function initCivilBeatFileSystem(initializer) {
@@ -117,4 +117,5 @@ $(document).ready(function() {
 });
 
 </script>
+</body>
 </html>
