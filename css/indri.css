@@ -18,6 +18,7 @@ List View BG              Light-Blue    #f0f5f9
 
 header, footer { color: white; text-transform: uppercase; letter-spacing: 0.2em;}
 
+a { color: #333;}
 
 .ind-wrapper    { position:absolute; left: 0; right: 0; }
 
@@ -72,7 +73,7 @@ img {	max-width: 100%; max-height: 100%; }
 .ind-filelist > li 			    { width: 25%; overflow: hidden; display: inline-block; zoom: 1; *display:inline;
 white-space: nowrap; overflow: hidden; text-overflow: ellipsis; -moz-user-select: none; /* Truncates text */
 -webkit-user-select: none; -ms-user-select:none; user-select:none; /* Remove accidental text highlighting */ }
-.ind-filelist > li span:hover    { cursor: default; /* Remove text cursor */}
+.ind-filelist > li span:hover    { /* cursor: default; Remove text cursor - Add to mobile */}
 
 /* Sets every 9th element to be light blue. This is dependent on the width of each LI being 25%. If it is changed to 20%, everything 11th element needs to be implemented. */
 .ind-filelist > li:nth-child(8n+1),
