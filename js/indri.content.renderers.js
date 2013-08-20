@@ -82,7 +82,7 @@ DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		},
 
 		_renderItem : function(contentItem) {
-			var $tr = jQuery(document.createElement("tr")).addClass("ind-detailitem");
+			var $tr = jQuery(document.createElement("tr"));
 
 			var $label = jQuery(document.createElement("span")).addClass("ind-editable-name").html(contentItem.name);
 			if(contentItem.isDir) {

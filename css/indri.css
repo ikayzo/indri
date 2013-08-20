@@ -1,3 +1,13 @@
+/* --- Colors --- */
+/*
+
+Title Control             Gray          #666
+Title Control Border      Dark-Gray     #333
+Wrapper BGs               Light-Gray    #eee
+List View BG              Light-Blue    #f0f5f9
+
+*/
+
 /* Entypo pictograms by Daniel Bruce — www.entypo.com */
 @font-face {
   font-family: "entypo";
@@ -10,35 +20,32 @@
   font-style: normal;
 }
 
-
+/* --- Universal Styles --- */
 *, *:before, *:after {
   -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
  }
-
 html, body  { height: 100%; width: 100%; }
 body        { font-family: Verdana, Tahoma, Arial, sans-serif; font-size: 13px; line-height: 1.0; color: #4d4d4d; }
-
-/* --- Colors --- */
-/*
-
-Title Control             Gray          #666
-Title Control Border      Dark-Gray     #333
-Wrapper BGs               Light-Gray    #eee
-List View BG              Light-Blue    #f0f5f9
-
-*/
-
-/* --- Universal Styles --- */
 header, footer { color: white; text-transform: uppercase; letter-spacing: 0.2em;}
-
+img { max-width: 100%; max-height: 100%; }
 a { color: #333;}
 
-.entypo  { font-family: "entypo"; font-size: 3.25em; line-height: 0.9em;
--webkit-user-select: none; -ms-user-select:none; user-select:none; /* Remove accidental text highlighting */}
+.clearfix { content: ""; display: table; clear: both; }
+.entypo  { font-family: "entypo"; font-size: 3.25em; line-height: 0.9em; color: #666;
+-webkit-user-select: none; -ms-user-select:none; user-select:none; /* Remove accidental text highlighting */cursor: default; }
 
 
-/* --- Controls --- */
-#view-controls  { background: #fff; text-align: center; overflow: hidden; position: relative;
+
+
+
+
+/* --- */
+/* --- Header Controls --- */
+#control-panel    { padding: 15px 20px; width: 100%;}
+
+#location-controls { float: left;}
+
+#view-controls  { background: #fff; text-align: center; overflow: hidden; position: relative; float: right;
   -webkit-border-radius: 5px;
      -moz-border-radius: 5px;
           border-radius: 5px; }
@@ -47,85 +54,95 @@ a { color: #333;}
 .ind-viewbutton:first-child { border-left: none;}
 .ind-btn-active   { background: #7dbfd7; color: #fff;}
 
+/* --- Footer Controls --- */
+#filename-panel       { padding: 15px 20px; }
+#filename-control     { width: 300px; }
+#status-display       { padding: 15px 20px; text-transform: capitalize;}
+
+.ind-control-panel-right    {float: right;}
 
 
 
+
+
+
+/* --- */
+/* --- Overall Content Areas --- */
 .ind-wrapper    { position:absolute; left: 0; right: 0; }
 
 #header-wrapper,
 #footer-wrapper { border-color: #aaa; border-style: solid; background: #eee; overflow: hidden;  }
 
-
 /* --- Header --- */
 #header-wrapper { border-width: 0 0 1px 0; top:0; height: 100px; }
 #title-control  { background: #323a45; text-align: center; border-bottom: 1px solid #333; padding: 10px 15px; }
 
-
-/* --- Content Window ---*/
-#section-wrapper { top: 100px; bottom: 150px; overflow: auto; }
+/* --- Content Window --- */
+#section-wrapper{ top: 100px; bottom: 150px; overflow: auto; margin-right: 300px; }
 #contents-panel { height: 100%;}
+
+/* --- Preview Window --- */
+#aside-wrapper  { top: 100px; bottom: 150px; width: 300px; float: right; position: relative; padding: 15px 20px;}
 
 /* --- Footer --- */
 #footer-wrapper { border-width: 1px 0 0 0; bottom: 0; height: 150px; }
 
-.ind-panel        	{ display: table; width: 100%; }
-.ind-cell			{ display: table-cell; vertical-align: top; }
-
-.ind-control-panel-right		{float: right;}
-
-#control-panel		{ padding: 15px 20px; }
-
-#location-display	{ display: inline;}
-#location-controls 	{ padding: 5px 0; }
-#refresh-control		{ }
 
 
-#shortcuts-controls   { width: 20%; }
-#contents-display    	{ width: auto; background: white; }
-#filename-panel				{ padding: 15px 20px; }
-#filename-control			{ width: 300px; }
-#status-display				{ padding: 15px 20px; text-transform: capitalize;}
 
 
-img {	max-width: 100%; max-height: 100%; }
 
-.ind-location-segment   { }
-.ind-location-bucket   { }
-
-.ind-content-selected		{ background: #aedeff;}
-.ind-editbox					{ font: Georgia, "Times New Roman", Times, serif; }
-
-
-/* --- General Content Layout --- */
+/* --- */
+/* --- Specific Content Layout --- */
 .ind-filelist				        { }
 .ind-filelist > li 			    { width: 25%; overflow: hidden; display: inline-block; zoom: 1; *display:inline;
 white-space: nowrap; overflow: hidden; text-overflow: ellipsis; -moz-user-select: none; /* Truncates text */
 -webkit-user-select: none; -ms-user-select:none; user-select:none; /* Remove accidental text highlighting */ }
-.ind-filelist > li span:hover    { /* cursor: default; Remove text cursor - Add to mobile */}
+.ind-filelist > li span:hover    { cursor: default; /* Remove text cursor - Add to mobile */}
+.ind-filelist .ind-content-selected { background: #0c5b7f !important; color: #fff !important;}
 
+.ind-editable-name   { letter-spacing: 0.06em; display: inline-block; zoom: 1; *display:inline;}
 /* Sets every 9th element to be light blue. This is dependent on the width of each LI being 25%. If it is changed to 20%, everything 11th element needs to be implemented. */
 .ind-filelist > li:nth-child(8n+1),
 .ind-filelist > li:nth-child(8n+2),
 .ind-filelist > li:nth-child(8n+3),
-.ind-filelist > li:nth-child(8n+4) { background: #f0f5f9;}
+.ind-filelist > li:nth-child(8n+4),
+.ind-filelist tr:nth-child(odd)  { background: #f0f5f9;}
 
 /* --- List View --- */
 .ind-listitem         { padding: 10px; }
-.ind-listitem span    { margin: 0 0 0 8px; letter-spacing: 0.06em;}
-.ind-filelist > li.ind-content-selected { background: #0c5b7f; color: #fff;}
+.ind-listitem .ind-editable-name   { margin: 0 0 0 8px; letter-spacing: 0.06em;}
 
-.ind-iconlist				 { }
-li.ind-iconitem				 { text-align: center; margin-bottom: 25;} 
+/* --- Thumbnail View --- */
+.ind-iconlist li      { padding: 20px 10px; text-align: center;}
+.ind-iconlist .ind-editable-name { padding: 5px 0 0 0;}
 
-.ind-detaillist				{ width: 100% }
-.ind-detailheader			{ text-transform: uppercase; letter-spacing: 0.2em; text-align: left; background: #8f9a9f; padding: 3px 7px;}
-.ind-detailitem				{ width: 100% }
-.ind-detailitem:hover		{ background: #def2ff;}
-.ind-detailitem-dirname		{ font-weight: bold; }
-
-#preview-panel { padding: 10px; width: 20%;}
+/* --- Detail View --- */
+.ind-detaillist				{ width: 100%; }
+.ind-detailheader			{ text-transform: uppercase; letter-spacing: 0.1em; text-align: left; background: #eee; padding: 5px 10px; border-left: 1px solid #fff;}
+.ind-detailheader:first-child { border-left: 1px solid none;}
+.ind-detaillist tr td     { padding: 10px; }
 
 
+
+
+
+
+/* --- */
+#location-display { display: inline;}
+#location-controls  { padding: 5px 0; }
+#refresh-control    { }
+
+
+#shortcuts-controls   { width: 20%; }
+#contents-display     { width: auto; background: white; }
+
+
+.ind-location-segment   { }
+.ind-location-bucket   { }
+
+.ind-content-selected   { background: #aedeff;}
+.ind-editbox          { font: Georgia, "Times New Roman", Times, serif; }
 
 .btn {
   border: none;
