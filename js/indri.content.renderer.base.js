@@ -24,8 +24,20 @@ ContentRenderer.prototype = {
 		}, this);
 	},
 
+	editItem : function(contentItem) {
+		var $listItem = this.lookup[contentItem.id];
+		if($listItem) {
+			this._setupEditingEvents($listItem, contentItem);
+		}
+	},
+
 	_beginRender : function() {
 		this.lookup = {};
+	},
+
+	_initItem : function($listItem, contentItem) {
+		this.lookup[contentItem.id] = $listItem;
+		this._setupNormalEvents($listItem, contentItem);
 	},
 
 	_setupEditingEvents : function($listItem, contentItem) {
