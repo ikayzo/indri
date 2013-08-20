@@ -8,18 +8,17 @@
 </head>
 
 <body>
-	<!-- Marks the top-most DOM element for the javascript -->
-	<div id="browserui">
+	<div id="browserui"><!-- Marks the top-most DOM element for the javascript -->
 
 		<header id="header-wrapper" class="ind-wrapper">
 			<div id="title-control">File Dialog</div>
 			<div class="ind-panel" id="control-panel">
 				<div class="ind-cell" id="location-controls" >
-				<button id="parent-control" class="btn">Parent</button>
-				<button id="refresh-control" class="btn">Refresh</button>
-				<div id="location-display">Location</div>
-			</div>
-			<div class="ind-cell ind-control-panel-right" id="view-controls"></div>
+					<button id="parent-control" class="btn">Parent</button>
+					<button id="refresh-control" class="btn">Refresh</button>
+					<div id="location-display">Location</div>
+				</div>
+				<div class="ind-cell ind-control-panel-right" id="view-controls"></div>
 			</div>
 		</header><!-- End Header -->
 
@@ -66,10 +65,15 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-	var initializer = jQuery.extend({}, FileBrowser.prototype.DefaultInitializer, {
+	var initializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
 		multiSelect : true,
-		showPreview : false,
-		showShortcuts : false,
+
+		visibility : {
+			newFolder : true,
+			delete : true,
+//			preview : true,
+//			shortcuts : true,
+		},
 	});
 
 	initializer.filter.options.push({ value: "\.(htm|html)$", text: "HTML files (*.htm, *.html)"});
@@ -81,7 +85,9 @@ $(document).ready(function() {
 
 //	initializer.locationRenderer = new StringLocationRenderer();
 	initializer.locationRenderer = new SegmentedLocationRenderer();
-	//initializer.previewRenderer.baseUrl = 'http://civilbeat_production.s3.amazonaws.com/';
+//	initializer.locationRenderer = new BucketLocationRenderer();
+
+//	initializer.previewRenderer.baseUrl = 'http://civilbeat_production.s3.amazonaws.com/';
 
 	var fileBrowser = new FileBrowser(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
 });

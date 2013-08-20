@@ -12,31 +12,6 @@ function FileBrowser(rootElem, fileSystemManager, initializer) {
 	this.fsm = fileSystemManager;
 
 	this._initialize(initializer);
-
-	// TEMP some defaults
-	var fileBrowser = this;
-	this._getUiElem(this.uiNames.parent).click(function() { fileBrowser.navigateRelative("parent"); });
-	this._getUiElem(this.uiNames.refresh).click(function() { fileBrowser.navigateToLocation(fileBrowser.currentLocation); });
-	this._getUiElem(this.uiNames.contents).click(function(evt) {
-		if(evt.toElement == this) {
-			fileBrowser.clearSelection();
-		}
-	});
-	this._getUiElem(this.uiNames.delete).click(function() { fileBrowser.deleteSelected(); });
-	this._getUiElem(this.uiNames.newFolder).click(function() { fileBrowser.createFolder(); });
-	this._getUiElem(this.uiNames.accept).click(function() { initializer.resultCallback({ userCancelled: false, selection: fileBrowser.currentSelection }) });
-	this._getUiElem(this.uiNames.cancel).click(function() { initializer.resultCallback({ userCancelled: true, selection: [] }) });
-
-	if(initializer.showShortcuts) {
-		this.fsm.getShortcuts(this._makeCallback(this._updateShortcuts), 
-			this._makeCallback(function() { 
-				this._setVisible(this.uiNames.shortcuts, false);
-				this.navigateToRoot();
-			}));
-	}
-	else {
-		this.navigateToRoot();
-	}
 }
 
 FileBrowser.prototype = {
@@ -288,12 +263,13 @@ FileBrowser.prototype = {
 			initializer = new this.DefaultInitializer();
 		}
 
-		this._getUiElem(this.uiNames.title).html(initializer.title);
-		this._getUiElem(this.uiNames.accept).html(initializer.accept);
-		this._getUiElem(this.uiNames.cancel).html(initializer.cancel);
+		for(textItem in initializer.texts) {
+			this._getUiElem(this.uiNames[textItem]).html(initializer.texts[textItem]);
+		}
 
-		this._setVisible(this.uiNames.preview, initializer.showPreview);
-		this._setVisible(this.uiNames.shortcuts, initializer.showShortcuts);
+		for(visibility in initializer.visibility) {
+			this._setVisible(this.uiNames[visibility], initializer.visibility[visibility]);
+		}
 
 		this.multiSelect = initializer.multiSelect;
 		this.sorter = initializer.sorter;
@@ -306,6 +282,31 @@ FileBrowser.prototype = {
 
 		this._initializeFiltering(initializer.filter);
 		this._initializeViews(initializer.viewFactory);
+
+		var fileBrowser = this;
+		this._getUiElem(this.uiNames.parent).click(function() { fileBrowser.navigateRelative("parent"); });
+		this._getUiElem(this.uiNames.refresh).click(function() { fileBrowser.navigateToLocation(fileBrowser.currentLocation); });
+		this._getUiElem(this.uiNames.contents).click(function(evt) {
+			if(evt.toElement == this) {
+				fileBrowser.clearSelection();
+			}
+		});
+		this._getUiElem(this.uiNames.delete).click(function() { fileBrowser.deleteSelected(); });
+		this._getUiElem(this.uiNames.newFolder).click(function() { fileBrowser.createFolder(); });
+		this._getUiElem(this.uiNames.accept).click(function() { initializer.resultCallback({ userCancelled: false, selection: fileBrowser.currentSelection }) });
+		this._getUiElem(this.uiNames.cancel).click(function() { initializer.resultCallback({ userCancelled: true, selection: [] }) });
+
+		if(initializer.visibility['shortcuts']) {
+			this.fsm.getShortcuts(this._makeCallback(this._updateShortcuts), 
+				this._makeCallback(function() { 
+					this._setVisible(this.uiNames.shortcuts, false);
+					this.navigateToRoot();
+				}));
+		}
+		else {
+			this.navigateToRoot();
+		}
+
 	},
 
 
@@ -347,19 +348,26 @@ FileBrowser.prototype = {
 	},
 
 	_setVisible : function(name, isVisible) {
-		var displayMode = isVisible ? 'block' : 'none';
+		var displayMode = isVisible ? '' : 'none';
 		this._getUiElem(name).css('display', displayMode);
 	},
 };
 
 
 FileBrowser.prototype.DefaultInitializer = {
-	title : "File Chooser",
-	accept : "Save",
-	cancel : "Cancel",
+	texts : {
+		title : "FileChooser",
+		accept : "Save",
+		cancel : "Cancel",
+	},
 
-	showPreview : true,
-	showShortcuts : false,
+	visibility : {
+		preview : false,
+		shortcuts : false,
+		newFolder : false,
+		delete : false,
+	},
+
 	directoriesOnly : false,
 	multiSelect : false,
 	// fileMustExist : false,
@@ -446,11 +454,21 @@ FileBrowser.prototype.DefaultInitializer = {
 
 			var btnId = 0;
 			this.views.forEach(function(view) {
-				var button = jQuery(document.createElement("button")).html(view.name)
-					.addClass('ind-viewbutton').attr('id', 'ind-viewbutton-' + btnId++).click(function() {
+				var anchor = jQuery(document.createElement("a")).addClass('ind-viewbutton').attr('id', 'ind-viewbutton-' + btnId++).click(function() {
 					callback(view);
 				});
-				controlContainer.append(button);
+
+				if(view.img) {
+					anchor.append(jQuery(document.createElement("img")).attr('src', view.img));
+				}
+				else if(view.text) {
+					anchor.append(jQuery(document.createElement("span")).html(view.text));
+				}
+				else {
+					anchor.append(jQuery(document.createElement("span")).html(view.name));
+				}
+
+				controlContainer.append(anchor);
 			});
 			callback(this.views[0]);
 
