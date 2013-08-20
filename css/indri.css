@@ -25,7 +25,7 @@ List View BG              Light-Blue    #f0f5f9
   -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
  }
 html, body  { height: 100%; width: 100%; }
-body        { font-family: Verdana, Tahoma, Arial, sans-serif; font-size: 13px; line-height: 1.0; color: #4d4d4d; }
+body        { font-family: Verdana, Tahoma, Arial, sans-serif; font-size: 13px; line-height: 1.0; color: #444; }
 header, footer { color: white; text-transform: uppercase; letter-spacing: 0.2em;}
 img { max-width: 100%; max-height: 100%; }
 a { color: #333;}
@@ -41,30 +41,28 @@ a { color: #333;}
 
 /* --- */
 /* --- Header Controls --- */
-#control-panel    { padding: 15px 20px; width: 100%;}
+#control-panel      { padding: 15px 20px; width: 100%;}
 
-#location-controls { float: left;}
+#location-controls  { float: left;}
+#layout-controls    { float: right;}
 
-#view-controls  { background: #fff; text-align: center; overflow: hidden; position: relative; float: right;
+#view-controls      { float: left;}
+#detail-controls    { float: right; margin: 0 0 0 10px;}
+.ind-layout-controls  { background: #fff; text-align: center; overflow: hidden; position: relative; float: right;
   -webkit-border-radius: 5px;
      -moz-border-radius: 5px;
           border-radius: 5px; }
-.ind-viewbutton { height: 35px; width: 35px; display: inline-block; zoom:1; *display:inline; 
+.ind-layout-controls a { height: 35px; width: 35px; display: inline-block; zoom:1; *display:inline; 
  border-left: 1px solid #ddd; }
-.ind-viewbutton:first-child { border-left: none;}
+.ind-layout-controls a:first-child { border-left: none;}
 .ind-btn-active   { background: #7dbfd7; color: #fff;}
+
+.ind-detailbutton { height: 35px; width: 35px; display: inline-block; zoom:1; *display:inline; }
 
 /* --- Footer Controls --- */
 #filename-panel       { padding: 15px 20px; }
 #filename-control     { width: 300px; }
 #status-display       { padding: 15px 20px; text-transform: capitalize;}
-
-.ind-control-panel-right    {float: right;}
-
-
-.ind-col-sort-asc   {}
-.ind-col-sort-desc  {}
-
 
 
 /* --- */
@@ -79,7 +77,7 @@ a { color: #333;}
 #title-control  { background: #323a45; text-align: center; border-bottom: 1px solid #333; padding: 10px 15px; }
 
 /* --- Content Window --- */
-#section-wrapper{ top: 100px; bottom: 150px; overflow: auto; margin-right: 300px; }
+#section-wrapper{ top: 100px; bottom: 150px; overflow: auto; margin-right: 300px; border-right: 1px solid #aaa; }
 #contents-panel { height: 100%;}
 
 /* --- Preview Window --- */
@@ -117,14 +115,21 @@ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; -moz-user-select
 .ind-iconlist li      { padding: 20px 10px; text-align: center;}
 .ind-iconlist .ind-editable-name { padding: 5px 0 0 0;}
 
+
+
+/* --- */
 /* --- Detail View --- */
+
+/* --- Layout --- */
 .ind-detaillist				{ width: 100%; }
-.ind-detailheader			{ text-transform: uppercase; letter-spacing: 0.1em; text-align: left; background: #eee; padding: 5px 10px; border-left: 1px solid #fff;}
-.ind-detailheader:first-child { border-left: 1px solid none;}
+.ind-detailheader			{ text-transform: uppercase; letter-spacing: 0.1em; text-align: left; background: #eee; padding: 5px 10px; border-left: 1px solid #fff; position: relative;}
+.ind-detailheader:first-child { border-left: none;}
 .ind-detaillist tr td     { padding: 10px; }
 
-
-
+/* --- Controls --- */
+.ind-col-sort-asc,
+.ind-col-sort-desc  { background: #7dbfd7;}
+.ind-col-sort       { display: inline-block; zoom: 1; *display:inline; right: 10px; top: 0; line-height: 0.55em; position: absolute;}
 
 
 
@@ -158,10 +163,6 @@ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; -moz-user-select
   -webkit-box-shadow: 8px;
   -moz-box-shadow: 8px;
   box-shadow: 8px;
-  -webkit-transition: 0.25s;
-  -moz-transition: 0.25s;
-  -o-transition: 0.25s;
-  transition: 0.25s;
   -webkit-backface-visibility: hidden;
 }
 .btn:hover,
@@ -170,10 +171,6 @@ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; -moz-user-select
   background-color: #4d4d4d;
   color: #ffffff;
   outline: none;
-  -webkit-transition: 0.25s;
-  -moz-transition: 0.25s;
-  -o-transition: 0.25s;
-  transition: 0.25s;
   -webkit-backface-visibility: hidden;
 }
 		
