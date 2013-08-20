@@ -17,8 +17,14 @@
 					<button id="parent-control" class="btn">Parent</button>
 					<button id="refresh-control" class="btn">Refresh</button>
 					<div id="location-display">Location</div>
-				</div>
-				<div class="ind-cell ind-control-panel-right" id="view-controls"></div>
+				</div><!-- End LH Controls -->
+
+				<div class="ind-cell" id="layout-controls">
+					<div id="view-controls" class="ind-layout-controls"></div>
+					<div id="detail-controls" class="ind-layout-controls">
+						<a class="ind-detailbutton entypo"><span>&#128269;</span></a>
+					</div>
+				</div><!-- End RH Controls -->
 			</div>
 		</header><!-- End Header -->
 
@@ -42,10 +48,8 @@
 				</div>
 
 				<div class="ind-cell">
-					<center>
-						<input id="filename-control"></input>
-						<span id="filter-controls"></span>
-					</center>
+					<input id="filename-control"></input>
+					<span id="filter-controls"></span>
 				</div>
 				<div class="ind-cell ind-control-panel-right">
 					<button id="accept-control" class="btn primary">OK</button>
