@@ -375,7 +375,7 @@ FileBrowser.prototype = {
 FileBrowser.prototype.DefaultInitializer = {
 	texts : {
 		title : "FileChooser",
-		accept : "Save",
+		accept : "OK",
 		cancel : "Cancel",
 	},
 
@@ -384,6 +384,9 @@ FileBrowser.prototype.DefaultInitializer = {
 		shortcuts : false,
 		newFolder : false,
 		delete : false,
+		rename : false,
+		filename : false,
+		filter : false,
 	},
 
 	directoriesOnly : false,
@@ -556,3 +559,59 @@ FileBrowser.prototype.DefaultInitializer = {
 	resultCallback : function(results) { console.log(results); },
 };
 
+FileBrowser.prototype.DebugDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
+
+	multiSelect : true,
+
+	texts : {
+		title : "Test Dialog",
+	},
+
+	visibility : {
+		preview : true,
+		shortcuts : true,
+		newFolder : true,
+		delete : true,
+		rename : true,
+		filename : true,
+		filter : true,
+	},
+});
+
+FileBrowser.prototype.SaveDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
+
+	multiSelect : false,
+
+	texts : {
+		title : "Save File",
+		accept : "Save",
+		cancel : "Cancel",
+	},
+
+	visibility : {
+		preview : false,
+		shortcuts : false,
+		newFolder : true,
+		delete : true,
+		rename : true,
+		filename : true
+	},
+});
+
+
+FileBrowser.prototype.OpenDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
+
+	multiSelect : true,
+
+	texts : {
+		title : "Open File(s)",
+		accept : "Open",
+		cancel : "Cancel",
+	},
+
+	visibility : {
+		preview : true,
+		shortcuts : false,
+		filter : true,
+	},
+});
