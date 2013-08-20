@@ -6,7 +6,8 @@
 	Displays the content items as a multi-column list with small icons
 */
 function ListContentRenderer() {
-	this.name = "List"
+	// List View
+	this.name = "&#9776;"
 }
 ListContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		_renderContainer : function() {
@@ -31,7 +32,8 @@ ListContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 	Displays content as a multi-column list with preview icons
 */
 function IconContentRenderer() {
-	this.name = "Icon"
+	// Icon View
+	this.name = "&#9871;"
 }
 IconContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 
@@ -58,7 +60,8 @@ IconContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 	Displays content in a table with sortable columns
 */
 function DetailContentRenderer() {
-	this.name = "Details"
+	// Detail View
+	this.name = "&#57349;"
 }
 DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 
@@ -79,7 +82,7 @@ DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		},
 
 		_renderItem : function(contentItem) {
-			var $tr = jQuery(document.createElement("tr")).addClass("ind-detailitem");
+			var $tr = jQuery(document.createElement("tr"));
 
 			var $label = jQuery(document.createElement("span")).addClass("ind-editable-name").html(contentItem.name);
 			if(contentItem.isDir) {
