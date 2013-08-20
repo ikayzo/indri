@@ -84,13 +84,36 @@ $(document).ready(function() {
 	initializer.viewFactory.views.push(new IconContentRenderer());
 	initializer.viewFactory.views.push(new DetailContentRenderer());
 
-//	initializer.locationRenderer = new StringLocationRenderer();
-	initializer.locationRenderer = new SegmentedLocationRenderer();
-//	initializer.locationRenderer = new BucketLocationRenderer();
-
-	initializer.previewRenderer.baseUrl = 'http://civilbeat_production.s3.amazonaws.com/';
+	initLocalFileSystem(initializer);
+//	initAwsFileSystem(initializer);
+//	initCivilBeatFileSystem(initializer);
 
 	var fileBrowser = new FileBrowser(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
+
+	function initLocalFileSystem(initializer) {
+		initializer.visibility.preview = true;
+		initializer.visibility.shortcuts = false;
+
+		initializer.locationRenderer = new SegmentedLocationRenderer();
+	}
+
+	function initAwsFileSystem(initializer) {
+		initializer.visibility.preview = true;
+		initializer.visibility.shortcuts = true;
+
+		initializer.locationRenderer = new BucketLocationRenderer();
+
+		//initializer.previewRenderer.baseUrl = 'http://ikayzo_files.s3.amazonaws.com/';
+	}
+
+	function initCivilBeatFileSystem(initializer) {
+		initializer.visibility.preview = true;
+		initializer.visibility.shortcuts = true;
+
+		initializer.locationRenderer = new BucketLocationRenderer();
+
+		initializer.previewRenderer.baseUrl = 'http://civilbeat_production.s3.amazonaws.com/';
+	}
 });
 
 </script>

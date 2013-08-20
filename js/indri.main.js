@@ -319,8 +319,6 @@ FileBrowser.prototype = {
 	},
 
 	_initializeViews : function(viewFactory) {
-//		this._getUiElem(this.uiNames.viewControls).empty()
-//			.append(viewFactory.render(this._makeCallback(function(view) { this._setRenderer(view); })));
 		viewFactory.render(this._makeCallback(function(view) { this._setRenderer(view); }), this._getUiElem(this.uiNames.viewControls));
 	},
 
