@@ -85,9 +85,17 @@ DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 						}
 					});
 
-				// If this is the column we're sorting by, add the appropriate class
+				// If this is the column we're sorting by, add the appropriate indicator
 				if(field == this.browser.sorter.fieldName) {
-					$th.addClass(this.browser.sorter.ascending ? "ind-col-sort-asc" : "ind-col-sort-desc");					
+					$sortIndicator = jQuery(document.createElement("span")).addClass("ind-col-sort");
+					if(this.browser.sorter.ascending) {
+						$sortIndicator.addClass("ind-col-sort-asc").html("&#59235;");
+					}
+					else {
+						$sortIndicator.addClass("ind-col-sort-desc").html("&#59232;");
+					}
+
+					$th.append($sortIndicator)
 				}
 
 				$tr.append($th);
