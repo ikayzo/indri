@@ -97,7 +97,7 @@ DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 			}, this);
 
 			return jQuery(document.createElement("table")).addClass("ind-content ind-detaillist")
-					.append(jQuery(document.createElement("thead"))).append($tr);
+					.append(jQuery(document.createElement("thead")).append($tr));
 		},
 
 		_renderItem : function(contentItem) {
