@@ -395,12 +395,12 @@ FileBrowser.prototype = {
 			if(isVisible) {
 				this._getUiElem(this.uiNames.contentsWrapper).addClass(className);
 				if(controlName)
-					this._getUiElem(controlName).addClass("ind-btn-on");
+					this._getUiElem(controlName).addClass("ind-btn-active");
 			}
 			else {
 				this._getUiElem(this.uiNames.contentsWrapper).removeClass(className);				
 				if(controlName)
-					this._getUiElem(controlName).removeClass("ind-btn-on");
+					this._getUiElem(controlName).removeClass("ind-btn-active ");
 			}
 		}
 	},
