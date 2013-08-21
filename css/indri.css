@@ -102,20 +102,20 @@ a.entypo { text-decoration: none;}
 
 /* --- */
 /* --- Specific Content Layout --- */
-.ind-filelist				        { }
-.ind-filelist > li 			    { width: 25%; overflow: hidden; display: inline-block; zoom: 1; *display:inline;
+.ind-content				        { }
+.ind-content > li 			    { width: 25%; overflow: hidden; display: inline-block; zoom: 1; *display:inline;
 white-space: nowrap; overflow: hidden; text-overflow: ellipsis; -moz-user-select: none; /* Truncates text */
 -webkit-user-select: none; -ms-user-select:none; user-select:none; /* Remove accidental text highlighting */ }
-.ind-filelist > li span:hover    { cursor: default; /* Remove text cursor - Add to mobile */}
-.ind-filelist .ind-content-selected { background: #0c5b7f !important; color: #fff !important;}
+.ind-content > li span:hover    { cursor: default; /* Remove text cursor - Add to mobile */}
+.ind-content .ind-content-selected { background: #0c5b7f !important; color: #fff !important;}
 
 .ind-editable-name   { letter-spacing: 0.06em; display: inline-block; zoom: 1; *display:inline;}
 /* Sets every 9th element to be light blue. This is dependent on the width of each LI being 25%. If it is changed to 20%, everything 11th element needs to be implemented. */
-.ind-filelist > li:nth-child(8n+1),
-.ind-filelist > li:nth-child(8n+2),
-.ind-filelist > li:nth-child(8n+3),
-.ind-filelist > li:nth-child(8n+4),
-.ind-filelist tr:nth-child(odd)  { background: #f0f5f9;}
+.ind-content > li:nth-child(8n+1),
+.ind-content > li:nth-child(8n+2),
+.ind-content > li:nth-child(8n+3),
+.ind-content > li:nth-child(8n+4),
+.ind-content tr:nth-child(odd)  { background: #f0f5f9;}
 
 /* --- List View --- */
 .ind-listitem         { padding: 10px; }

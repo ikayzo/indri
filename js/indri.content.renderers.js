@@ -12,7 +12,7 @@ function ListContentRenderer() {
 }
 ListContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		_renderContainer : function() {
-			return jQuery(document.createElement("ul")).addClass("ind-filelist").click(this, function(evt) { 
+			return jQuery(document.createElement("ul")).addClass("ind-content ind-filelist").click(this, function(evt) { 
 				if(evt.toElement == this) evt.data.callback(null, 'clear');
 			});
 		},
@@ -40,7 +40,7 @@ IconContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		showIconPreview : false,
 
 		_renderContainer : function() {
-			return jQuery(document.createElement("ul")).addClass("ind-filelist ind-iconlist").click(this, function(evt) {
+			return jQuery(document.createElement("ul")).addClass("ind-content ind-iconlist").click(this, function(evt) {
 				if(evt.toElement == this) evt.data.callback(null, 'clear');
 			});
 		},
@@ -70,7 +70,7 @@ DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		_renderContainer : function() {
 			var $tr = jQuery(document.createElement("tr"));
 			this._fieldNames.forEach(function(field) {
-				var $th = jQuery(document.createElement("th")).addClass("ind-detailheader").html(field);
+				var $th = jQuery(document.createElement("th")).html(field);
 				if(field != '') {
 					$th.click(this, function(evt){
 						if(evt.toElement == this && evt.which == MouseButtons.BUTTON_LEFT) {
@@ -96,8 +96,8 @@ DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 				$tr.append($th);
 			}, this);
 
-			return jQuery(document.createElement("table")).addClass("ind-filelist ind-detaillist")
-					.append(jQuery(document.createElement("thead"))).append($tr);
+			return jQuery(document.createElement("table")).addClass("ind-content ind-detaillist")
+					.append(jQuery(document.createElement("thead")).append($tr));
 		},
 
 		_renderItem : function(contentItem) {
