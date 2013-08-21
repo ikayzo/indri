@@ -322,6 +322,7 @@ FileBrowser.prototype = {
 				fileBrowser.clearSelection();
 			}
 		});
+		this._getUiElem(this.uiNames.detail).click(function() { fileBrowser._toggleVisible(fileBrowser.uiNames.preview); });
 		this._getUiElem(this.uiNames.delete).click(function() { fileBrowser.deleteSelected(); });
 		this._getUiElem(this.uiNames.newFolder).click(function() { fileBrowser.createFolder(); });
 		this._getUiElem(this.uiNames.rename).click(function() { fileBrowser._beginEditingContentItem(); });
@@ -357,23 +358,26 @@ FileBrowser.prototype = {
 
 	// UI Accessors
 	uiNames : {
-		title 			: '#title-control',
-		accept 			: '#accept-control',
-		cancel 			: '#cancel-control',
-		parent 			: '#parent-control',
-		refresh 		: '#refresh-control',
-		newFolder 		: '#newfolder-control',
-		delete 			: '#delete-control',
-		rename 			: '#rename-control',
-		location 		: '#location-display',
-		viewControls 	: '#view-controls',
-		contents 		: '#contents-display',
-		contentsPanel	: '#contents-panel',
-		status 			: '#status-display',
-		filter 			: '#filter-controls',
-		filename 		: "#filename-control",
-		preview 		: "#preview-panel",
-		shortcuts 		: "#shortcuts-controls",
+		title 				: '#title-control',
+		accept 				: '#accept-control',
+		cancel 				: '#cancel-control',
+		parent 				: '#parent-control',
+		refresh 			: '#refresh-control',
+		newFolder 			: '#newfolder-control',
+		delete 				: '#delete-control',
+		rename 				: '#rename-control',
+		location 			: '#location-display',
+		viewControls 		: '#view-controls',
+		detail 				: '#detail-control',
+		contents 			: '#contents-display',
+		contentsPanel		: '#contents-panel',
+		contentsWrapper		: '#section-wrapper',
+		status 				: '#status-display',
+		filter 				: '#filter-controls',
+		filename 			: "#filename-control",
+		previewControls		: "#preview-panel",
+		preview 			: "#aside-wrapper",
+		shortcuts 			: "#shortcuts-controls",
 	},
 
 	_getUiElem : function(name) {
@@ -383,6 +387,21 @@ FileBrowser.prototype = {
 	_setVisible : function(name, isVisible) {
 		var displayMode = isVisible ? '' : 'none';
 		this._getUiElem(name).css('display', displayMode);
+
+		// Some special cases for the shortcuts and preview panels
+		if(name == this.uiNames.preview || name == this.uiNames.shortcuts) {
+			var className = name == this.uiNames.preview ? "ind-show-preview" : "ind-show-shortcuts";
+			if(isVisible) {
+				this._getUiElem(this.uiNames.contentsWrapper).addClass(className);
+			}
+			else {
+				this._getUiElem(this.uiNames.contentsWrapper).removeClass(className);				
+			}
+		}
+	},
+
+	_toggleVisible : function(name) {
+		this._setVisible(name, this._getUiElem(name).css('display') == 'none');
 	},
 
 	_setEnabled : function(name, isEnabled) {
