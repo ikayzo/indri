@@ -63,7 +63,7 @@ FileBrowser.prototype = {
 			this._beginEditingContentItem(newContents[0]);
 		});
 
-		this.fsm.createFolder(this.currentLocation, "New Folder", success, this._makeCallback(this._updateStatus));
+		this.fsm.createFolder(this.currentLocation, IndriText.NEW_FOLDER_TEXT, success, this._makeCallback(this._updateStatus));
 	},
 
 	renameItem : function(contentItem, newName) {
@@ -277,7 +277,7 @@ FileBrowser.prototype = {
 
 	_returnResults : function(filesSelected, results) {
 		if(filesSelected && !this.allowMultipleResults && results.length != 1) {
-			this._updateStatus("Error: Multiple selection is not allowed.")
+			this._updateStatus(IndriText.MULTI_SELECT_ERR);
 		}
 		else {
 			this.resultCallback({ success: filesSelected, results: results });

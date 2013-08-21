@@ -8,7 +8,7 @@
 function ListContentRenderer() {
 	// List View
 	this.name = "List";
-	this.text = "&#9776;"
+	this.text = IndriIcons.ICON_LIST_VIEW;
 }
 ListContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		_renderContainer : function() {
@@ -34,7 +34,7 @@ ListContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 function IconContentRenderer() {
 	// Icon View
 	this.name = "Icon";
-	this.text = "&#9871;"
+	this.text = IndriIcons.ICON_ICON_VIEW;
 }
 IconContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		showIconPreview : false,
@@ -63,7 +63,7 @@ IconContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 function DetailContentRenderer() {
 	// Detail View
 	this.name = "Detail";
-	this.text = "&#57349;"
+	this.text = IndriIcons.ICON_DETAIL_VIEW;
 }
 DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 
@@ -73,7 +73,7 @@ DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 				var $th = jQuery(document.createElement("th")).addClass("ind-detailheader").html(field);
 				if(field != '') {
 					$th.click(this, function(evt){
-						if(evt.toElement == this && evt.which == 1) {
+						if(evt.toElement == this && evt.which == MouseButtons.BUTTON_LEFT) {
 							evt.data.browser.sorter.setSortField(field);
 						}
 					});
@@ -84,10 +84,10 @@ DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 					$th.addClass(this.browser.sorter.ascending ? "ind-col-sort-asc" : "ind-col-sort-desc");					
 					$sortIndicator = jQuery(document.createElement("span")).addClass("ind-col-sort");
 					if(this.browser.sorter.ascending) {
-						$sortIndicator.addClass("ind-col-sort entypo").html("&#59235;");
+						$sortIndicator.addClass("ind-col-sort entypo").html(IndriIcons.ICON_SORT_ASC);
 					}
 					else {
-						$sortIndicator.addClass("ind-col-sort entypo").html("&#59232;");
+						$sortIndicator.addClass("ind-col-sort entypo").html(IndriIcons.ICON_SORT_DESC);
 					}
 
 					$th.append($sortIndicator)
