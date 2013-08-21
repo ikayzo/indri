@@ -110,7 +110,7 @@ DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 			}
 			$tr.append(jQuery(document.createElement("td")).append($label));
 
-			$tr.append(jQuery(document.createElement("td")).html(this._formatSize(contentItem)));
+			$tr.append(jQuery(document.createElement("td")).html(this._formatSize(contentItem.size)));
 			$tr.append(jQuery(document.createElement("td")).html(this._formatDate(contentItem.created)));
 			$tr.append(jQuery(document.createElement("td")).html(this._formatDate(contentItem.modified)));
 			this._initItem($tr, contentItem);
@@ -122,12 +122,7 @@ DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 			return contentFile.name;
 		},
 
-		_formatSize : function(contentItem) {
-			if(contentItem.isDir) {
-				return "Folder";
-			}
-
-			var size = contentItem.size;
+		_formatSize : function(size) {
 			if(!size) {
 				return "--";
 			}
