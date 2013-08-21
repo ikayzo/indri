@@ -113,12 +113,15 @@ ContentRenderer.prototype = {
 */		
 	},
 
-	_getIcon : function(contentItem, size) {
-		if(!size) {
-			size = "default"
+	_getIcon : function(contentItem) {
+		$icon = jQuery(document.createElement("span")).addClass("entypo");
+		if(contentItem.isDir) {
+			$icon.addClass('icon-folder').html("&#128193;");
 		}
-		var typeName = contentItem.isDir ? "folder" : "file";
-
-		return "img/" + size + "_" + typeName + "_icon.png";
+		else {
+			$icon.addClass('icon-file').html("&#59190;");
+		}
+		
+		return $icon;
 	},	
 }
