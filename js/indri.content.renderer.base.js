@@ -1,10 +1,3 @@
-if (typeof KeyEvent == "undefined") {
-    var KeyEvent = {
-    	KEYCODE_ENTER : 13,
-		KEYCODE_ESC : 27,
-    };
-}
-
 function ContentRenderer() {
 }
 
@@ -82,14 +75,14 @@ ContentRenderer.prototype = {
 
 	_setupNormalEvents : function($listItem, contentItem) {
 		$listItem.off("click").on("click", this, function(evt) {
-			if(evt.which == 1) {
+			if(evt.which == MouseButtons.BUTTON_LEFT) {
 				evt.data.callback(contentItem, evt);
 			}
 		});
 
 		if(!contentItem.isDir) {
 			$listItem.off("dblclick").on("dblclick", this, function(evt) {
-				if(evt.which == 1) {
+				if(evt.which == MouseButtons.BUTTON_LEFT) {
 					evt.data.callback(contentItem, evt);
 				}
 			});
@@ -116,10 +109,10 @@ ContentRenderer.prototype = {
 	_getIcon : function(contentItem) {
 		$icon = jQuery(document.createElement("span")).addClass("entypo");
 		if(contentItem.isDir) {
-			$icon.addClass('icon-folder').html("&#128193;");
+			$icon.addClass('icon-folder').html(IndriIcons.ICON_FOLDER);
 		}
 		else {
-			$icon.addClass('icon-file').html("&#59190;");
+			$icon.addClass('icon-file').html(IndriIcons.ICON_DOCUMENT);
 		}
 		
 		return $icon;
