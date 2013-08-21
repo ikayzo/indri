@@ -18,7 +18,7 @@ ListContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		},
 
 		_renderItem : function(contentItem) {
-			var $icon = jQuery(document.createElement("img")).attr("src", this._getIcon(contentItem, "small"));
+			var $icon = this._getIcon(contentItem);
 			var $label = jQuery(document.createElement("span")).addClass("ind-editable-name").html(contentItem.name);
 			var $listItem = jQuery(document.createElement("li")).addClass("ind-listitem").append($icon).append($label);
 			this._initItem($listItem, contentItem);
@@ -46,21 +46,13 @@ IconContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		},
 
 		_renderItem : function(contentItem) {
-			var $icon = jQuery(document.createElement("img")).attr("src", this._getIcon(contentItem));
+			var $icon = this._getIcon(contentItem);
 			var $label = jQuery(document.createElement("span")).addClass("ind-editable-name").html(contentItem.name);
 			var $listItem = jQuery(document.createElement("li")).addClass("ind-iconitem").append($icon).append("<br>").append($label);
 			this._initItem($listItem, contentItem);
 
 			return $listItem;
 		},	
-
-		_getIcon : function(contentItem, size) {
-			if(this.showIconPreview && contentItem.previewUrl) {
-				return contentItem.previewUrl;
-			}
-
-			return ContentRenderer.prototype._getIcon.call(this, contentItem, size);
-		}
 
 	});
 
@@ -78,12 +70,14 @@ DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		_renderContainer : function() {
 			var $tr = jQuery(document.createElement("tr"));
 			this._fieldNames.forEach(function(field) {
-				var $th = jQuery(document.createElement("th")).addClass("ind-detailheader").html(field)
-					.click(this, function(evt){
+				var $th = jQuery(document.createElement("th")).addClass("ind-detailheader").html(field);
+				if(field != '') {
+					$th.click(this, function(evt){
 						if(evt.toElement == this && evt.which == 1) {
 							evt.data.browser.sorter.setSortField(field);
 						}
 					});
+				}
 
 				// If this is the column we're sorting by, add the appropriate indicator
 				if(field == this.browser.sorter.fieldName) {
@@ -109,6 +103,7 @@ DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		_renderItem : function(contentItem) {
 			var $tr = jQuery(document.createElement("tr"));
 
+			$tr.append(jQuery(document.createElement("td")).append(this._getIcon(contentItem)));
 			var $label = jQuery(document.createElement("span")).addClass("ind-editable-name").html(contentItem.name);
 			if(contentItem.isDir) {
 				$label.addClass("ind-detailitem-dirname");
@@ -151,7 +146,7 @@ DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 			return timestamp ? new Date(timestamp).toDateString() : '--';
 		},
 
-		_fieldNames : [ "name", "size", "created", "modified" ],
+		_fieldNames : [ "", "name", "size", "created", "modified" ],
 
 		dateFormatString : "yyyy-MM-dd, hh:mm ",
 	});

@@ -390,12 +390,17 @@ FileBrowser.prototype = {
 
 		// Some special cases for the shortcuts and preview panels
 		if(name == this.uiNames.preview || name == this.uiNames.shortcuts) {
+			var controlName = name == this.uiNames.preview ? this.uiNames.detail : null;
 			var className = name == this.uiNames.preview ? "ind-show-preview" : "ind-show-shortcuts";
 			if(isVisible) {
 				this._getUiElem(this.uiNames.contentsWrapper).addClass(className);
+				if(controlName)
+					this._getUiElem(controlName).addClass("ind-btn-on");
 			}
 			else {
 				this._getUiElem(this.uiNames.contentsWrapper).removeClass(className);				
+				if(controlName)
+					this._getUiElem(controlName).removeClass("ind-btn-on");
 			}
 		}
 	},
