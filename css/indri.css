@@ -26,13 +26,13 @@ List View BG              Light-Blue    #f0f5f9
  }
 html, body  { height: 100%; width: 100%; }
 body        { font-family: Verdana, Tahoma, Arial, sans-serif; font-size: 13px; line-height: 1.0; color: #444; }
-header, footer { color: white; text-transform: uppercase; letter-spacing: 0.2em;}
-img { max-width: 100%; max-height: 100%; }
-a { color: #333;}
+img   { max-width: 100%; max-height: 100%; }
+a     { color: blue; text-decoration: underline;}
 
 .clearfix { content: ""; display: table; clear: both; }
 .entypo  { font-family: "entypo"; font-size: 3.25em; line-height: 0.9em; color: #666;
 -webkit-user-select: none; -ms-user-select:none; user-select:none; /* Remove accidental text highlighting */cursor: default; }
+a.entypo { text-decoration: none;}
 
 
 
@@ -74,7 +74,7 @@ a { color: #333;}
 
 /* --- Header --- */
 #header-wrapper { border-width: 0 0 1px 0; top:0; height: 100px; }
-#title-control  { background: #323a45; text-align: center; border-bottom: 1px solid #333; padding: 10px 15px; }
+#title-control  { background: #323a45; text-align: center; border-bottom: 1px solid #333; padding: 10px 15px; text-transform: uppercase; letter-spacing: 0.2em; color: #fff; }
 
 /* --- Content Window --- */
 #section-wrapper{ top: 100px; bottom: 150px; overflow: auto; border-right: 1px solid #aaa; }
