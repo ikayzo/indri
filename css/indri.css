@@ -25,16 +25,16 @@ List View BG              Light-Blue    #f0f5f9
   -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
  }
 html, body  { height: 100%; width: 100%; }
-body        { font-family: Verdana, Tahoma, Arial, sans-serif; font-size: 13px; line-height: 1.0; color: #444; }
+body        { font-family: Arial, Verdana, Tahoma, sans-serif; font-size: 13px; line-height: 1.0; color: #444; }
 img   { max-width: 100%; max-height: 100%; }
-a     { color: blue; text-decoration: underline;}
+a     { color: #dd514c; text-decoration: underline; -webkit-user-select: none; -ms-user-select:none; user-select:none; /* Remove accidental text highlighting */cursor: default; }
 
 .clearfix { content: ""; display: table; clear: both; }
 
 
 /* --- */
 /* --- Icons --- */
-.entypo  { font-family: "entypo"; font-size: 3.25em; line-height: 0.9em; color: #666;
+.entypo  { font-family: "entypo"; font-size: 3.0em; line-height: 0.9em; color: #666;
 -webkit-user-select: none; -ms-user-select:none; user-select:none; /* Remove accidental text highlighting */cursor: default; }
 a.entypo { text-decoration: none;}
 
@@ -43,25 +43,29 @@ a.entypo { text-decoration: none;}
 .ind-iconlist     .entypo { font-size: 70px; line-height: 0.8em;}
 .ind-detaillist   .entypo { font-size: 30px; line-height: 1.0em;}
 
+
+/* --- */
+/* --- Header Controls --- */
+.ind-btn { background: #ccc; text-align: center; display: inline-block; zoom:1; *display: block; width: 35px; height: 35px; position: relative; overflow: hidden;}
+
+.ind-btn-active   { background: #0078e7; color: #fff;}
+
+
 /* --- */
 /* --- Header Controls --- */
 #control-panel      { padding: 15px 20px; width: 100%;}
 
-#location-controls  { float: left;}
-#layout-controls    { float: right;}
+#location-controls          { float: left;}
+#location-controls .ind-btn { float: left;}
+#location-display           { float: left; padding: 10px; font-weight: bold;}
+.ind-location-divider       { margin: 0 10px;}
+
+#layout-controls            { float: right;}
+
 
 #view-controls      { float: left;}
 #detail-controls    { float: right; margin: 0 0 0 10px;}
-.ind-layout-controls  { background: #fff; text-align: center; overflow: hidden; position: relative; float: right;
-  -webkit-border-radius: 5px;
-     -moz-border-radius: 5px;
-          border-radius: 5px; }
-.ind-layout-controls a { height: 35px; width: 35px; display: inline-block; zoom:1; *display:inline; 
- border-left: 1px solid #ddd; }
-.ind-layout-controls a:first-child { border-left: none;}
-.ind-btn-active   { background: #7dbfd7; color: #fff;}
 
-.ind-detailbutton { height: 35px; width: 35px; display: inline-block; zoom:1; *display:inline; }
 
 /* --- Footer Controls --- */
 #filename-panel       { padding: 15px 20px 0; width: 100%; }
@@ -80,14 +84,14 @@ a.entypo { text-decoration: none;}
 
 /* --- Header --- */
 #header-wrapper { border-width: 0 0 1px 0; top:0; height: 100px; }
-#title-control  { background: #323a45; text-align: center; border-bottom: 1px solid #333; padding: 10px 15px; text-transform: uppercase; letter-spacing: 0.2em; color: #fff; }
+#title-control  { background: #333; text-align: center; padding: 10px 15px; text-transform: uppercase; color: #fff; }
 
 /* --- Content Window --- */
-#section-wrapper{ top: 100px; bottom: 150px; overflow: auto; border-right: 1px solid #aaa; }
+#section-wrapper{ top: 100px; bottom: 150px; overflow: auto; }
 #contents-panel { height: 100%;}
 
 /* --- Preview Window --- */
-#aside-wrapper  { top: 100px; bottom: 150px; width: 300px; float: right; position: relative; padding: 15px 20px;}
+#aside-wrapper  { top: 100px; bottom: 150px; width: 300px; position: absolute; padding: 15px 20px; right: 0; background: #f3f3f3; border-left: 1px solid #aaa; }
 
 /* --- Footer --- */
 #footer-wrapper { border-width: 1px 0 0 0; bottom: 0; height: 150px; }
@@ -131,22 +135,19 @@ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; -moz-user-select
 
 /* --- Layout --- */
 .ind-detaillist				{ width: 100%; }
-.ind-detailheader			{ text-transform: uppercase; letter-spacing: 0.1em; text-align: left; background: #eee; padding: 7px 10px; border-left: 1px solid #fff; position: relative;}
-.ind-detailheader:first-child { border-left: none;}
+.ind-detaillist th		{ text-transform: uppercase; text-align: left; background: #ccc; padding: 7px 10px; border-left: 1px solid #fff; position: relative;}
+.ind-detaillist th:first-child { border-left: none;}
 .ind-detaillist tr td     { padding: 0 10px; height: 32px; /* Min Height */ vertical-align: middle; }
 .ind-detaillist tr td:first-child {  width: 40px; text-align: center;}
 
 /* --- Controls --- */
-.ind-col-sort-asc,
-.ind-col-sort-desc  { background: #7dbfd7;}
-.ind-col-sort       { display: inline-block; zoom: 1; *display:inline; right: 10px; top: 0; line-height: 0.55em; position: absolute;}
+th.ind-col-sort-asc,
+th.ind-col-sort-desc  { background: #0078e7; color: #fff;}
+.ind-col-sort         { display: inline-block; zoom: 1; *display:inline; right: 10px; top: 0; line-height: 0.55em; position: absolute; color: #fff;}
 
 
 
 /* --- */
-#location-display { display: inline;}
-#location-controls  { padding: 5px 0; }
-#refresh-control    { }
 
 
 #shortcuts-controls   { width: 20%; }

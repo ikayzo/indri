@@ -34,7 +34,7 @@ SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 			var fullPath = '';
 			location.split('/').forEach(function(segment, index, segments) {
 				if(segment.length) {
-					$elem.append(' / ');
+					$elem.append('<span class="ind-location-divider">&#62;</span>');
 					fullPath += '/' + segment;
 
 					var $anchor = jQuery(document.createElement("a")).html(segment).addClass('ind-location-segment');
