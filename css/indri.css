@@ -34,7 +34,7 @@ a     { color: #dd514c; text-decoration: underline; -webkit-user-select: none; -
 
 /* --- */
 /* --- Icons --- */
-.entypo  { font-family: "entypo"; font-size: 3.0em; line-height: 0.9em; color: #666;
+.entypo  { font-family: "entypo"; font-size: 2.9em; line-height: 1.0em; color: #666;
 -webkit-user-select: none; -ms-user-select:none; user-select:none; /* Remove accidental text highlighting */cursor: default; }
 a.entypo { text-decoration: none;}
 
@@ -119,7 +119,7 @@ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; -moz-user-select
 .ind-content > li:nth-child(8n+2),
 .ind-content > li:nth-child(8n+3),
 .ind-content > li:nth-child(8n+4),
-.ind-content tr:nth-child(odd)  { background: #f0f5f9;}
+.ind-content tr:nth-child(odd)  { background: #f7f7f7;}
 
 /* --- List View --- */
 .ind-listitem         { padding: 10px; }
