@@ -111,7 +111,7 @@ a.entypo { text-decoration: none;}
 white-space: nowrap; overflow: hidden; text-overflow: ellipsis; -moz-user-select: none; /* Truncates text */
 -webkit-user-select: none; -ms-user-select:none; user-select:none; /* Remove accidental text highlighting */ }
 .ind-content > li span:hover    { cursor: default; /* Remove text cursor - Add to mobile */}
-.ind-content .ind-content-selected { background: #0c5b7f !important; color: #fff !important;}
+.ind-content .ind-content-selected { background: #0078e7 !important; color: #fff !important;}
 
 .ind-editable-name   { letter-spacing: 0.06em; display: inline-block; zoom: 1; *display:inline;}
 /* Sets every 9th element to be light blue. This is dependent on the width of each LI being 25%. If it is changed to 20%, everything 11th element needs to be implemented. */
@@ -122,8 +122,8 @@ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; -moz-user-select
 .ind-content tr:nth-child(odd)  { background: #f7f7f7;}
 
 /* --- List View --- */
-.ind-listitem         { padding: 10px; }
-.ind-listitem .ind-editable-name   { margin: 0 0 0 8px; letter-spacing: 0.06em;}
+.ind-listitem                     { padding: 5px; }
+.ind-listitem .ind-editable-name  { margin: 0 0 0 10px; top: -4px; position: relative;}
 
 /* --- Thumbnail View --- */
 .ind-iconlist li      { padding: 10px 10px 20px; text-align: center;}
