@@ -194,7 +194,7 @@ FileBrowser.prototype = {
 
 	_updateShortcuts : function(shortcuts) {
 		if(this.shortcutsRenderer) {
-			this._getUiElem(this.uiNames.shortcuts).empty().append(
+			this._getUiElem(this.uiNames.shortcutsPanel).empty().append(
 				this.shortcutsRenderer.render(shortcuts, this._makeCallback(this.navigateToLocation)));
 		}
 	},
@@ -323,16 +323,17 @@ FileBrowser.prototype = {
 			}
 		});
 		this._getUiElem(this.uiNames.detail).click(function() { fileBrowser._toggleVisible(fileBrowser.uiNames.preview); });
+		this._getUiElem(this.uiNames.shortcuts).click(function() { fileBrowser._toggleVisible(fileBrowser.uiNames.shortcutsPanel); });
 		this._getUiElem(this.uiNames.delete).click(function() { fileBrowser.deleteSelected(); });
 		this._getUiElem(this.uiNames.newFolder).click(function() { fileBrowser.createFolder(); });
 		this._getUiElem(this.uiNames.rename).click(function() { fileBrowser._beginEditingContentItem(); });
 		this._getUiElem(this.uiNames.accept).click(function() { fileBrowser._returnResults(true, fileBrowser.currentSelection); });
 		this._getUiElem(this.uiNames.cancel).click(function() { fileBrowser._returnResults(false); });
 
-		if(initializer.visibility['shortcuts']) {
+		if(initializer.visibility['shortcutsPanel']) {
 			this.fsm.getShortcuts(this._makeCallback(this._updateShortcuts), 
 				this._makeCallback(function() { 
-					this._setVisible(this.uiNames.shortcuts, false);
+					this._setVisible(this.uiNames.shortcutsPanel, false);
 					this.navigateToRoot();
 				}));
 		}
@@ -377,7 +378,8 @@ FileBrowser.prototype = {
 		filename 			: "#filename-control",
 		previewControls		: "#preview-panel",
 		preview 			: "#aside-wrapper",
-		shortcuts 			: "#shortcuts-controls",
+		shortcuts 			: '#shortcuts-control',
+		shortcutsPanel 		: "#shortcuts-panel",
 	},
 
 	_getUiElem : function(name) {
@@ -389,18 +391,17 @@ FileBrowser.prototype = {
 		this._getUiElem(name).css('display', displayMode);
 
 		// Some special cases for the shortcuts and preview panels
-		if(name == this.uiNames.preview || name == this.uiNames.shortcuts) {
-			var controlName = name == this.uiNames.preview ? this.uiNames.detail : null;
+		if(name == this.uiNames.preview || name == this.uiNames.shortcutsPanel) {
+			var controlName = name == this.uiNames.preview ? this.uiNames.detail : this.uiNames.shortcuts;
 			var className = name == this.uiNames.preview ? "ind-show-preview" : "ind-show-shortcuts";
+
 			if(isVisible) {
 				this._getUiElem(this.uiNames.contentsWrapper).addClass(className);
-				if(controlName)
-					this._getUiElem(controlName).addClass("ind-btn-active");
+				this._getUiElem(controlName).addClass("ind-btn-active");
 			}
 			else {
 				this._getUiElem(this.uiNames.contentsWrapper).removeClass(className);				
-				if(controlName)
-					this._getUiElem(controlName).removeClass("ind-btn-active ");
+				this._getUiElem(controlName).removeClass("ind-btn-active ");
 			}
 		}
 	},
@@ -429,7 +430,7 @@ FileBrowser.prototype.DefaultInitializer = {
 
 	visibility : {
 		preview : false,
-		shortcuts : false,
+		shortcutsPanel : false,
 		newFolder : false,
 		delete : false,
 		rename : false,
@@ -619,7 +620,7 @@ FileBrowser.prototype.DebugDialogInitializer = jQuery.extend(true, {}, FileBrows
 
 	visibility : {
 		preview : true,
-		shortcuts : true,
+		shortcutsPanel : true,
 		newFolder : true,
 		delete : true,
 		rename : true,
@@ -640,7 +641,7 @@ FileBrowser.prototype.SaveDialogInitializer = jQuery.extend(true, {}, FileBrowse
 
 	visibility : {
 		preview : false,
-		shortcuts : false,
+		shortcutsPanel : false,
 		newFolder : true,
 		delete : true,
 		rename : true,
@@ -662,7 +663,7 @@ FileBrowser.prototype.OpenDialogInitializer = jQuery.extend(true, {}, FileBrowse
 
 	visibility : {
 		preview : true,
-		shortcuts : false,
+		shortcutsPanel : false,
 		filter : true,
 	},
 });

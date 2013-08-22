@@ -14,6 +14,10 @@
 			<div id="title-control">File Dialog</div>
 			<div class="ind-panel clearfix" id="control-panel">
 				<div class="ind-cell" id="location-controls" >
+					<div id="shortcuts-controls" class="ind-layout-controls">
+						<a id="shortcuts-control" class="ind-detailbutton entypo ind-btn"><span>&#59146;</span></a>
+					</div>
+
 					<a id="parent-control" class="entypo icon-parent ind-btn" title="Back"><span>&#9666;</span></a>
 					<a id="refresh-control" class="entypo icon-refresh ind-btn" title="Refresh"><span>&#128260;</span></a>
 					<div id="location-display">Location</div>
@@ -30,7 +34,7 @@
 
 		<section id="section-wrapper" class="ind-wrapper">
 			<div class="ind-panel" id="contents-panel">
-				<div class="ind-cell" id="shortcuts-controls"></div>
+				<div class="ind-cell" id="shortcuts-panel"></div>
 				<div class="ind-cell" id="contents-display"></div>
 			</div>
 		</section><!-- End Main Content -->
@@ -74,8 +78,6 @@
 $(document).ready(function() {
 	var initializer = jQuery.extend(true, {}, FileBrowser.prototype.DebugDialogInitializer);
 
-	initializer.visibility.shortcuts = false;
-
 	initializer.filter.options.push({ value: "\.(htm|html)$", text: "HTML files (*.htm, *.html)"});
 	initializer.filter.options.push({ value: "\.js$", text: "Javascript files (*.js)"});
 	initializer.filter.options.push({ value: "\.(jpg|png)", text: "Image files (*.jpg, *.png)"});
@@ -94,7 +96,7 @@ $(document).ready(function() {
 	}
 
 	function initAwsFileSystem(initializer) {
-		initializer.visibility.shortcuts = true;
+		initializer.visibility.shortcutsPanel = true;
 
 		initializer.locationRenderer = new BucketLocationRenderer();
 
@@ -102,7 +104,7 @@ $(document).ready(function() {
 	}
 
 	function initCivilBeatFileSystem(initializer) {
-		initializer.visibility.shortcuts = true;
+		initializer.visibility.shortcutsPanel = true;
 
 		initializer.locationRenderer = new BucketLocationRenderer();
 
