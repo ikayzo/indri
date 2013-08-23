@@ -48,20 +48,23 @@
 
 		<footer id="footer-wrapper" class="ind-wrapper">
 			<div class="ind-panel clearfix" id="filename-panel">
-				<div class="ind-cell">
-					<button id="newfolder-control" class="btn">New Folder</button>
-					<button id="delete-control" class="btn" disabled>Delete</button>
-					<button id="rename-control" class="btn" disabled>Rename</button>
+				<div class="ind-cell" id="filename-options">
+					<a id="newfolder-control" class="ind-btn" title="New Folder">New Folder</a>
+					<a id="delete-control" class="ind-btn ind-btn-dis" title="Delete">Delete</a>
+					<a id="rename-control" class="ind-btn ind-btn-dis" title="Rename">Rename</a>
+
 				</div>
 
-				<div class="ind-cell">
+				<div class="ind-cell" id="filename-save">
+					<label>Save As:</label>
 					<input id="filename-control"></input>
-					<span id="filter-controls"></span>					
-					<button id="accept-control" class="btn primary">OK</button>
-					<button id="cancel-control" class="btn primary">Cancel</button>
+					<span id="filter-controls"></span>	
+				</div>
+				<div class="ind-cell" id="filename-action">				
+					<a id="accept-control" class="ind-btn" title="OK">OK</a>
+					<a id="cancel-control" class="ind-btn" title="Cancel">Cancel</a>
 				</div>
 			</div>
-
 			<div class="ind-panel" id="status-panel">
 				<div class="ind-cell" id="status-display">Current status</div>
 			</div>

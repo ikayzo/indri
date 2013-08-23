@@ -34,20 +34,22 @@ a     { color: #dd514c; text-decoration: underline; -webkit-user-select: none; -
 
 /* --- */
 /* --- Icons --- */
-.entypo  { font-family: "entypo"; font-size: 2.9em; line-height: 1.0em; color: #666;
+.entypo  { font-family: "entypo"; line-height: 1.0em; color: #666;
 -webkit-user-select: none; -ms-user-select:none; user-select:none; /* Remove accidental text highlighting */cursor: default; }
 a.entypo { text-decoration: none;}
 
 .icon-folder { color: #e8aa50;}
 
-.ind-iconlist     .entypo { font-size: 70px; line-height: 0.8em;}
-.ind-detaillist   .entypo { font-size: 30px; line-height: 1.0em;}
+.ind-filelist     .entypo { font-size: 2.9em; line-height: 0.8em;}
+.ind-iconlist     .entypo { font-size: 4.5em; line-height: 0.8em;}
+.ind-detaillist   .entypo { font-size: 2.2em; line-height: 1.0em;}
 
 
 /* --- */
 /* --- Header Controls --- */
-.ind-btn { background: #ccc; text-align: center; display: inline-block; zoom:1; *display: block; width: 35px; height: 35px; position: relative; overflow: hidden;}
-
+.ind-btn { background: #ccc; text-align: center; display: inline-block; zoom:1; *display: block; position: relative; overflow: hidden; text-decoration: none; padding: 10px 15px; color: #333; font-size: 1.1em;}
+.ind-btn-dis 	  { background: #ddd; color: #aaa; cursor: no-drop;}
+.ind-btn.entypo   { width: 35px; height: 35px; padding: 0; font-size: 2.9em; }
 .ind-btn-active   { background: #0078e7; color: #fff;}
 
 
@@ -69,11 +71,16 @@ a.entypo { text-decoration: none;}
 
 
 /* --- Footer Controls --- */
-#filename-panel       { padding: 15px 20px 0; width: 100%; }
-#filename-control     { width: 300px; }
-#status-display       { padding: 15px 20px; text-transform: capitalize;}
-
-#filename-panel > .ind-cell { float: left; width: 50%;}
+#filename-panel     { padding: 15px 20px 0; width: 100%; }
+#filename-options,	
+#filename-save,		
+#filename-action	{ float: left; width: 33.3333333%;}
+#filename-options	{ }
+#filename-save		{ padding: 5px 0 0 0;}
+#filename-action	{ text-align: right;}
+#filename-control   { width: 50%;}
+#filterSelector 	{ width: 30%;}
+#status-display     { padding: 15px 20px; text-transform: capitalize;}
 
 
 /* --- */
@@ -81,7 +88,7 @@ a.entypo { text-decoration: none;}
 .ind-wrapper    { position:absolute; left: 0; right: 0; }
 
 #header-wrapper,
-#footer-wrapper { border-color: #aaa; border-style: solid; background: #eee; overflow: hidden;  }
+#footer-wrapper { border-color: #aaa; border-style: solid; background: #f0f0f0; overflow: hidden;  }
 
 /* --- Header --- */
 #header-wrapper { border-width: 0 0 1px 0; top:0; height: 100px; }
@@ -95,7 +102,7 @@ a.entypo { text-decoration: none;}
 #aside-wrapper-left,
 #aside-wrapper-right		{ position: absolute; width: 300px; padding: 15px 20px;}
 /* --- Shortcut Window --- */
-#aside-wrapper-left	 	{ left: 0; background: #f3f3f3; border-right: 1px solid #aaa; }
+#aside-wrapper-left	 	{ left: 0; background: #fafafa; border-right: 1px solid #aaa; }
 
 /* --- Content Window --- */
 #section-wrapper{ overflow: auto; }

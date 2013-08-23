@@ -379,7 +379,7 @@ FileBrowser.prototype = {
 		previewControls		: "#preview-panel",
 		preview 			: "#aside-wrapper-right",
 		shortcuts 			: '#shortcuts-control',
-		shortcutsPanel 		: "#shortcuts-panel",
+		shortcutsPanel 		: "#aside-wrapper-left",
 	},
 
 	_getUiElem : function(name) {
