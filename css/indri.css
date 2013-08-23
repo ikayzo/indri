@@ -55,14 +55,15 @@ a.entypo { text-decoration: none;}
 /* --- Header Controls --- */
 #control-panel      { padding: 15px 20px; width: 100%;}
 
-#location-controls          { float: left;}
-#location-controls .ind-btn { float: left;}
-#location-display           { float: left; padding: 10px; font-weight: bold;}
-.ind-location-divider       { margin: 0 10px;}
+#layout-controls-left,
+#shortcuts-controls,
+#layout-contorols 		{ float: left; }
+#location-controls      { float: left; margin: 0 0 0 10px;}
+#location-display    	{ float: left; padding: 10px; font-weight: bold;}
+.ind-location-divider   { margin: 0 10px;}
 
-#layout-controls            { float: right;}
 
-
+#layout-controls-right       { float: right;}
 #view-controls      { float: left;}
 #detail-controls    { float: right; margin: 0 0 0 10px;}
 
@@ -86,12 +87,22 @@ a.entypo { text-decoration: none;}
 #header-wrapper { border-width: 0 0 1px 0; top:0; height: 100px; }
 #title-control  { background: #333; text-align: center; padding: 10px 15px; text-transform: uppercase; color: #fff; }
 
+
+/* --- Content Window Shared Styles --- */
+#aside-wrapper-left,
+#section-wrapper,
+#aside-wrapper-right		{ top: 100px; bottom: 150px; }
+#aside-wrapper-left,
+#aside-wrapper-right		{ position: absolute; width: 300px; padding: 15px 20px;}
+/* --- Shortcut Window --- */
+#aside-wrapper-right 	{ left: 0; background: #f3f3f3; border-right: 1px solid #aaa; }
+
 /* --- Content Window --- */
-#section-wrapper{ top: 100px; bottom: 150px; overflow: auto; }
+#section-wrapper{ overflow: auto; }
 #contents-panel { height: 100%;}
 
 /* --- Preview Window --- */
-#aside-wrapper  { top: 100px; bottom: 150px; width: 300px; position: absolute; padding: 15px 20px; right: 0; background: #f3f3f3; border-left: 1px solid #aaa; }
+#aside-wrapper-right  	{ right: 0; background: #fff; border-left: 1px solid #aaa; }
 
 /* --- Footer --- */
 #footer-wrapper { border-width: 1px 0 0 0; bottom: 0; height: 150px; }
@@ -150,7 +161,6 @@ th.ind-col-sort-desc  { background: #0078e7; color: #fff;}
 /* --- */
 
 
-#shortcuts-controls   { width: 20%; }
 #contents-display     { width: auto; background: white; }
 
 

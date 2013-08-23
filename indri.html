@@ -13,17 +13,17 @@
 		<header id="header-wrapper" class="ind-wrapper">
 			<div id="title-control">File Dialog</div>
 			<div class="ind-panel clearfix" id="control-panel">
-				<div class="ind-cell" id="location-controls" >
+				<div class="ind-cell" id="layout-controls-left" >
 					<div id="shortcuts-controls" class="ind-layout-controls">
-						<a id="shortcuts-control" class="ind-detailbutton entypo ind-btn"><span>&#59146;</span></a>
+						<a id="shortcuts-control" class="ind-detailbutton entypo ind-btn" title="Shortcut"><span>&#8627;</span></a>
 					</div>
-
-					<a id="parent-control" class="entypo icon-parent ind-btn" title="Back"><span>&#9666;</span></a>
-					<a id="refresh-control" class="entypo icon-refresh ind-btn" title="Refresh"><span>&#128260;</span></a>
+					<div id="location-controls" class="ind-layout-controls">
+						<a id="parent-control" class="entypo icon-parent ind-btn" title="Back"><span>&#9666;</span></a><!-- Remove g	ap. Do not do a new line break --><a id="refresh-control" class="entypo icon-refresh ind-btn" title="Refresh"><span>&#128260;</span></a>
+					</div>
 					<div id="location-display">Location</div>
 				</div><!-- End LH Controls -->
 
-				<div class="ind-cell" id="layout-controls">
+				<div class="ind-cell" id="layout-controls-right">
 					<div id="view-controls" class="ind-layout-controls"></div>
 					<div id="detail-controls" class="ind-layout-controls">
 						<a id="detail-control" class="ind-detailbutton entypo ind-btn"><span>&#59146;</span></a>
@@ -32,14 +32,17 @@
 			</div>
 		</header><!-- End Header -->
 
+		<aside id="aside-wrapper-left">
+			<div class="ind-cell" id="shortcuts-panel"></div>
+		</aside><!-- End Short Cuts -->
+
 		<section id="section-wrapper" class="ind-wrapper">
 			<div class="ind-panel" id="contents-panel">
-				<div class="ind-cell" id="shortcuts-panel"></div>
 				<div class="ind-cell" id="contents-display"></div>
 			</div>
 		</section><!-- End Main Content -->
 
-		<aside id="aside-wrapper">
+		<aside id="aside-wrapper-right">
 			<div class="ind-cell" id="preview-panel"></div> 
 		</aside><!-- End Preview -->
 
