@@ -95,7 +95,7 @@ a.entypo { text-decoration: none;}
 #aside-wrapper-left,
 #aside-wrapper-right		{ position: absolute; width: 300px; padding: 15px 20px;}
 /* --- Shortcut Window --- */
-#aside-wrapper-right 	{ left: 0; background: #f3f3f3; border-right: 1px solid #aaa; }
+#aside-wrapper-left	 	{ left: 0; background: #f3f3f3; border-right: 1px solid #aaa; }
 
 /* --- Content Window --- */
 #section-wrapper{ overflow: auto; }

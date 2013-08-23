@@ -377,7 +377,7 @@ FileBrowser.prototype = {
 		filter 				: '#filter-controls',
 		filename 			: "#filename-control",
 		previewControls		: "#preview-panel",
-		preview 			: "#aside-wrapper",
+		preview 			: "#aside-wrapper-right",
 		shortcuts 			: '#shortcuts-control',
 		shortcutsPanel 		: "#shortcuts-panel",
 	},
