@@ -72,6 +72,8 @@ a.entypo { text-decoration: none;}
 
 /* --- Footer Controls --- */
 #filename-panel     { padding: 15px 20px 0; width: 100%; }
+#filename-panel .ind-btn { margin-left: 10px;}
+#filename-panel .ind-btn:first-child { margin: 0;}
 #filename-options,	
 #filename-save,		
 #filename-action	{ float: left; width: 33.3333333%;}
@@ -80,7 +82,8 @@ a.entypo { text-decoration: none;}
 #filename-action	{ text-align: right;}
 #filename-control   { width: 50%;}
 #filterSelector 	{ width: 30%;}
-#status-display     { padding: 15px 20px; text-transform: capitalize;}
+#status-panel		{ background: #ccc; bottom: 0px; position: absolute; width: 100%;}
+#status-display     { padding: 10px 20px; text-transform: capitalize;}
 
 
 /* --- */
@@ -98,45 +101,48 @@ a.entypo { text-decoration: none;}
 /* --- Content Window Shared Styles --- */
 #aside-wrapper-left,
 #section-wrapper,
-#aside-wrapper-right		{ top: 100px; bottom: 150px; }
+#aside-wrapper-right		{ top: 100px; bottom: 100px; }
 #aside-wrapper-left,
-#aside-wrapper-right		{ position: absolute; width: 300px; padding: 15px 20px;}
+#aside-wrapper-right		{ position: absolute; width: 300px;}
 /* --- Shortcut Window --- */
 #aside-wrapper-left	 	{ left: 0; background: #fafafa; border-right: 1px solid #aaa; }
+.ind-show-preview   { margin-right: 300px; }
 
 /* --- Content Window --- */
 #section-wrapper{ overflow: auto; }
 #contents-panel { height: 100%;}
 
 /* --- Preview Window --- */
-#aside-wrapper-right  	{ right: 0; background: #fff; border-left: 1px solid #aaa; }
-
-/* --- Footer --- */
-#footer-wrapper { border-width: 1px 0 0 0; bottom: 0; height: 150px; }
-
-
-/* --- */
-/* --- Side panels --- */
-.ind-show-preview   { margin-right: 300px; }
+#aside-wrapper-right  	{ right: 0; background: #fff; border-left: 1px solid #aaa; padding: 15px 20px; }
 .ind-show-shortcuts { margin-left: 300px; }
 
+/* --- Footer --- */
+#footer-wrapper { border-width: 1px 0 0 0; bottom: 0; height: 100px; }
 
 
 /* --- */
 /* --- Specific Content Layout --- */
-.ind-content				        { }
-.ind-content > li 			    { width: 25%; overflow: hidden; display: inline-block; zoom: 1; *display:inline;
+
+/* Shortcuts */
+.ind-shortcut-list li 	{ padding: 15px 15px; font-weight: bold;}
+/* remove first child once this works */
+.ind-shortcut-selected:first-child 	{ background: #0078e7; color: #fff;}
+
+
+/* Main Content */
+.ind-content				    { }
+.ind-content li 			    { width: 25%; overflow: hidden; display: inline-block; zoom: 1; *display:inline;
 white-space: nowrap; overflow: hidden; text-overflow: ellipsis; -moz-user-select: none; /* Truncates text */
 -webkit-user-select: none; -ms-user-select:none; user-select:none; /* Remove accidental text highlighting */ }
-.ind-content > li span:hover    { cursor: default; /* Remove text cursor - Add to mobile */}
+.ind-content li span:hover    { cursor: default; /* Remove text cursor - Add to mobile */}
 .ind-content .ind-content-selected { background: #0078e7 !important; color: #fff !important;}
 
 .ind-editable-name   { letter-spacing: 0.06em; display: inline-block; zoom: 1; *display:inline;}
 /* Sets every 9th element to be light blue. This is dependent on the width of each LI being 25%. If it is changed to 20%, everything 11th element needs to be implemented. */
-.ind-content > li:nth-child(8n+1),
-.ind-content > li:nth-child(8n+2),
-.ind-content > li:nth-child(8n+3),
-.ind-content > li:nth-child(8n+4),
+.ind-content li:nth-child(8n+1),
+.ind-content li:nth-child(8n+2),
+.ind-content li:nth-child(8n+3),
+.ind-content li:nth-child(8n+4),
 .ind-content tr:nth-child(odd)  { background: #f7f7f7;}
 
 /* --- List View --- */
@@ -152,7 +158,7 @@ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; -moz-user-select
 /* --- Detail View --- */
 
 /* --- Layout --- */
-.ind-detaillist				{ width: 100%; }
+.ind-detaillist			{ width: 100%; }
 .ind-detaillist th		{ text-transform: uppercase; text-align: left; background: #ccc; padding: 7px 10px; border-left: 1px solid #fff; position: relative;}
 .ind-detaillist th:first-child { border-left: none;}
 .ind-detaillist tr td     { padding: 0 10px; height: 32px; /* Min Height */ vertical-align: middle; }
@@ -165,7 +171,7 @@ th.ind-col-sort-desc  { background: #0078e7; color: #fff;}
 
 
 
-/* --- */
+/* --- 
 
 
 #contents-display     { width: auto; background: white; }
@@ -175,4 +181,4 @@ th.ind-col-sort-desc  { background: #0078e7; color: #fff;}
 .ind-location-bucket   { }
 
 .ind-content-selected   { background: #aedeff;}
-.ind-editbox          { font: Georgia, "Times New Roman", Times, serif; }
+.ind-editbox          { font: Georgia, "Times New Roman", Times, serif; }*/

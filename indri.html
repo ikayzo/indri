@@ -49,9 +49,9 @@
 		<footer id="footer-wrapper" class="ind-wrapper">
 			<div class="ind-panel clearfix" id="filename-panel">
 				<div class="ind-cell" id="filename-options">
-					<a id="newfolder-control" class="ind-btn" title="New Folder">New Folder</a>
-					<a id="delete-control" class="ind-btn ind-btn-dis" title="Delete">Delete</a>
-					<a id="rename-control" class="ind-btn ind-btn-dis" title="Rename">Rename</a>
+					<a id="newfolder-control" class="ind-btn" title="New Folder">New Folder</a><!--
+					--><a id="delete-control" class="ind-btn ind-btn-dis" title="Delete">Delete</a><!--
+					--><a id="rename-control" class="ind-btn ind-btn-dis" title="Rename">Rename</a>
 
 				</div>
 
@@ -61,12 +61,14 @@
 					<span id="filter-controls"></span>	
 				</div>
 				<div class="ind-cell" id="filename-action">				
-					<a id="accept-control" class="ind-btn" title="OK">OK</a>
-					<a id="cancel-control" class="ind-btn" title="Cancel">Cancel</a>
+					<a id="accept-control" class="ind-btn" title="OK">OK</a><!--
+					--><a id="cancel-control" class="ind-btn" title="Cancel">Cancel</a>
 				</div>
 			</div>
 			<div class="ind-panel" id="status-panel">
-				<div class="ind-cell" id="status-display">Current status</div>
+				<marquee loop="infinite" scrolldelay="10" width="400">
+					<div class="ind-cell" id="status-display">Current status</div>
+				</marquee>
 			</div>
 		</footer><!-- End Footer -->
 		
