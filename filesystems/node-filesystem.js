@@ -147,9 +147,9 @@ function handleFileRequest(req, res) {
 		}
 		else if(action == 'shortcuts') {
 			result.contents = [];
-			result.contents.push({ name : 'Shortcut 1', location: encodeLocation('/')});
-			result.contents.push({ name : 'A Fun Shortcut', location: encodeLocation('/')});
-			result.contents.push({ name : 'A scary Shortcut', location: encodeLocation('/')});
+			result.contents.push({ name : 'Applications', location: encodeLocation('/Applications')});
+			result.contents.push({ name : 'Users', location: encodeLocation('/Users')});
+			result.contents.push({ name : 'Temp Files', location: encodeLocation('/tmp')});
 		}
 		else {
 			result.error = "Invalid action";
