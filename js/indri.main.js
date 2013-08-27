@@ -411,11 +411,15 @@ FileBrowser.prototype = {
 	},
 
 	_setEnabled : function(name, isEnabled) {
+		var $uiElem = this._getUiElem(name);
+
 		if(isEnabled) {
-			this._getUiElem(name).removeAttr('disabled');
+			$uiElem.removeAttr('disabled');
+			$uiElem.removeClass("ind-btn-dis");
 		}
 		else  {
-			this._getUiElem(name).attr('disabled', 'true');
+			$uiElem.attr('disabled', 'true');
+			$uiElem.addClass("ind-btn-dis");
 		}
 	},
 };
