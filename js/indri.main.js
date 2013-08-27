@@ -598,9 +598,12 @@ FileBrowser.prototype.DefaultInitializer = {
 			var $listContainer = jQuery(document.createElement("ul")).addClass("ind-shortcut-list");
 			shortcuts.forEach(function(shortcut) {
 				var $label = jQuery(document.createElement("span")).addClass("ind-shortcut-name").html(shortcut.name);
-				var $listItem = jQuery(document.createElement("li")).addClass("ind-listitem ind-shortcut-selected").append($label)
-				.click(function(evt) {
+				var $listItem = jQuery(document.createElement("li")).addClass("ind-listitem ind-shortcut-item").append($label);
+				$listItem.click($listItem, function(evt) {
 					if(evt.which == 1) {
+						jQuery(".ind-shortcut-item").removeClass("ind-shortcut-selected");
+						jQuery(evt.data).addClass("ind-shortcut-selected");
+						
 						callback(shortcut.location);
 					}
 				});
