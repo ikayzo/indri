@@ -1,0 +1,117 @@
+@charset "UTF-8";
+
+
+/*----------------------------
+            CUSTOM 1
+-----------------------------*/
+
+/*$primary-color: purple;
+$secondary-color: turquoise;
+$highlight-color: lighten($primary-color, 30%);
+$headerfooter: #5a5a5a;
+$background: #f0f0f0;
+$row-color: #ddd;
+$font: italic 12px Georgia;*/
+
+
+/*----------------------------
+            CUSTOM 2
+-----------------------------*/
+
+/*$primary-color: red;
+$secondary-color: #666;
+$highlight-color: lighten($primary-color, 50%);
+$headerfooter: white url(../img/brushed_alu.png) repeat;
+$background: #ffffff;
+$row-color: #ddd;
+$font: italic 12px Georgia; */
+
+/*----------------------------
+            CUSTOM 3
+-----------------------------*/
+
+/*$primary-color: #e96e00;
+$secondary-color: #bdbaa8;
+$highlight-color: lighten($primary-color, 50%);
+$headerfooter: white url(../img/brushed_alu.png) repeat;
+$background: #ffffff;
+$row-color: #ddd;
+$font: 12px Arial; */
+
+
+
+
+
+/*==========STYLES============*/
+
+a {
+	color: $primary-color;
+}
+
+.ind-btn {
+	background: $secondary-color;
+	color: white;
+}
+
+.ind-btn-dis {
+	background: desaturate($secondary-color, 20%);
+	color: #ddd;
+}
+
+
+.ind-btn-active {
+	background: $primary-color;
+}
+.ind-shortcut-selected:first-child {
+	background: $primary-color;
+}
+
+.ind-content .ind-content-selected {
+	background: $primary-color !important;
+}
+
+
+
+th.ind-col-sort-asc, th.ind-col-sort-desc {
+	background: $primary-color;
+}
+
+.ind-listitem:hover {
+	background: $highlight-color !important;
+}
+
+
+/* detailed-list view */
+
+.ind-content.ind-detaillist .ind-content-selected:hover {
+	background: $secondary-color !important;
+}
+
+.ind-content tr:nth-child(odd) {
+	background: $row-color;
+}
+
+.ind-detaillist th:hover {
+	background: $secondary-color;
+}
+
+
+/* backgrounds */
+
+#header-wrapper, #footer-wrapper {
+	border-color: #aaa;
+	background: $headerfooter;
+}
+
+#aside-wrapper-right, #contents-panel, #aside-wrapper-left {
+	background: $background;
+}
+
+
+body {
+	font: $font;
+}
+
+#title-control {
+	background: $secondary-color;
+}
