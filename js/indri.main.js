@@ -200,7 +200,7 @@ FileBrowser.prototype = {
 			}
 
 			if(shortcuts.length) {
-				this.navigateToLocation(shortcuts[0].location);
+				this.shortcutsRenderer.selectIndex(0);
 			}
 		}
 	},
@@ -605,8 +605,8 @@ FileBrowser.prototype.DefaultInitializer = {
 			shortcuts.forEach(function(shortcut) {
 				var $label = jQuery(document.createElement("span")).addClass("ind-shortcut-name").html(shortcut.name);
 				var $listItem = jQuery(document.createElement("li")).addClass("ind-listitem ind-shortcut-item").append($label);
-				$listItem.click($listItem, function(evt) {
-					if(evt.which == 1) {
+				$listItem.on('click', $listItem, function(evt, isManual) {
+					if(evt.which == 1 || isManual) {
 						jQuery(".ind-shortcut-item").removeClass("ind-shortcut-selected");
 						jQuery(evt.data).addClass("ind-shortcut-selected");
 						
@@ -616,7 +616,13 @@ FileBrowser.prototype.DefaultInitializer = {
 				$listContainer.append($listItem);
 			});
 			return $listContainer;
-		}
+		},
+
+		selectIndex : function(index) {
+			// NOITE: Add the offset becase CSS is 1-based
+			var $listItem = jQuery('.ind-shortcut-list li:nth-child(' + (index + 1) + ')');
+			$listItem.trigger('click', true);
+		},
 	},
 
 	resultCallback : function(results) { console.log(results); },
