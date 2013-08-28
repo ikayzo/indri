@@ -13,7 +13,6 @@ function FileBrowser(rootElem, fileSystemManager, initializer) {
 
 	this._initialize(initializer);
 }
-
 FileBrowser.prototype = {
 	currentLocation : {},
 	currentContents : {},

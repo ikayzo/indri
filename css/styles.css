@@ -1,74 +1,124 @@
-@charset "UTF-8";
-/*----------------------------
-            CUSTOM 1
------------------------------*/
-/*$primary-color: purple;
-$secondary-color: turquoise;
-$highlight-color: lighten($primary-color, 30%);
-$headerfooter: #5a5a5a;
-$background: #f0f0f0;
-$row-color: #ddd;
-$font: italic 12px Georgia;*/
-/*----------------------------
-            CUSTOM 2
------------------------------*/
-/*$primary-color: red;
-$secondary-color: #666;
-$highlight-color: lighten($primary-color, 50%);
-$headerfooter: white url(../img/brushed_alu.png) repeat;
-$background: #ffffff;
-$row-color: #ddd;
-$font: italic 12px Georgia; */
-/*----------------------------
-            CUSTOM 3
------------------------------*/
-/*==========STYLES============*/
-a {
-  color: #e96e00; }
+/*
+COLORS:
+#0078e7	royal blue				btn selected, list item selected
+#dd514c	red						breadcrumb
 
-.ind-btn {
-  background: #bdbaa8;
+
+#333	darkest gray			title control, btn text
+#444	darker gray				text
+#aaa	dark gray 				(border)		
+
+#ccc	medium gray				buttons, status panel
+#ddd	medium-light gray		disabled btn
+#f0f0f0	light gray
+#f7f7f7 lighter gray			list item row
+#fafafa lightest gray
+#fff	white    				contents panel, btn text, title control text, list item selected text
+
+*/
+/*==============================
+		   VARIABLES           
+===============================*/
+/* text colors */
+/*-----------PANEL BGS------------- */
+#title-control {
+  background: #ef9109;
+  text-transform: uppercase;
   color: white; }
 
-.ind-btn-dis {
-  background: #b3b3b3;
-  color: #ddd; }
-
-.ind-btn-active {
-  background: #e96e00; }
-
-.ind-shortcut-selected:first-child {
-  background: #e96e00; }
-
-.ind-content .ind-content-selected {
-  background: #e96e00 !important; }
-
-th.ind-col-sort-asc, th.ind-col-sort-desc {
-  background: #e96e00; }
-
-.ind-listitem:hover {
-  background: #fff3e9 !important; }
-
-/* detailed-list view */
-.ind-content.ind-detaillist .ind-content-selected:hover {
-  background: #bdbaa8 !important; }
-
-.ind-content tr:nth-child(odd) {
-  background: #dddddd; }
-
-.ind-detaillist th:hover {
-  background: #bdbaa8; }
-
-/* backgrounds */
 #header-wrapper, #footer-wrapper {
-  border-color: #aaa;
-  background: white url(../img/brushed_alu.png) repeat; }
+  border-color: #d7d5ca;
+  border-style: solid;
+  background: #edece7; }
 
-#aside-wrapper-right, #contents-panel, #aside-wrapper-left {
+#aside-wrapper-left {
+  /* shortcuts panel */
+  background: #f4f3f0;
+  border-right: 1px solid #d7d5ca; }
+
+#contents-panel {
   background: white; }
 
-body {
-  font: 12px Arial; }
+#aside-wrapper-right {
+  background: white;
+  border-left: 1px solid #d7d5ca; }
 
-#title-control {
-  background: #bdbaa8; }
+#status-panel {
+  background: #c1bead;
+  bottom: 0px; }
+
+/*-----------BUTTONS, links------------- */
+.ind-btn {
+  background: #9bc8dd;
+  color: #333333;
+  font-size: 1.1em; }
+  .ind-btn:hover {
+    background: #98bed1;
+    color: white; }
+
+.ind-btn-dis {
+  background: #b6d7e6;
+  color: #aaa; }
+
+.ind-btn-active {
+  background: #639cba;
+  color: white; }
+
+.ind-shortcut-selected:first-child {
+  background: #639cba; }
+
+a {
+  color: #ef9109;
+  text-decoration: underline; }
+  a:hover {
+    color: #f8b24c; }
+  a:active {
+    color: #fac77d; }
+
+/*---------------LIST--------------------- */
+.ind-content li:nth-child(8n+1), .ind-content li:nth-child(8n+2), .ind-content li:nth-child(8n+3), .ind-content li:nth-child(8n+4), .ind-content tr:nth-child(odd) {
+  background: #f8f8f6; }
+
+.ind-listitem:hover {
+  background: #e7f2f7 !important; }
+
+/*---shortcuts list----*/
+.ind-listitem.ind-shortcut-item:hover {
+  background: #e2e0d8 !important; }
+
+/*---default view----*/
+.ind-content .ind-content-selected {
+  background: #639cba !important;
+  color: white !important; }
+
+.ind-listitem.ind-content-selected:hover {
+  background: #a6cee1 !important; }
+
+.ind-listitem:active {
+  background: #639cba !important; }
+
+/*---detail list view----*/
+.ind-detaillist th {
+  text-transform: uppercase;
+  background: #cddfe9;
+  border-left: 1px solid white; }
+
+.ind-detaillist th:hover {
+  background: #e7f2f7; }
+
+.ind-detaillist .ind-content-selected:hover {
+  background: #a6cee1 !important; }
+
+th.ind-col-sort-asc, th.ind-col-sort-desc {
+  background: #639cba !important;
+  color: white; }
+
+/*---icon view----*/
+.ind-iconitem:hover {
+  background: #e7f2f7 !important; }
+
+.ind-iconitem.ind-content-selected:hover {
+  background: #a6cee1 !important; }
+
+tr:hover {
+  background: #e7f2f7 !important; }

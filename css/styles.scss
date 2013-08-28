@@ -1,117 +1,183 @@
-@charset "UTF-8";
+/*
+COLORS:
+#0078e7	royal blue				btn selected, list item selected
+#dd514c	red						breadcrumb
 
 
-/*----------------------------
-            CUSTOM 1
------------------------------*/
+#333	darkest gray			title control, btn text
+#444	darker gray				text
+#aaa	dark gray 				(border)		
 
-/*$primary-color: purple;
-$secondary-color: turquoise;
-$highlight-color: lighten($primary-color, 30%);
-$headerfooter: #5a5a5a;
-$background: #f0f0f0;
-$row-color: #ddd;
-$font: italic 12px Georgia;*/
+#ccc	medium gray				buttons, status panel
+#ddd	medium-light gray		disabled btn
+#f0f0f0	light gray
+#f7f7f7 lighter gray			list item row
+#fafafa lightest gray
+#fff	white    				contents panel, btn text, title control text, list item selected text
 
+*/
 
-/*----------------------------
-            CUSTOM 2
------------------------------*/
-
-/*$primary-color: red;
-$secondary-color: #666;
-$highlight-color: lighten($primary-color, 50%);
-$headerfooter: white url(../img/brushed_alu.png) repeat;
-$background: #ffffff;
-$row-color: #ddd;
-$font: italic 12px Georgia; */
-
-/*----------------------------
-            CUSTOM 3
------------------------------*/
-
-/*$primary-color: #e96e00;
-$secondary-color: #bdbaa8;
-$highlight-color: lighten($primary-color, 50%);
-$headerfooter: white url(../img/brushed_alu.png) repeat;
-$background: #ffffff;
-$row-color: #ddd;
-$font: 12px Arial; */
+/*==============================
+		   VARIABLES           
+===============================*/
 
 
+$primary-color: #639cba /*#0078e7*/;
+$highlight-color: #9bc8dd /*#9bc8dd*/;
+
+$dark-color: #ef9109 /*#696274*/ /*#333*/;
+$medium-color: #9bc8dd /*#ccc*/;
+$light-color: #edece7 /*#f0f0f0*/;
+$lighter-color: lighten($light-color, 3%);
+$lightest-color: lighten($light-color, 5%);
+$white: #fff;
+
+$border-dark: darken($light-color, 10%);
+$border-light: $white;
+
+/* text colors */
+$text-main: #444;
+$text-dark: #333;
+$text-light: #fff;
 
 
+/*-----------PANEL BGS------------- */
 
-/*==========STYLES============*/
-
-a {
-	color: $primary-color;
+#title-control {
+background: $dark-color;
+text-transform: uppercase;
+color: $text-light;
 }
 
+#header-wrapper, #footer-wrapper { 
+border-color: $border-dark;
+border-style: solid;
+background: $light-color;
+}
+
+#aside-wrapper-left {    /* shortcuts panel */
+background: $lighter-color;
+border-right: 1px solid $border-dark;
+}
+
+#contents-panel {
+background: $white;
+}
+
+#aside-wrapper-right {
+background: $white;
+border-left: 1px solid $border-dark;
+}
+
+#status-panel {
+background: darken($light-color, 20%);
+bottom: 0px;
+}
+
+
+
+/*-----------BUTTONS, links------------- */
+
+
 .ind-btn {
-	background: $secondary-color;
-	color: white;
+background: $medium-color;
+color: $text-dark;
+font-size: 1.1em;
+&:hover { background: lighten($primary-color, 15%); color: $text-light;}
 }
 
 .ind-btn-dis {
-	background: desaturate($secondary-color, 20%);
-	color: #ddd;
+background: lighten($medium-color, 7%);
+color: #aaa;
 }
-
 
 .ind-btn-active {
-	background: $primary-color;
+background: $primary-color;
+color: $text-light;
 }
+
 .ind-shortcut-selected:first-child {
 	background: $primary-color;
 }
 
-.ind-content .ind-content-selected {
-	background: $primary-color !important;
+
+a {
+color: $dark-color;
+text-decoration: underline;
+&:hover { color: lighten($dark-color, 15%); }
+&:active { color: lighten($dark-color, 25%); }
 }
 
 
+/*---------------LIST--------------------- */
 
-th.ind-col-sort-asc, th.ind-col-sort-desc {
-	background: $primary-color;
+
+.ind-content li:nth-child(8n+1), .ind-content li:nth-child(8n+2), .ind-content li:nth-child(8n+3), .ind-content li:nth-child(8n+4), .ind-content tr:nth-child(odd) {
+	background: $lightest-color;
 }
 
 .ind-listitem:hover {
-	background: $highlight-color !important;
+	background: lighten($highlight-color, 20%)!important;
+}
+
+/*---shortcuts list----*/
+
+.ind-listitem.ind-shortcut-item:hover {
+	background: darken($light-color, 5%) !important;
 }
 
 
-/* detailed-list view */
+/*---default view----*/
 
-.ind-content.ind-detaillist .ind-content-selected:hover {
-	background: $secondary-color !important;
+.ind-content .ind-content-selected {
+background: $primary-color !important;
+color: $text-light !important;
 }
 
-.ind-content tr:nth-child(odd) {
-	background: $row-color;
+
+.ind-listitem.ind-content-selected:hover {
+	background: lighten($highlight-color, 3%)!important;
+}
+
+.ind-listitem:active {
+	background: $primary-color !important;
+}
+
+/*---detail list view----*/
+
+.ind-detaillist th {
+text-transform: uppercase;
+background: lighten($primary-color, 30%);
+border-left: 1px solid $border-light;
 }
 
 .ind-detaillist th:hover {
-	background: $secondary-color;
+	background: lighten($highlight-color, 20%);
+}
+
+.ind-detaillist .ind-content-selected:hover {
+	background: lighten($highlight-color, 3%)!important;
+}
+
+th.ind-col-sort-asc, th.ind-col-sort-desc {
+background: $primary-color !important;
+color: $text-light;
+}
+
+/*---icon view----*/
+
+
+.ind-iconitem:hover {
+	background: lighten($highlight-color, 20%)!important;
+}
+
+.ind-iconitem.ind-content-selected:hover {
+	background: lighten($highlight-color, 3%)!important;
+}
+
+tr:hover {
+	background: lighten($highlight-color, 20%)!important;
 }
 
 
-/* backgrounds */
 
-#header-wrapper, #footer-wrapper {
-	border-color: #aaa;
-	background: $headerfooter;
-}
-
-#aside-wrapper-right, #contents-panel, #aside-wrapper-left {
-	background: $background;
-}
-
-
-body {
-	font: $font;
-}
-
-#title-control {
-	background: $secondary-color;
-}
