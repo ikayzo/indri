@@ -2,6 +2,17 @@
 	Standard location renderers
 */
 
+function splitPath(path, delimiter) {
+	var parts = [];
+	path.split(delimiter).forEach(function(item) {
+		if(item.length) {
+			parts.push(item);
+		}
+	});
+
+	return parts;
+}
+
 function StringLocationRenderer() {}
 StringLocationRenderer.prototype = jQuery.extend({}, {
 		render : function(elem, location) {
@@ -24,37 +35,39 @@ SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 				location = '/';
 			}
 
+			var parts = splitPath(location, '/');
+
 			$elem.empty();
 
 			// Handle the root path case
-			var $rootAnchor = jQuery(document.createElement("a")).html("(root)").addClass('ind-location-segment');
-			$elem.append($rootAnchor);
-
-			// Add each other path component
-			var fullPath = '';
-			location.split('/').forEach(function(segment, index, segments) {
-				if(segment.length) {
-					$elem.append('<span class="ind-location-divider">&#62;</span>');
-					fullPath += '/' + segment;
-
-					var $anchor = jQuery(document.createElement("a")).html(segment).addClass('ind-location-segment');
-
-					// Only add a click handler if this isn't the last segment
-					if(index != segments.length - 1) {
-						$anchor.click(JSON.stringify(fullPath), function(evt) {
-							callback(evt.data);
-						});
-					}
-					$elem.append($anchor);
-				}
-			});
-
+			var isEmptyPath = (parts.length == 0);
+			var $rootAnchor = jQuery(document.createElement(isEmptyPath ? "span" : "a")).html("(root)").addClass('ind-location-segment');
 			// Only add the click handler to the root path if there weren't any other segments
-			if(fullPath != '') {
+			if(!isEmptyPath) {
 				$rootAnchor.click(JSON.stringify('/'), function(evt) {
 					callback(evt.data);
 				});
 			}
+			$elem.append($rootAnchor);
+
+			// Add each other path component
+			var fullPath = '';
+			parts.forEach(function(segment, index) {
+				$elem.append('<span class="ind-location-divider">&#62;</span>');
+				fullPath += '/' + segment;
+
+				var isLastSegment = (index == parts.length - 1);
+				var $anchor = jQuery(document.createElement(isLastSegment ? "span" : "a")).html(segment).addClass('ind-location-segment');
+
+				// Only add a click handler if this isn't the last segment
+				if(!isLastSegment) {
+					$anchor.click(JSON.stringify(fullPath), function(evt) {
+						callback(evt.data);
+					});
+				}
+				$elem.append($anchor);
+			});
+
 		},
 	});
 
@@ -69,40 +82,41 @@ BucketLocationRenderer.prototype = jQuery.extend({}, {
 			}
 
 			var bucketData = JSON.parse(location);
+
+			var parts = splitPath(bucketData.key, '/');
+			var targetLocation = { bucket: bucketData.bucket, key : '' };
 			
 			$elem.empty();
 
 			// Create root link
-			var $rootAnchor = jQuery(document.createElement("a")).html(bucketData.bucket).addClass('ind-location-segment');
+			var isEmptyPath = (parts.length == 0);
+			var $rootAnchor = jQuery(document.createElement(isEmptyPath ? "span" : "a")).html(bucketData.bucket).addClass('ind-location-segment');
+			if(!isEmptyPath) {
+				$rootAnchor.click(JSON.stringify(targetLocation), function(evt) {
+					callback(evt.data);
+				});
+			}
 			$elem.append($rootAnchor);
 
 			$elem.append(' : ');
 
 			// Add all other links
-			var targetLocation = { bucket: bucketData.bucket, key : '' };
-			bucketData.key.split('/').forEach(function(segment, index, segments) {
-				if(segment.length) {
-					targetLocation.key += segment + '/';
+			parts.forEach(function(segment, index) {
+				targetLocation.key += segment + '/';
 
-					var $anchor = jQuery(document.createElement("a")).html(segment).addClass('ind-location-segment');
+				var isLastSegment = (index == parts.length - 1);
+				var $anchor = jQuery(document.createElement(isLastSegment ? "span" : "a")).html(segment).addClass('ind-location-segment');
 
-					// Only add a click handler if this isn't the last segment
-					if(index != segments.length - 1) {
-						$anchor.click(JSON.stringify(targetLocation), function(evt) {
-							callback(evt.data);
-						});
-					}
-					
-					$elem.append($anchor);
-					$elem.append(' / ');
+				// Only add a click handler if this isn't the last segment
+				if(!isLastSegment) {
+					$anchor.click(JSON.stringify(targetLocation), function(evt) {
+						callback(evt.data);
+					});
 				}
+				
+				$elem.append($anchor);
+				$elem.append(' / ');
 			});
 
-			if(targetLocation.key != '') {
-				targetLocation = { bucket: bucketData.bucket, key : '' } 
-				$rootAnchor.click(JSON.stringify(targetLocation), function(evt) {
-					callback(evt.data);
-				});
-			}
 		},
 	});

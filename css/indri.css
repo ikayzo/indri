@@ -125,8 +125,7 @@ a.entypo { text-decoration: none;}
 
 /* Shortcuts */
 .ind-shortcut-list li 	{ padding: 15px 15px; font-weight: bold;}
-/* remove first child once this works */
-.ind-shortcut-selected:first-child 	{ background: #0078e7; color: #fff;}
+.ind-shortcut-selected 	{ background: #0078e7; color: #fff;}
 
 
 /* Main Content */
