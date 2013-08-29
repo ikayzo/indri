@@ -1,25 +1,61 @@
-/*
-COLORS:
-#0078e7	royal blue				btn selected, list item selected
-#dd514c	red						breadcrumb
-
-
-#333	darkest gray			title control, btn text
-#444	darker gray				text
-#aaa	dark gray 				(border)		
-
-#ccc	medium gray				buttons, status panel
-#ddd	medium-light gray		disabled btn
-#f0f0f0	light gray
-#f7f7f7 lighter gray			list item row
-#fafafa lightest gray
-#fff	white    				contents panel, btn text, title control text, list item selected text
-
-*/
 /*==============================
 		   VARIABLES           
 ===============================*/
-/* text colors */
+/* DEFAULT THEME 
+
+$primary-color: #59d9c2 // #0078e7;
+$highlight-color: #a5f6e6 //#9bc8dd;
+
+$dark-color: #333;
+$medium-color: #ccc;
+$light-color: #f0f0f0;
+$lighter-color: lighten($light-color, 3%);
+$lightest-color: lighten($light-color, 5%);
+$white: #fff;
+
+$border-dark: darken($light-color, 10%);
+$border-light: $white;
+
+$text-main: #444;
+$text-dark: #333;
+$text-light: #fff; */
+/* Custom Theme - Civil Beat */
+/* Custom Theme - Dark
+
+$primary-color: #ee0043;
+$highlight-color: #ffd8e5;
+
+$dark-color: #000;
+$medium-color: #474747;
+$light-color: #999;
+$lighter-color: lighten($light-color, 3%);
+$lightest-color: lighten($light-color, 5%);
+$white: #fff;
+
+$border-dark: darken($light-color, 10%);
+$border-light: $white;
+
+$text-main: #444;
+$text-dark: #fff;
+$text-light: #fff;   */
+/* Custom Theme - 80s Mixed Tape  
+
+$primary-color: #bf5363;
+$highlight-color: #fa6173;
+
+$dark-color: #1e4952;
+$medium-color: #cbc2b9;
+$light-color: #e9e6df;
+$lighter-color: lighten($light-color, 3%);
+$lightest-color: lighten($light-color, 5%);
+$white: #fff;
+
+$border-dark: darken($light-color, 10%);
+$border-light: $white;
+
+$text-main: #444;
+$text-dark: #fff;
+$text-light: #fff;   */
 /*-----------PANEL BGS------------- */
 #title-control {
   background: #ef9109;
@@ -57,6 +93,10 @@ COLORS:
     color: white; }
 
 .ind-btn-dis {
+  background: #b6d7e6;
+  color: #aaa; }
+
+.ind-btn-dis:hover {
   background: #b6d7e6;
   color: #aaa; }
 

@@ -1,33 +1,15 @@
-/*
-COLORS:
-#0078e7	royal blue				btn selected, list item selected
-#dd514c	red						breadcrumb
-
-
-#333	darkest gray			title control, btn text
-#444	darker gray				text
-#aaa	dark gray 				(border)		
-
-#ccc	medium gray				buttons, status panel
-#ddd	medium-light gray		disabled btn
-#f0f0f0	light gray
-#f7f7f7 lighter gray			list item row
-#fafafa lightest gray
-#fff	white    				contents panel, btn text, title control text, list item selected text
-
-*/
-
 /*==============================
 		   VARIABLES           
 ===============================*/
 
+/* DEFAULT THEME 
 
-$primary-color: #639cba /*#0078e7*/;
-$highlight-color: #9bc8dd /*#9bc8dd*/;
+$primary-color: #59d9c2 // #0078e7;
+$highlight-color: #a5f6e6 //#9bc8dd;
 
-$dark-color: #ef9109 /*#696274*/ /*#333*/;
-$medium-color: #9bc8dd /*#ccc*/;
-$light-color: #edece7 /*#f0f0f0*/;
+$dark-color: #333;
+$medium-color: #ccc;
+$light-color: #f0f0f0;
 $lighter-color: lighten($light-color, 3%);
 $lightest-color: lighten($light-color, 5%);
 $white: #fff;
@@ -35,10 +17,69 @@ $white: #fff;
 $border-dark: darken($light-color, 10%);
 $border-light: $white;
 
-/* text colors */
 $text-main: #444;
 $text-dark: #333;
-$text-light: #fff;
+$text-light: #fff; */
+
+
+/* Custom Theme - Civil Beat */
+
+
+$primary-color: #639cba;
+$highlight-color: #9bc8dd;
+
+$dark-color: #ef9109;
+$medium-color: #9bc8dd;
+$light-color: #edece7;
+$lighter-color: lighten($light-color, 3%);
+$lightest-color: lighten($light-color, 5%);
+$white: #fff;
+
+$border-dark: darken($light-color, 10%);
+$border-light: $white;
+
+$text-main: #444;
+$text-dark: #333;
+$text-light: #fff;  
+
+/* Custom Theme - Dark
+
+$primary-color: #ee0043;
+$highlight-color: #ffd8e5;
+
+$dark-color: #000;
+$medium-color: #474747;
+$light-color: #999;
+$lighter-color: lighten($light-color, 3%);
+$lightest-color: lighten($light-color, 5%);
+$white: #fff;
+
+$border-dark: darken($light-color, 10%);
+$border-light: $white;
+
+$text-main: #444;
+$text-dark: #fff;
+$text-light: #fff;   */
+
+/* Custom Theme - 80s Mixed Tape  
+
+$primary-color: #bf5363;
+$highlight-color: #fa6173;
+
+$dark-color: #1e4952;
+$medium-color: #cbc2b9;
+$light-color: #e9e6df;
+$lighter-color: lighten($light-color, 3%);
+$lightest-color: lighten($light-color, 5%);
+$white: #fff;
+
+$border-dark: darken($light-color, 10%);
+$border-light: $white;
+
+$text-main: #444;
+$text-dark: #fff;
+$text-light: #fff;   */
+
 
 
 /*-----------PANEL BGS------------- */
@@ -87,6 +128,11 @@ font-size: 1.1em;
 }
 
 .ind-btn-dis {
+background: lighten($medium-color, 7%);
+color: #aaa;
+}
+
+.ind-btn-dis:hover {
 background: lighten($medium-color, 7%);
 color: #aaa;
 }
