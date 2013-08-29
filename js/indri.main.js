@@ -528,6 +528,8 @@ FileBrowser.prototype.DefaultInitializer = {
 	viewFactory : {
 		views : [
 			new ListContentRenderer(),
+			new IconContentRenderer(),
+			new DetailContentRenderer(),
 		],
 
 		render : function(callback, container) {
