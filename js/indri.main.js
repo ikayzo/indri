@@ -193,9 +193,15 @@ FileBrowser.prototype = {
 	},
 
 	_updateShortcuts : function(shortcuts) {
-		if(this.shortcutsRenderer) {
-			this._getUiElem(this.uiNames.shortcutsPanel).empty().append(
-				this.shortcutsRenderer.render(shortcuts, this._makeCallback(this.navigateToLocation)));
+		if(shortcuts) {
+			if(this.shortcutsRenderer) {
+				this._getUiElem(this.uiNames.shortcutsPanel).empty().append(
+					this.shortcutsRenderer.render(shortcuts, this._makeCallback(this.navigateToLocation)));
+			}
+
+			if(shortcuts.length) {
+				this.navigateToLocation(shortcuts[0].location);
+			}
 		}
 	},
 
