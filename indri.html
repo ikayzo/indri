@@ -83,7 +83,6 @@
 
 $(document).ready(function() {
 	var initializer = jQuery.extend(true, {}, FileBrowser.prototype.DebugDialogInitializer);
-		initializer.visibility.shortcutsPanel = false;
 
 	initializer.filter.options.push({ value: "\.(htm|html)$", text: "HTML files (*.htm, *.html)"});
 	initializer.filter.options.push({ value: "\.js$", text: "Javascript files (*.js)"});
