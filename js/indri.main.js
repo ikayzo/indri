@@ -193,17 +193,20 @@ FileBrowser.prototype = {
 	},
 
 	_updateShortcuts : function(shortcuts) {
-		if(shortcuts) {
-			if(this.shortcutsRenderer) {
-				this._getUiElem(this.uiNames.shortcutsPanel).empty().append(
-					this.shortcutsRenderer.render(shortcuts, this._makeCallback(this.navigateToLocation)));
-			}
-
-			if(shortcuts.length) {
-				this.navigateToLocation(shortcuts[0].location);
-			}
+	    if(shortcuts && shortcuts.length != 0&& this.shortcutsRenderer) {
+            this._getUiElem(this.uiNames.shortcutsPanel).empty().append(
+                this.shortcutsRenderer.render(shortcuts, this._makeCallback(this.navigateToLocation)));
+            this.navigateToRoot();
 		}
+		else {
+	        this._disableShortcuts();
+        }
 	},
+	
+	_disableShortcuts : function() { 
+        this._setVisible(this.uiNames.shortcutsPanel, false);
+        this.navigateToRoot();
+    },
 
 	_updateStatus : function(status) {
 		if(this.statusRenderer) {
@@ -338,10 +341,7 @@ FileBrowser.prototype = {
 
 		if(initializer.visibility['shortcutsPanel']) {
 			this.fsm.getShortcuts(this._makeCallback(this._updateShortcuts), 
-				this._makeCallback(function() { 
-					this._setVisible(this.uiNames.shortcutsPanel, false);
-					this.navigateToRoot();
-				}));
+				this._makeCallback(this._disableShortnuts));
 		}
 		else {
 			this.navigateToRoot();

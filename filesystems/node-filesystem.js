@@ -1,6 +1,9 @@
 
 var fs = require('fs');
 var path = require('path');
+var http = require('http');
+
+var config = {};
 
 function isValidFile(fileName) {
 	return fileName[0] != '.';
@@ -14,7 +17,7 @@ function getFileInfo(fullPath) {
 	var stats = fs.statSync(fullPath);
 	return { 
 		name: path.basename(fullPath),
-		location: encodeLocation(fullPath.slice(rootDir.length)),
+		location: encodeLocation(fullPath.slice(config.rootDir.length)),
 		isDir: stats.isDirectory(),
 		size: (stats.isFile() ? stats.size : undefined),
 		created: stats.ctime.getTime(),
@@ -26,7 +29,7 @@ function getFileInfo(fullPath) {
 
 function constrainPath(path) {
 	// TODO Apply constraints
-	//return (path.indexOf(rootDir) != 0) ? rootDir : path;
+	//return (path.indexOf(config.rootDir) != 0) ? config.rootDir : path;
 	return path;
 }
 
@@ -60,8 +63,8 @@ function handleFileRequest(req, res) {
 			result.loc = encodeLocation(loc);
 		}
 		else if(action == "browse") {
-			result.realLoc = constrainPath(path.join(rootDir, loc));
-			result.loc = loc = result.realLoc.slice(rootDir.length);
+			result.realLoc = constrainPath(path.join(config.rootDir, loc));
+			result.loc = loc = result.realLoc.slice(config.rootDir.length);
 
 			result.contents = [];
 			fs.readdirSync(result.realLoc).forEach(function(fileName) {
@@ -80,7 +83,7 @@ function handleFileRequest(req, res) {
 				result.error = "No new name supplied for rename";
 			}
 			else {
-				var oldFile = path.join(rootDir, loc);
+				var oldFile = path.join(config.rootDir, loc);
 				if(fs.existsSync(oldFile)) {
 					var newFile = path.join(path.dirname(oldFile), newName);
 
@@ -111,7 +114,7 @@ function handleFileRequest(req, res) {
 			locations.forEach(function(location) {
 				location = parseLocation(location);
 				if(location.length) {
-					var fullPath = path.join(rootDir, location);
+					var fullPath = path.join(config.rootDir, location);
 					result.attempt = fullPath;
 
 					try {
@@ -139,17 +142,19 @@ function handleFileRequest(req, res) {
 				throw "Missing new folder name";
 			}
 
-			var fullPath = path.join(rootDir, loc, parsedQuery.query.name);
+			var fullPath = path.join(config.rootDir, loc, parsedQuery.query.name);
 			result.attemp = fullPath;
 
 			fs.mkdirSync(fullPath);
 			result.contents = [getFileInfo(fullPath)];
 		}
 		else if(action == 'shortcuts') {
-			result.contents = [];
-			result.contents.push({ name : 'Applications', location: encodeLocation('/Applications')});
-			result.contents.push({ name : 'Users', location: encodeLocation('/Users')});
-			result.contents.push({ name : 'Temp Files', location: encodeLocation('/tmp')});
+    		result.contents = [];
+    		if(config.shortcuts) {
+                config.shortcuts.forEach(function(item) {
+                    result.contents.push({name: item.name, location: encodeLocation(item.location)});
+                });
+            }
 		}
 		else {
 			result.error = "Invalid action";
@@ -168,15 +173,20 @@ function handleFileRequest(req, res) {
 }
 
 
-var rootDir = (process.argv.length > 2) ? process.argv[2] : '/tmp';
+var configFile = (process.argv.length > 2) ? process.argv[2] : './config-default.json';
+console.log("Parsing settings from: ", configFile);
+fs.readFile(configFile, 'utf8', function (err, data) {
+    if (err) {
+        console.log('Error: ' + err);
+        return;
+    }
 
-var serverName = (process.argv.length > 3) ? process.argv[3] : "localhost";
-var serverPort = (process.argv.length > 4) ? process.argv[4] : 1337;
+    config = JSON.parse(data);
 
-var http = require('http');
-http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
-  handleFileRequest(req, res);
-}).listen(serverPort, serverName);
-console.log('Server running at http://' + serverName + ':' + serverPort);
-console.log('Serving files from ', rootDir);
+    http.createServer(function (req, res) {
+      res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
+      handleFileRequest(req, res);
+    }).listen(config.serverPort, config.serverName);
+    console.log('Server running at http://' + config.serverName + ':' + config.serverPort);
+    console.log('Serving files from ', config.rootDir);
+});
