@@ -13,7 +13,6 @@ function FileBrowser(rootElem, fileSystemManager, initializer) {
 
 	this._initialize(initializer);
 }
-
 FileBrowser.prototype = {
 	currentLocation : {},
 	currentContents : {},
@@ -193,15 +192,9 @@ FileBrowser.prototype = {
 	},
 
 	_updateShortcuts : function(shortcuts) {
-		if(shortcuts) {
-			if(this.shortcutsRenderer) {
-				this._getUiElem(this.uiNames.shortcutsPanel).empty().append(
-					this.shortcutsRenderer.render(shortcuts, this._makeCallback(this.navigateToLocation)));
-			}
-
-			if(shortcuts.length) {
-				this.shortcutsRenderer.selectIndex(0);
-			}
+		if(this.shortcutsRenderer) {
+			this._getUiElem(this.uiNames.shortcutsPanel).empty().append(
+				this.shortcutsRenderer.render(shortcuts, this._makeCallback(this.navigateToLocation)));
 		}
 	},
 
@@ -528,8 +521,6 @@ FileBrowser.prototype.DefaultInitializer = {
 	viewFactory : {
 		views : [
 			new ListContentRenderer(),
-			new IconContentRenderer(),
-			new DetailContentRenderer(),
 		],
 
 		render : function(callback, container) {
@@ -607,8 +598,8 @@ FileBrowser.prototype.DefaultInitializer = {
 			shortcuts.forEach(function(shortcut) {
 				var $label = jQuery(document.createElement("span")).addClass("ind-shortcut-name").html(shortcut.name);
 				var $listItem = jQuery(document.createElement("li")).addClass("ind-listitem ind-shortcut-item").append($label);
-				$listItem.on('click', $listItem, function(evt, isManual) {
-					if(evt.which == 1 || isManual) {
+				$listItem.click($listItem, function(evt) {
+					if(evt.which == 1) {
 						jQuery(".ind-shortcut-item").removeClass("ind-shortcut-selected");
 						jQuery(evt.data).addClass("ind-shortcut-selected");
 						
@@ -618,13 +609,7 @@ FileBrowser.prototype.DefaultInitializer = {
 				$listContainer.append($listItem);
 			});
 			return $listContainer;
-		},
-
-		selectIndex : function(index) {
-			// NOITE: Add the offset becase CSS is 1-based
-			var $listItem = jQuery('.ind-shortcut-list li:nth-child(' + (index + 1) + ')');
-			$listItem.trigger('click', true);
-		},
+		}
 	},
 
 	resultCallback : function(results) { console.log(results); },

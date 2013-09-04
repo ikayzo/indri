@@ -2,21 +2,19 @@
 	Standard location renderers
 */
 
-var LocationRendererBase = {
-	_splitPath : function(path, delimiter) {
-		var parts = [];
-		path.split(delimiter).forEach(function(item) {
-			if(item.length) {
-				parts.push(item);
-			}
-		});
+function splitPath(path, delimiter) {
+	var parts = [];
+	path.split(delimiter).forEach(function(item) {
+		if(item.length) {
+			parts.push(item);
+		}
+	});
 
-		return parts;
-	}
+	return parts;
 }
 
 function StringLocationRenderer() {}
-StringLocationRenderer.prototype = jQuery.extend({}, LocationRendererBase, {
+StringLocationRenderer.prototype = jQuery.extend({}, {
 		render : function(elem, location) {
 			if(location) {
 				location = JSON.parse(location);
@@ -28,7 +26,7 @@ StringLocationRenderer.prototype = jQuery.extend({}, LocationRendererBase, {
 
 
 function SegmentedLocationRenderer() {}
-SegmentedLocationRenderer.prototype = jQuery.extend({}, LocationRendererBase, {
+SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 		render : function($elem, location, callback) {
 			if(location) {
 				location = JSON.parse(location);
@@ -37,13 +35,14 @@ SegmentedLocationRenderer.prototype = jQuery.extend({}, LocationRendererBase, {
 				location = '/';
 			}
 
-			var parts = this._splitPath(location, '/');
+			var parts = splitPath(location, '/');
 
 			$elem.empty();
 
 			// Handle the root path case
 			var isEmptyPath = (parts.length == 0);
 			var $rootAnchor = jQuery(document.createElement(isEmptyPath ? "span" : "a")).html("(root)").addClass('ind-location-segment');
+			// Only add the click handler to the root path if there weren't any other segments
 			if(!isEmptyPath) {
 				$rootAnchor.click(JSON.stringify('/'), function(evt) {
 					callback(evt.data);
@@ -76,7 +75,7 @@ SegmentedLocationRenderer.prototype = jQuery.extend({}, LocationRendererBase, {
 // { bucket: bucket, key : key }
 
 function BucketLocationRenderer() {}
-BucketLocationRenderer.prototype = jQuery.extend({}, LocationRendererBase, {
+BucketLocationRenderer.prototype = jQuery.extend({}, {
 		render : function($elem, location, callback) {
 			if(!location) {
 				return;
@@ -84,7 +83,7 @@ BucketLocationRenderer.prototype = jQuery.extend({}, LocationRendererBase, {
 
 			var bucketData = JSON.parse(location);
 
-			var parts = this._splitPath(bucketData.key, '/');
+			var parts = splitPath(bucketData.key, '/');
 			var targetLocation = { bucket: bucketData.bucket, key : '' };
 			
 			$elem.empty();
