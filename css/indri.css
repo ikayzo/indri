@@ -21,9 +21,7 @@ List View BG              Light-Blue    #f0f5f9
 }
 
 /* --- Universal Styles --- */
-*, *:before, *:after {
-  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
- }
+*, *:before, *:after {  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
 html, body  { height: 100%; width: 100%; }
 body        { font-family: Arial, Verdana, Tahoma, sans-serif; font-size: 13px; line-height: 1.0; color: #444; }
 img   { max-width: 100%; max-height: 100%; }
@@ -130,13 +128,13 @@ a.entypo { text-decoration: none;}
 
 /* Main Content */
 .ind-content				    { }
-.ind-content li 			    { width: 25%; overflow: hidden; display: inline-block; zoom: 1; *display:inline;
-white-space: nowrap; overflow: hidden; text-overflow: ellipsis; -moz-user-select: none; /* Truncates text */
--webkit-user-select: none; -ms-user-select:none; user-select:none; /* Remove accidental text highlighting */ }
-.ind-content li span:hover    { cursor: default; /* Remove text cursor - Add to mobile */}
-.ind-content .ind-content-selected { background: #0078e7 !important; color: #fff !important;}
+.ind-content li 			    { width: 25%; overflow: hidden; white-space: nowrap; float: left;
+ -moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none; /* Remove accidental text highlighting */ }
+.ind-content li span:hover    	{ cursor: default; /* Remove text cursor - Add to mobile */}
+.ind-content .ind-content-selected  { background: #0078e7 !important; color: #fff !important;}
 
-.ind-editable-name   { letter-spacing: 0.06em; display: inline-block; zoom: 1; *display:inline;}
+.ind-content span 					{ display: inline-block; zoom: 1; *display:inline;}
+.ind-content .ind-editable-name	 	{ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; padding: 4px 0; letter-spacing: 0.06em; } /* Truncates text. Width needs to be set to work properly */
 /* Sets every 9th element to be light blue. This is dependent on the width of each LI being 25%. If it is changed to 20%, everything 11th element needs to be implemented. */
 .ind-content li:nth-child(8n+1),
 .ind-content li:nth-child(8n+2),
@@ -146,7 +144,7 @@ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; -moz-user-select
 
 /* --- List View --- */
 .ind-listitem                     { padding: 5px; }
-.ind-listitem .ind-editable-name  { margin: 0 0 0 10px; top: -4px; position: relative;}
+.ind-listitem .ind-editable-name  { margin: 0 0 0 5px; top: -4px; position: relative; width: 75%;}
 
 /* --- Thumbnail View --- */
 .ind-iconlist li      { padding: 10px 10px 20px; text-align: center;}
