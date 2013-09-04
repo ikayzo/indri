@@ -13,7 +13,6 @@ function FileBrowser(rootElem, fileSystemManager, initializer) {
 
 	this._initialize(initializer);
 }
-
 FileBrowser.prototype = {
 	currentLocation : {},
 	currentContents : {},
@@ -193,20 +192,11 @@ FileBrowser.prototype = {
 	},
 
 	_updateShortcuts : function(shortcuts) {
-	    if(shortcuts && shortcuts.length != 0&& this.shortcutsRenderer) {
-            this._getUiElem(this.uiNames.shortcutsPanel).empty().append(
-                this.shortcutsRenderer.render(shortcuts, this._makeCallback(this.navigateToLocation)));
-            this.navigateToRoot();
+		if(this.shortcutsRenderer) {
+			this._getUiElem(this.uiNames.shortcutsPanel).empty().append(
+				this.shortcutsRenderer.render(shortcuts, this._makeCallback(this.navigateToLocation)));
 		}
-		else {
-	        this._disableShortcuts();
-        }
 	},
-	
-	_disableShortcuts : function() { 
-        this._setVisible(this.uiNames.shortcutsPanel, false);
-        this.navigateToRoot();
-    },
 
 	_updateStatus : function(status) {
 		if(this.statusRenderer) {
@@ -308,6 +298,10 @@ FileBrowser.prototype = {
 			this._setVisible(this.uiNames[visibility], initializer.visibility[visibility]);
 		}
 
+		this.currentLocation = {};
+		this.currentContents = {};
+		this.currentSelection = [];
+
 		this.multiSelect = initializer.multiSelect;
 		this.allowMultipleResults = initializer.allowMultipleResults;
 
@@ -341,7 +335,10 @@ FileBrowser.prototype = {
 
 		if(initializer.visibility['shortcutsPanel']) {
 			this.fsm.getShortcuts(this._makeCallback(this._updateShortcuts), 
-				this._makeCallback(this._disableShortnuts));
+				this._makeCallback(function() { 
+					this._setVisible(this.uiNames.shortcutsPanel, false);
+					this.navigateToRoot();
+				}));
 		}
 		else {
 			this.navigateToRoot();
