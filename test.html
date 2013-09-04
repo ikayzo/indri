@@ -6,7 +6,6 @@
 	<script type="text/javascript" src="js/3rdparty/foundation.js"></script>
 	<script type="text/javascript" src="js/3rdparty/foundation/foundation.reveal.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="css/foundation.min.css">
 	<link rel="stylesheet" type="text/css" href="css/indri.css">
 <style type="text/css">
 </style>
@@ -65,8 +64,8 @@
 		fsLookup[fs](initializer);
 
 		initializer.resultCallback = function(results) { 
-			console.log(results); 
 			$('#myModal').foundation('reveal', 'close'); 
+			console.log(results); 
 		};
 
 		console.log(initializer);

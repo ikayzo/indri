@@ -298,6 +298,10 @@ FileBrowser.prototype = {
 			this._setVisible(this.uiNames[visibility], initializer.visibility[visibility]);
 		}
 
+		this.currentLocation = {};
+		this.currentContents = {};
+		this.currentSelection = [];
+
 		this.multiSelect = initializer.multiSelect;
 		this.allowMultipleResults = initializer.allowMultipleResults;
 
