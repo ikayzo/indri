@@ -464,6 +464,10 @@ FileBrowser.prototype.DefaultInitializer = {
 					if(aValue == bValue)
 						return 0;
 					
+					if(aValue.toLowerCase) {
+						aValue = aValue.toLowerCase();
+						bValue = bValue.toLowerCase();
+					} 
 					return aValue < bValue ? -1 * inverter : 1 * inverter;
 				});
 			}
