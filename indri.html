@@ -81,12 +81,17 @@
 
 <script type="text/javascript">
 
-/*
+
 $(document).ready(function() {
-	var initializer = window.dialogArguments || FileBrowser.prototype.DebugDialogInitializer;
+	var initializer = jQuery.extend(true, {}, FileBrowser.prototype.DebugDialogInitializer);
+	initializer.locationRenderer = new SegmentedLocationRenderer();
+	
+	initializer.viewFactory.views.push(new IconContentRenderer());
+	initializer.viewFactory.views.push(new DetailContentRenderer());
+
 	var fileBrowser = new FileBrowser(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
 });
-*/
+
 
 </script>
 </body>
