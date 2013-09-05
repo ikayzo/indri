@@ -3,16 +3,22 @@
 
 <head>
 	<script type="text/javascript" src="js/3rdparty/jquery-1.10.2.js"></script>
-
+	<!-- Foundation -->
 	<script type="text/javascript" src="js/3rdparty/foundation.min.js"></script>
-
-	<link rel="stylesheet" type="text/css" href="css/indri.css">
 	<link rel="stylesheet" type="text/css" href="css/foundation.min.css">
+<<<<<<< HEAD
 <style type="text/css">
 	/* Foundation specific styles */
 	#modalDlg	{ height: 90%; padding: 0; }
 </style>
+=======
+>>>>>>> refs/heads/design
 
+	<!-- Bootstrap CDN -->
+	<!--<script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">-->
+
+	<link rel="stylesheet" type="text/css" href="css/indri.css">
 </head>
 
 <body>
@@ -74,7 +80,11 @@
 		console.log(initializer);
 		//var returnVal = window.showModalDialog('indri.html', initializer);
 
+<<<<<<< HEAD
 		jQuery('#modalDlg').load('http://localhost/indri/indri.html #browserui', function() {
+=======
+		jQuery('#myModal').load('indri.html #browserui', function() {
+>>>>>>> refs/heads/design
 			new FileBrowser(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
 			$('#modalDlg').foundation('reveal', 'open'); 
 		});
