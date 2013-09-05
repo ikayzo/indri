@@ -463,8 +463,16 @@ FileBrowser.prototype.DefaultInitializer = {
 					var aValue = a[fieldName], bValue = b[fieldName];
 					if(aValue == bValue)
 						return 0;
+
+					if(!aValue) {
+						return -1 * inverter;
+					}
+
+					if(!bValue) {
+						return 1 * inverter;
+					}
 					
-					if(aValue.toLowerCase) {
+					if(aValue.toLowerCase && bValue.toLowerCase) {
 						aValue = aValue.toLowerCase();
 						bValue = bValue.toLowerCase();
 					} 
