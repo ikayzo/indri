@@ -9,6 +9,8 @@
 	<link rel="stylesheet" type="text/css" href="css/indri.css">
 	<link rel="stylesheet" type="text/css" href="css/foundation.min.css">
 <style type="text/css">
+	/* Foundation specific styles */
+	#modalDlg	{ height: 90%; padding: 0; }
 </style>
 
 </head>
@@ -30,7 +32,7 @@
 		<button id="debugBtn">Debug...</button>
 	</div>
 
-	<div id="myModal" class="reveal-modal">
+	<div id="modalDlg" class="reveal-modal">
 	  <h2>Awesome. I have it.</h2>
 	  <p class="lead">Your couch.  It is mine.</p>
 	  <p>Im a cool paragraph that lives inside of an even cooler modal. Wins</p>
@@ -65,16 +67,16 @@
 		fsLookup[fs](initializer);
 
 		initializer.resultCallback = function(results) { 
-			$('#myModal').foundation('reveal', 'close'); 
+			$('#modalDlg').foundation('reveal', 'close'); 
 			console.log(results); 
 		};
 
 		console.log(initializer);
 		//var returnVal = window.showModalDialog('indri.html', initializer);
 
-		jQuery('#myModal').load('http://localhost/indri/indri.html #browserui', function() {
+		jQuery('#modalDlg').load('http://localhost/indri/indri.html #browserui', function() {
 			new FileBrowser(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
-			$('#myModal').foundation('reveal', 'open'); 
+			$('#modalDlg').foundation('reveal', 'open'); 
 		});
 		
 		//$('#myModal').foundation('reveal', 'open', "http://localhost/indri/indri.html");
