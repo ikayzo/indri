@@ -43,6 +43,12 @@ a.entypo { text-decoration: none;}
 .ind-detaillist   .entypo { font-size: 2.2em; line-height: 1.0em;}
 
 
+
+#browserui 	  { background: red; height: 100%; width: 100%; position: relative;}
+
+/* Testing for pop up */
+#section-wrapper { }
+
 /* --- */
 /* --- Header Controls --- */
 .ind-btn { background: #ccc; text-align: center; display: inline-block; zoom:1; *display: block; position: relative; overflow: hidden; text-decoration: none; padding: 10px 15px; color: #333; font-size: 1.1em;}
