@@ -298,6 +298,10 @@ FileBrowser.prototype = {
 			this._setVisible(this.uiNames[visibility], initializer.visibility[visibility]);
 		}
 
+		this.currentLocation = {};
+		this.currentContents = {};
+		this.currentSelection = [];
+
 		this.multiSelect = initializer.multiSelect;
 		this.allowMultipleResults = initializer.allowMultipleResults;
 
@@ -460,6 +464,10 @@ FileBrowser.prototype.DefaultInitializer = {
 					if(aValue == bValue)
 						return 0;
 					
+					if(aValue.toLowerCase) {
+						aValue = aValue.toLowerCase();
+						bValue = bValue.toLowerCase();
+					} 
 					return aValue < bValue ? -1 * inverter : 1 * inverter;
 				});
 			}

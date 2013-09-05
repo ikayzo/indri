@@ -83,42 +83,17 @@
 
 <script type="text/javascript">
 
+
 $(document).ready(function() {
 	var initializer = jQuery.extend(true, {}, FileBrowser.prototype.DebugDialogInitializer);
-
-	initializer.filter.options.push({ value: "\.(htm|html)$", text: "HTML files (*.htm, *.html)"});
-	initializer.filter.options.push({ value: "\.js$", text: "Javascript files (*.js)"});
-	initializer.filter.options.push({ value: "\.(jpg|png)", text: "Image files (*.jpg, *.png)"});
-
+	initializer.locationRenderer = new SegmentedLocationRenderer();
+	
 	initializer.viewFactory.views.push(new IconContentRenderer());
 	initializer.viewFactory.views.push(new DetailContentRenderer());
 
-	initLocalFileSystem(initializer);
-//	initAwsFileSystem(initializer);
-//	initCivilBeatFileSystem(initializer);
-
 	var fileBrowser = new FileBrowser(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
-
-	function initLocalFileSystem(initializer) {
-		initializer.locationRenderer = new SegmentedLocationRenderer();
-	}
-
-	function initAwsFileSystem(initializer) {
-		initializer.visibility.shortcutsPanel = true;
-
-		initializer.locationRenderer = new BucketLocationRenderer();
-
-		initializer.previewRenderer.baseUrl = 'http://ikayzo-files.s3.amazonaws.com/';
-	}
-
-	function initCivilBeatFileSystem(initializer) {
-		initializer.visibility.shortcutsPanel = true;
-
-		initializer.locationRenderer = new BucketLocationRenderer();
-
-		initializer.previewRenderer.baseUrl = 'http://civilbeat_production.s3.amazonaws.com/';
-	}
 });
+
 
 </script>
 </body>
