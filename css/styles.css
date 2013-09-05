@@ -2,69 +2,33 @@
 		   VARIABLES           
 ===============================*/
 /* DEFAULT THEME 
+$primary-color:  #0078e7;
+$highlight-color: #9bc8dd;
 
-$primary-color: #59d9c2 // #0078e7;
-$highlight-color: #a5f6e6 //#9bc8dd;
-
-$dark-color: #333;
+$secondary-color: #333;
 $medium-color: #ccc;
 $light-color: #f0f0f0;
-$lighter-color: lighten($light-color, 3%);
-$lightest-color: lighten($light-color, 5%);
-$white: #fff;
+*/
+/* Custom Theme - Civil Beat  */
+/*--------base colors / subsidiary colors ----------------*/
+/*---------typography-----------------*/
+/* text colors */
+body {
+  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+  font-size: 13px;
+  color: #444444; }
 
-$border-dark: darken($light-color, 10%);
-$border-light: $white;
+/*-------------TYPOGRAPHY--------*/
+#title-control, th {
+  font-family: Arial, Helvetica Neue, Helvetica, sans-serif; }
 
-$text-main: #444;
-$text-dark: #333;
-$text-light: #fff; */
-/* Custom Theme - Civil Beat */
-/* Custom Theme - Dark
-
-$primary-color: #ee0043;
-$highlight-color: #ffd8e5;
-
-$dark-color: #000;
-$medium-color: #474747;
-$light-color: #999;
-$lighter-color: lighten($light-color, 3%);
-$lightest-color: lighten($light-color, 5%);
-$white: #fff;
-
-$border-dark: darken($light-color, 10%);
-$border-light: $white;
-
-$text-main: #444;
-$text-dark: #fff;
-$text-light: #fff;   */
-/* Custom Theme - 80s Mixed Tape  
-
-$primary-color: #bf5363;
-$highlight-color: #fa6173;
-
-$dark-color: #1e4952;
-$medium-color: #cbc2b9;
-$light-color: #e9e6df;
-$lighter-color: lighten($light-color, 3%);
-$lightest-color: lighten($light-color, 5%);
-$white: #fff;
-
-$border-dark: darken($light-color, 10%);
-$border-light: $white;
-
-$text-main: #444;
-$text-dark: #fff;
-$text-light: #fff;   */
 /*-----------PANEL BGS------------- */
 #title-control {
   background: #ef9109;
-  text-transform: uppercase;
   color: white; }
 
 #header-wrapper, #footer-wrapper {
   border-color: #d7d5ca;
-  border-style: solid;
   background: #edece7; }
 
 #aside-wrapper-left {
@@ -80,32 +44,33 @@ $text-light: #fff;   */
   border-left: 1px solid #d7d5ca; }
 
 #status-panel {
-  background: #c1bead;
-  bottom: 0px; }
+  background: #c1bead; }
+
+#status-display {
+  color: #333333; }
 
 /*-----------BUTTONS, links------------- */
 .ind-btn {
   background: #9bc8dd;
-  color: #333333;
-  font-size: 1.1em; }
+  color: #333333; }
   .ind-btn:hover {
     background: #98bed1;
-    color: white; }
+    color: #333333; }
 
 .ind-btn-dis {
   background: #b6d7e6;
   color: #aaa; }
-
-.ind-btn-dis:hover {
-  background: #b6d7e6;
-  color: #aaa; }
+  .ind-btn-dis:hover {
+    background: #b6d7e6; }
 
 .ind-btn-active {
   background: #639cba;
   color: white; }
-
-.ind-shortcut-selected:first-child {
-  background: #639cba; }
+  .ind-btn-active:hover {
+    background: #75a7c2;
+    color: white; }
+  .ind-btn-active:active {
+    background: #5d9ec0; }
 
 a {
   color: #ef9109;
@@ -120,11 +85,20 @@ a {
   background: #f8f8f6; }
 
 .ind-listitem:hover {
-  background: #e7f2f7 !important; }
+  background: #d4e7f0 !important; }
 
 /*---shortcuts list----*/
+.ind-shortcut-selected:first-child {
+  background: #ef9109;
+  color: white; }
+
 .ind-listitem.ind-shortcut-item:hover {
   background: #e2e0d8 !important; }
+
+.ind-listitem.ind-shortcut-selected:hover {
+  background: #f7a734 !important; }
+.ind-listitem.ind-shortcut-selected:active {
+  background: #f9bd65 !important; }
 
 /*---default view----*/
 .ind-content .ind-content-selected {
@@ -139,12 +113,10 @@ a {
 
 /*---detail list view----*/
 .ind-detaillist th {
-  text-transform: uppercase;
   background: #cddfe9;
   border-left: 1px solid white; }
-
-.ind-detaillist th:hover {
-  background: #e7f2f7; }
+  .ind-detaillist th:hover {
+    background: #e7f2f7; }
 
 .ind-detaillist .ind-content-selected:hover {
   background: #a6cee1 !important; }

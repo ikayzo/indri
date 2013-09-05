@@ -1,36 +1,29 @@
+
 /*==============================
 		   VARIABLES           
 ===============================*/
 
 /* DEFAULT THEME 
+$primary-color:  #0078e7;
+$highlight-color: #9bc8dd;
 
-$primary-color: #59d9c2 // #0078e7;
-$highlight-color: #a5f6e6 //#9bc8dd;
-
-$dark-color: #333;
+$secondary-color: #333;
 $medium-color: #ccc;
 $light-color: #f0f0f0;
-$lighter-color: lighten($light-color, 3%);
-$lightest-color: lighten($light-color, 5%);
-$white: #fff;
-
-$border-dark: darken($light-color, 10%);
-$border-light: $white;
-
-$text-main: #444;
-$text-dark: #333;
-$text-light: #fff; */
+*/
 
 
-/* Custom Theme - Civil Beat */
-
-
+/* Custom Theme - Civil Beat  */
 $primary-color: #639cba;
 $highlight-color: #9bc8dd;
 
-$dark-color: #ef9109;
+$secondary-color: #ef9109;
 $medium-color: #9bc8dd;
 $light-color: #edece7;
+
+
+
+/*--------base colors / subsidiary colors ----------------*/
 $lighter-color: lighten($light-color, 3%);
 $lightest-color: lighten($light-color, 5%);
 $white: #fff;
@@ -38,120 +31,99 @@ $white: #fff;
 $border-dark: darken($light-color, 10%);
 $border-light: $white;
 
+
+
+
+/*---------typography-----------------*/
+
+$base-font: Arial, Helvetica Neue, Helvetica, sans-serif;
+$header-font: Arial, Helvetica Neue, Helvetica, sans-serif;
+
+/* text colors */
 $text-main: #444;
 $text-dark: #333;
-$text-light: #fff;  
+$text-light: #fff;
 
-/* Custom Theme - Dark
+body {
+	font-family: $base-font;
+	font-size: 13px;
+	color: $text-main;
 
-$primary-color: #ee0043;
-$highlight-color: #ffd8e5;
+}
 
-$dark-color: #000;
-$medium-color: #474747;
-$light-color: #999;
-$lighter-color: lighten($light-color, 3%);
-$lightest-color: lighten($light-color, 5%);
-$white: #fff;
 
-$border-dark: darken($light-color, 10%);
-$border-light: $white;
 
-$text-main: #444;
-$text-dark: #fff;
-$text-light: #fff;   */
-
-/* Custom Theme - 80s Mixed Tape  
-
-$primary-color: #bf5363;
-$highlight-color: #fa6173;
-
-$dark-color: #1e4952;
-$medium-color: #cbc2b9;
-$light-color: #e9e6df;
-$lighter-color: lighten($light-color, 3%);
-$lightest-color: lighten($light-color, 5%);
-$white: #fff;
-
-$border-dark: darken($light-color, 10%);
-$border-light: $white;
-
-$text-main: #444;
-$text-dark: #fff;
-$text-light: #fff;   */
-
+/*-------------TYPOGRAPHY--------*/
+#title-control, th {
+	font-family: $header-font;
+}
 
 
 /*-----------PANEL BGS------------- */
 
 #title-control {
-background: $dark-color;
-text-transform: uppercase;
-color: $text-light;
+	background: $secondary-color;
+	color: $text-light;
 }
 
 #header-wrapper, #footer-wrapper { 
-border-color: $border-dark;
-border-style: solid;
-background: $light-color;
+	border-color: $border-dark;
+	background: $light-color;
 }
 
 #aside-wrapper-left {    /* shortcuts panel */
-background: $lighter-color;
-border-right: 1px solid $border-dark;
+	background: $lighter-color;
+	border-right: 1px solid $border-dark;
 }
 
 #contents-panel {
-background: $white;
+	background: $white;
 }
 
 #aside-wrapper-right {
-background: $white;
-border-left: 1px solid $border-dark;
+	background: $white;
+	border-left: 1px solid $border-dark;
 }
 
 #status-panel {
-background: darken($light-color, 20%);
-bottom: 0px;
+	background: darken($light-color, 20%);
 }
 
+#status-display {
+	color: $text-dark;
+}
 
 
 /*-----------BUTTONS, links------------- */
 
 
 .ind-btn {
-background: $medium-color;
-color: $text-dark;
-font-size: 1.1em;
-&:hover { background: lighten($primary-color, 15%); color: $text-light;}
+	background: $medium-color;
+	color: $text-dark;
+	&:hover { background: lighten($primary-color, 15%); color: $text-dark;}
 }
 
 .ind-btn-dis {
-background: lighten($medium-color, 7%);
-color: #aaa;
-}
-
-.ind-btn-dis:hover {
-background: lighten($medium-color, 7%);
-color: #aaa;
+	background: lighten($medium-color, 7%);
+	color: #aaa;
+	&:hover { background: lighten($medium-color, 7%);}
 }
 
 .ind-btn-active {
-background: $primary-color;
-color: $text-light;
-}
-
-.ind-shortcut-selected:first-child {
 	background: $primary-color;
+	color: $text-light;
+	&:hover {
+		background: lighten($primary-color, 5%); 
+		color: $text-light;
+	}
+	&:active {background: saturate($primary-color, 5%)}
 }
-
 
 a {
-color: $dark-color;
-text-decoration: underline;
-&:hover { color: lighten($dark-color, 15%); }
-&:active { color: lighten($dark-color, 25%); }
+	color: $secondary-color;
+	text-decoration: underline;
+	&:hover { color: lighten($secondary-color, 15%); }
+	&:active { color: lighten($secondary-color, 25%); }
 }
 
 
@@ -163,21 +135,31 @@ text-decoration: underline;
 }
 
 .ind-listitem:hover {
-	background: lighten($highlight-color, 20%)!important;
+	background: lighten($highlight-color, 15%)!important;
 }
 
 /*---shortcuts list----*/
 
+.ind-shortcut-selected:first-child {
+	background: $secondary-color;
+	color: $text-light;
+}
+
 .ind-listitem.ind-shortcut-item:hover {
 	background: darken($light-color, 5%) !important;
+}
+
+.ind-listitem.ind-shortcut-selected {
+	&:hover {background: lighten($secondary-color, 10%) !important;}
+	&:active {background: lighten($secondary-color, 20%) !important;}
 }
 
 
 /*---default view----*/
 
 .ind-content .ind-content-selected {
-background: $primary-color !important;
-color: $text-light !important;
+	background: $primary-color !important;
+	color: $text-light !important;
 }
 
 
@@ -192,22 +174,19 @@ color: $text-light !important;
 /*---detail list view----*/
 
 .ind-detaillist th {
-text-transform: uppercase;
-background: lighten($primary-color, 30%);
-border-left: 1px solid $border-light;
+	background: lighten($primary-color, 30%);
+	border-left: 1px solid $border-light;
+	&:hover {background: lighten($highlight-color, 20%);}
 }
 
-.ind-detaillist th:hover {
-	background: lighten($highlight-color, 20%);
-}
 
 .ind-detaillist .ind-content-selected:hover {
 	background: lighten($highlight-color, 3%)!important;
 }
 
 th.ind-col-sort-asc, th.ind-col-sort-desc {
-background: $primary-color !important;
-color: $text-light;
+	background: $primary-color !important;
+	color: $text-light;
 }
 
 /*---icon view----*/
