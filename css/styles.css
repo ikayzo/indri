@@ -81,7 +81,10 @@ a {
     color: #fac77d; }
 
 /*---------------LIST--------------------- */
-.ind-content li:nth-child(8n+1), .ind-content li:nth-child(8n+2), .ind-content li:nth-child(8n+3), .ind-content li:nth-child(8n+4), .ind-content tr:nth-child(odd) {
+.ind-content li:nth-child(6n+1),
+.ind-content li:nth-child(6n+2),
+.ind-content li:nth-child(6n+3),
+.ind-content tr:nth-child(odd) {
   background: #f8f8f6; }
 
 .ind-listitem:hover {
