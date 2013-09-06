@@ -8,7 +8,6 @@ List View BG              Light-Blue    #f0f5f9
 
 */
 
-
 /* Entypo pictograms by Daniel Bruce — www.entypo.com */
 @font-face {
   font-family: "entypo";
@@ -107,7 +106,7 @@ a.entypo { text-decoration: none;}
 .ind-show-preview   { margin-right: 300px; }
 
 /* --- Content Window --- */
-#section-wrapper{ overflow: auto; }
+#section-wrapper{ overflow: auto; background: #fff; }
 #contents-panel { height: 100%;}
 
 /* --- Preview Window --- */
