@@ -68,9 +68,10 @@ function DetailContentRenderer() {
 DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 
 		_renderContainer : function() {
+			var renderer = this;
 			var $tr = jQuery(document.createElement("tr"));
-			this._fieldNames.forEach(function(field) {
-				var $th = jQuery(document.createElement("th")).html(field);
+			this._fieldNames.forEach(function(field, index) {
+				var $th = jQuery(document.createElement("th")).html(renderer._columnTitles[index]);
 				if(field != '') {
 					$th.click(this, function(evt){
 						if(evt.toElement == this && evt.which == MouseButtons.BUTTON_LEFT) {
@@ -141,7 +142,8 @@ DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 			return timestamp ? new Date(timestamp).toDateString() : '--';
 		},
 
-		_fieldNames : [ "", "name", "size", "created", "modified" ],
+		_fieldNames : [ "isDir", "name", "size", "created", "modified" ],
+		_columnTitles : [ "", "name", "size", "creation date", "last modified date" ],
 
 		dateFormatString : "yyyy-MM-dd, hh:mm ",
 	});
