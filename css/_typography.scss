@@ -1,7 +1,10 @@
 /* Typography */ 
 
+$font-serif: Georgia, Times, serif;
+$font-sansserif: Arial, Helvetica Neue, Helvetica, sans-serif;
+
 body      { 
-	font-family: Arial, Verdana, Tahoma, sans-serif; 
+	font-family: $font-sansserif; 
 	font-size: 13px; 
 	line-height: 1.0; 
 	color: $text-main; 

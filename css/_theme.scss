@@ -2,6 +2,22 @@
       BASIC CUSTOMIZATIONS          
 ===============================*/
 
+
+
+
+
+/* Civil Beat Theme */
+$color-primary: #639cba;
+$color-secondary: #ef9109;
+$color-base: #edece7; 
+
+
+
+/* Dark Theme */
+$color-primary: #f8c600;
+$color-secondary: black;
+$color-base: #333; 
+
 /* Retro Theme */
 $color-primary: #b90016;
 $color-secondary: #1e4952;
@@ -12,16 +28,6 @@ $color-primary: #0078e7;
 $color-secondary: #333;
 $color-base: #eee;
 
-/* Dark Theme */
-$color-primary: #f8c600;
-$color-secondary: black;
-$color-base: #333; 
-
-/* Civil Beat Theme */
-$color-primary: #639cba;
-$color-secondary: #ef9109;
-$color-base: #edece7; 
-
 $theme: light; /* 'dark' or 'light' */
 
 
@@ -30,12 +36,12 @@ $theme: light; /* 'dark' or 'light' */
 ===============================*/
 
 // Button, Interactivity Colors
-$btn-color: $color-primary;
-$highlight-color: lighten($color-primary, 30%);
+$btn-color:         $color-primary;
+$highlight-color:   lighten($color-primary, 30%);
 
 // Header Section
-$color-title: $color-secondary;
-$panel-header: $color-base;
+$color-title:       $color-secondary;
+$panel-header:    $color-base;
 
 // Shortcuts Section
 $panel-shortcut: lighten($color-base, 3%);
