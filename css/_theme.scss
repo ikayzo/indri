@@ -1,0 +1,78 @@
+/*==============================
+      BASIC CUSTOMIZATIONS          
+===============================*/
+
+
+/* Dark Theme */
+$primary-color: #f8c600;
+$secondary-color: black;
+$color-base: #333; 
+
+/* Civil Beat Theme */
+$primary-color: #639cba;
+$secondary-color: #ef9109;
+$color-base: #edece7; 
+
+/* Theme - Basic  */
+$primary-color: #0078e7;
+$secondary-color: #333;
+$color-base: #eee;
+
+
+$theme: light; /* 'dark' or 'light' */
+
+
+/*==============================
+      DEFAULT STYLE RULES       
+===============================*/
+
+// Button, Interactivity Colors
+$btn-color: $primary-color;
+$highlight-color: lighten($primary-color, 20%);
+
+// Panel Background Colors
+$color-title: $secondary-color;
+$panel-header: $color-base;
+$bg-color: white;
+$panel-footer: $color-base;
+$panel-status: darken($color-base, 15%); 
+
+$panel-shortcut: lighten($color-base, 3%);
+$panel-preview: $bg-color;
+$list-shading: lighten($color-base, 5%);
+
+// border-colors
+$border-dark: #aaa;
+$border-light: white;
+
+// text colors
+$text-main: #444;
+$text-dark: darken($text-main, 15%);
+$text-light: #fff;
+$color-breadcrumb: #333;
+
+// Conditional for dark themes
+body {
+  @if $theme == dark {
+    $text-main: white;
+    $text-dark: #fff;
+    $text-light: #333;
+    $bg-color: #444 !important;
+	$border-dark: black !important;
+	$border-light: #333 !important;
+	$color-breadcrumb: $primary-color;
+  }
+}
+
+// label color
+$color-label: $text-main;  
+
+// icon color 	
+$color-icon: $text-main; 	
+
+/*=========Write your variable overrides below==============*/
+
+
+
+
+

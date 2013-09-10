@@ -1,0 +1,15 @@
+/* --- Left Shortcut Content --- */
+#aside-wrapper-left {
+  background: $panel-shortcut;
+}
+
+.ind-shortcut-list li 	{ 
+  padding: 15px 15px; 
+  font-weight: bold; 
+  color: $text-dark;}
+.ind-shortcut-selected{ 
+  background: $secondary-color; 
+  color: $text-light;
+  &:hover {background: lighten($secondary-color, 10%) !important;}
+  &:active {background: lighten($secondary-color, 20%) !important;}
+}

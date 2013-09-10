@@ -1,0 +1,79 @@
+/* General Structure */
+
+/*General Layout
+  Header
+  Main content
+    - Shortcut Left Column
+    - Content Center Column
+    - Detail Right Column
+  Footer*/
+
+/* --- Overall Content --- */
+.ind-wrapper    { 
+  position:absolute; 
+  left: 0; 
+  right: 0; 
+}
+
+  /* --- Header --- */
+  #header-wrapper { 
+    border-width: 0 0 1px 0; 
+    top:0; 
+    height: 100px; 
+  }
+
+  #header-wrapper,
+  #footer-wrapper { 
+    border-color: $border-dark; 
+    border-style: solid; 
+    overflow: hidden;  
+  }
+
+  /* --- Content Window --- */ 
+  #aside-wrapper-left,
+  #section-wrapper,
+  #aside-wrapper-right  { 
+    top: 100px; 
+    bottom: 90px; 
+  }
+  #aside-wrapper-left,
+  #aside-wrapper-right  { 
+    position: absolute; 
+    width: 300px;
+  }
+
+    /* Shortcut Window */
+    #aside-wrapper-left   { 
+      left: 0; 
+      border-right: 1px solid $border-dark; 
+    }
+    .ind-show-preview     { 
+      margin-right: 300px; 
+    }
+
+    /* Content Window */
+    #section-wrapper { 
+      overflow: auto; 
+    }
+    #contents-panel { 
+      height: 100%;
+    }
+
+    /* Preview Window */
+    #aside-wrapper-right  { 
+      right: 0; 
+      background: $bg-color; 
+      border-left: 1px solid $border-dark; 
+      padding: 15px 20px; 
+    }
+    .ind-show-shortcuts   { 
+      margin-left: 300px; 
+    }
+
+  /* --- Footer --- */
+  #footer-wrapper { 
+    border-width: 1px 0 0 0; 
+    bottom: 0; 
+    height: 90px; 
+  }
+

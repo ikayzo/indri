@@ -1,0 +1,36 @@
+/* --- Universal Styles --- */
+
+*, *:before, *:after {  
+	-moz-box-sizing: border-box; 
+	-webkit-box-sizing: border-box; 
+	box-sizing: border-box; 
+	-webkit-user-select: none; 
+	-ms-user-select:none; 
+	user-select:none; /* Remove accidental text highlighting */ 
+	cursor: default;
+}
+
+html, body{ 
+	height: 100%; 
+	width: 100%; 
+}
+
+img { 
+	max-width: 100%; 
+	max-height: 100%; 
+}
+
+a,
+a > * { 
+	cursor: pointer;
+}
+
+input { 
+	cursor: text;
+}
+
+.clearfix { 
+	content: ""; 
+	display: table; 
+	clear: both; 
+}

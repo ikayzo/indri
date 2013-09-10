@@ -1,5 +1,6 @@
 /* --- Table of Contents --- */
 /*
+Variables
 
 @font-face
 
@@ -36,57 +37,113 @@ Specific Layout
 
 */
 
-/* Entypo pictograms by Daniel Bruce — www.entypo.com */
-@font-face {
-  font-family: "entypo";
-  src:  url("../fonts/entypo.eot");
-  src:  url("../fonts/entypo.eot?#iefix") format("embedded-opentype"),
-        url("../fonts/entypo.woff") format("woff"),
-        url("../fonts/entypo.ttf") format("truetype"),
-        url("../fonts/entypo.svg#entypo") format("svg");
-  font-weight: normal;
-  font-style: normal;
+
+@import "universal";      /* Universal Styles */
+@import "iconfont";       /* Icon Font (Entypo) */
+
+/*==============================
+      VARIABLES, RULES          
+===============================*/
+
+
+
+/* Theme - Basic  */
+$primary-color: #0078e7;
+$secondary-color: #333;
+$panel-color: #eee;
+
+/* Civil Beat Theme */
+$primary-color: #639cba;
+$secondary-color: #ef9109;
+$panel-color: #edece7; 
+
+/* Dark Theme */
+$primary-color: #639cba;
+$secondary-color: black;
+$panel-color: #333; 
+
+
+$theme: dark;
+
+/* Other Variable Settings */
+$btn-color: $primary-color;
+$title-color: $secondary-color;
+$link-color: #333;
+$bg-color: white;
+$header-panel: $panel-color;
+$footer-panel: $panel-color;
+$status-panel: darken($panel-color, 15%); 
+$shortcut-panel: lighten($panel-color, 3%);
+$list-shading: lighten($panel-color, 5%);
+$highlight-color: lighten($primary-color, 20%);
+
+
+$border-dark: #aaa;
+$border-light: white;
+
+/* text colors */
+$text-main: #444;
+$text-dark: darken($text-main, 15%);
+$text-light: #fff;
+
+body {
+  @if $theme == dark {
+    $text-main: #f0f0f0;
+    $text-dark: #fff;
+    $text-light: #333;
+    $bg-color: #444;
+  }
 }
-
-/* --- Universal Styles --- */
-*, *:before, *:after {  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; -webkit-user-select: none; -ms-user-select:none; user-select:none; /* Remove accidental text highlighting */ cursor: default;}
-html, body{ height: 100%; width: 100%; }
-body      { font-family: Arial, Verdana, Tahoma, sans-serif; font-size: 13px; line-height: 1.0; color: #444; }
-img   		{ max-width: 100%; max-height: 100%; }
-a     	  { color: #dd514c; text-decoration: underline;}
-a,
-a > *		  { cursor: pointer;}
-a:hover 	{ background: rgba(0,0,0,0.2);}
-ul,ol,dl  { margin: 0; padding: 0; list-style-type: none;}
-input 		{ cursor: text;}
-.clearfix { content: ""; display: table; clear: both; }
-
-
-/* --- */
-
-
-/* --- Icons --- */
-.entypo  { font-family: "entypo"; line-height: 1.0em; color: #666; }
-.icon-folder { color: #e8aa50;}
-.ind-filelist     .entypo { font-size: 2.9em; line-height: 0.8em;}
-.ind-iconlist     .entypo { font-size: 4.5em; line-height: 0.8em;}
-.ind-detaillist   .entypo { font-size: 2.2em; line-height: 1.0em;}
 
 
 /* --- */
 
 
 /* --- Buttons --- */
-.ind-btn { background: #ccc; padding: 10px 15px; color: #333; text-align: center; display: inline-block; zoom:1; *display: block;
+.ind-btn { 
+  background: desaturate(lighten($btn-color, 20%), 10%);
+  padding: 10px 15px; 
+  color: #333; 
+  text-align: center; 
+  display: inline-block; 
+  zoom:1; 
+  *display: block;
 	position: relative; 
-	line-height: inherit; vertical-align: baseline; overflow: hidden; text-decoration: none; }
-.ind-btn:hover 	  { color: inherit;}
-.ind-btn-dis 	  { background: #ddd; color: #aaa; cursor: no-drop;}
-.ind-btn.entypo   { width: 35px; height: 35px; padding: 0; font-size: 35px; }
-.ind-btn-active   { background: #0078e7; color: #fff !important;} /* Keeps color from changing on hover */
+	line-height: inherit; 
+  vertical-align: baseline; 
+  overflow: hidden; 
+  text-decoration: none; 
+  &:hover {
+    color: inherit;
+    background: desaturate(lighten($btn-color, 25%), 10%);
+  }
+  &.entypo {
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    font-size: 35px;
+  }
+}
+.ind-btn-dis 	  { 
+  background: #ddd; 
+  color: #aaa; 
+  cursor: no-drop;
+  &:hover { 
+    background: $highlight-color;
+  }
+}
+.ind-btn-active   { 
+  background: $btn-color; 
+  color: #fff !important;
+  &:hover {
+    background: lighten($btn-color, 5%); 
+    color: $text-light;
+  }
+  &:active {
+    background: saturate($btn-color, 5%);
+  }
+} 
 
-
-/* --- */
 
 
 /* --- Overall Content --- */
@@ -106,7 +163,7 @@ input 		{ cursor: text;}
   #aside-wrapper-right  { position: absolute; width: 300px;}
 
     /* Shortcut Window */
-    #aside-wrapper-left   { left: 0; background: #fafafa; border-right: 1px solid #aaa; }
+    #aside-wrapper-left   { left: 0; background: $shortcut-panel; border-right: 1px solid #aaa; }
     .ind-show-preview     { margin-right: 300px; }
 
     /* Content Window */
@@ -114,7 +171,7 @@ input 		{ cursor: text;}
     #contents-panel       { height: 100%;}
 
     /* Preview Window */
-    #aside-wrapper-right  { right: 0; background: #fff; border-left: 1px solid #aaa; padding: 15px 20px; }
+    #aside-wrapper-right  { right: 0; background: $bg-color; border-left: 1px solid #aaa; padding: 15px 20px; }
     .ind-show-shortcuts   { margin-left: 300px; }
 
   /* --- Footer --- */
@@ -125,7 +182,7 @@ input 		{ cursor: text;}
 
 
 /* --- Header Sections --- */
-#title-control  { background: #333; text-align: center; padding: 10px 15px; text-transform: uppercase; color: #fff; }
+#title-control  { background: $title-color; text-align: center; padding: 10px 15px; text-transform: uppercase; color: #fff; }
 #control-panel  { padding: 15px; width: 100%;}
   
   /* --- Left --- */
@@ -150,8 +207,16 @@ input 		{ cursor: text;}
 
 
 /* --- Left Shortcut Content --- */
-.ind-shortcut-list li 	{ padding: 15px 15px; font-weight: bold; background: red;}
-.ind-shortcut-selected 	{ background: #0078e7; color: #fff;}
+.ind-shortcut-list li 	{ 
+  padding: 15px 15px; 
+  font-weight: bold; 
+  color: $text-dark;}
+.ind-shortcut-selected{ 
+  background: $secondary-color; 
+  color: $text-light;
+  &:hover {background: lighten($secondary-color, 10%) !important;}
+  &:active {background: lighten($secondary-color, 20%) !important;}
+}
 
 /* --- Center Content --- */
 .ind-content				    {
@@ -161,9 +226,9 @@ input 		{ cursor: text;}
     /* Sets every 9th element to be light blue. This is dependent on the width of each LI being 33%. If it is changed to 25%, everything 9th element needs to be implemented. */
     &:nth-child(6n+1),
     &:nth-child(6n+2),
-    &:nth-child(6n+3) { background: #f7f7f7;}
+    &:nth-child(6n+3) { background: $list-shading;}
   }
-  tr:nth-child(odd)   { background: #f7f7f7;}
+  tr:nth-child(odd)   { background: $list-shading;}
   .ind-content-selected { background: #0078e7 !important; color: #fff !important;}
   .ind-editable-name	 	{ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; padding: 4px 0; letter-spacing: 0.06em; } /* Truncates text. Width needs to be set to work properly */
 }
@@ -178,18 +243,26 @@ input 		{ cursor: text;}
 
   /* --- Detail/Table View --- */
   .ind-detaillist			{ width: 100%;
-    th	{ text-transform: uppercase; text-align: left; background: #ccc; padding: 7px 10px; border-left: 1px solid #fff; position: relative;
-      &:first-child { border-left: none;}
+    th	{ 
+      text-transform: uppercase; 
+      text-align: left; 
+      background: #ccc; 
+      padding: 7px 10px; 
+      border-left: 1px solid $border-light; 
+      position: relative;
+      &:first-child { 
+        border-left: none;
+      }
     }
     tr {
-      td     { padding: 0 10px; height: 32px; /* Min Height */ vertical-align: middle;
+      td { padding: 0 10px; height: 32px; /* Min Height */ vertical-align: middle;
       &:first-child {  width: 40px; text-align: center;}
       }
     }
   }
     /* Table Sort */
     th.ind-col-sort-asc,
-    th.ind-col-sort-desc  { background: #0078e7; color: #fff;}
+    th.ind-col-sort-desc  { background: #0078e7; color: $text-light;}
     .ind-col-sort         { display: inline-block; zoom: 1; *display:inline; right: 10px; top: 0; line-height: 0.55em; position: absolute; color: #fff;}
 
 /* --- Right Detail Content --- */
@@ -214,7 +287,7 @@ input 		{ cursor: text;}
   #filename-control { width: 50%;}
   #filterSelector   { width: 30%;}
   
-#status-panel       { background: #ccc; bottom: 0px; position: absolute; width: 100%;}
+#status-panel       { background: $status-panel                                           ; bottom: 0px; position: absolute; width: 100%;}
 
   /* --- Status --- */
   #status-display   { padding: 10px; text-transform: capitalize;}

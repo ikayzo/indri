@@ -1,0 +1,22 @@
+/* Icon Font */
+
+/* Entypo pictograms by Daniel Bruce — www.entypo.com */
+
+@font-face {
+  font-family: "entypo";
+  src:  url("../fonts/entypo.eot");
+  src:  url("../fonts/entypo.eot?#iefix") format("embedded-opentype"),
+        url("../fonts/entypo.woff") format("woff"),
+        url("../fonts/entypo.ttf") format("truetype"),
+        url("../fonts/entypo.svg#entypo") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* --- Icons --- */
+.entypo  { font-family: "entypo"; line-height: 1.0em; color: $color-icon; }
+.icon-folder { color: #e8aa50;}
+.ind-filelist     .entypo { font-size: 2.9em; line-height: 0.8em;}
+.ind-iconlist     .entypo { font-size: 4.5em; line-height: 0.8em;}
+.ind-detaillist   .entypo { font-size: 2.2em; line-height: 1.0em;}
+

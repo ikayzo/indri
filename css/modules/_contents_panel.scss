@@ -1,0 +1,127 @@
+/* --- Center Content --- */
+#contents-panel {
+  background: $bg-color;
+}
+
+.ind-content {
+  span { 
+    display: inline-block; 
+    zoom: 1; 
+    *display:inline;
+  }
+  li { 
+    width: 33.333%; 
+    overflow: hidden; 
+    white-space: nowrap; 
+    float: left;
+    span:hover { 
+      cursor: default; /* Remove text cursor - Add to mobile */
+    }
+    /* Sets every 9th element to be slightly darker than bg color. 
+    This is dependent on the width of each LI being 33%. 
+    If it is changed to 25%, everything 9th element needs to be implemented. */
+    &:nth-child(6n+1),
+    &:nth-child(6n+2),
+    &:nth-child(6n+3) { 
+      background: $list-shading;
+      }
+    }
+    tr:nth-child(odd) { 
+      background: $list-shading;
+    }
+    .ind-editable-name { 
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: ellipsis; 
+      width: 100%; 
+      padding: 4px 0; 
+      letter-spacing: 0.06em; 
+    } /* Truncates text. Width needs to be set to work properly */
+    .ind-content-selected { 
+      background: $primary-color !important; 
+      color: $text-light !important;
+    }
+}
+
+/* --- List View --- */
+  .ind-listitem  { 
+    padding: 5px; 
+    &:hover {
+      background: lighten($highlight-color, 15%)!important;
+      color: $text-light;
+    }
+    .ind-editable-name  { 
+      margin: 0 0 0 5px; 
+      top: -4px; 
+      position: relative; 
+      width: 75%;
+    }
+  }
+
+/* --- Thumbnail View --- */
+
+  .ind-iconlist li { 
+    padding: 10px 10px 20px; 
+    text-align: center;
+  }
+  .ind-iconitem {
+    &:hover {
+      background: lighten($highlight-color, 10%) !important;
+      color: $text-dark;
+    }
+  }
+
+
+/* --- Detail/Table View --- */
+
+  .ind-detaillist			{ 
+    width: 100%;
+    border: none;
+    th	{ 
+      text-transform: uppercase; 
+      text-align: left; 
+      padding: 7px 10px; 
+      position: relative;
+      background: darken($color-base, 15%); 
+      color: $text-dark;
+      &:hover {background: lighten($highlight-color, 10%);}
+      border-left: 1px solid $border-light; 
+      &:first-child { 
+        border-left: none;
+      }
+    }
+    tr {
+      background: $bg-color;
+      &:hover {
+        background: lighten($highlight-color, 10%) !important;
+      }
+      td { 
+        padding: 0 10px; 
+        height: 32px; /* Min Height */ 
+        vertical-align: middle;
+        color: $text-dark;
+        &:first-child {  
+          width: 40px; 
+          text-align: center;
+        }
+      }
+    }
+  }
+  
+  /* Table Sort */
+  
+    th.ind-col-sort-asc,
+    th.ind-col-sort-desc  { 
+      background: $primary-color !important; 
+      color: $text-light;
+    }
+    .ind-col-sort         { 
+      display: inline-block; 
+      zoom: 1; 
+      *display:inline; 
+      right: 10px; 
+      top: 0; 
+      line-height: 0.55em; 
+      position: absolute; 
+      color: $text-light;
+    }

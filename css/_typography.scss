@@ -1,0 +1,35 @@
+/* Typography */ 
+
+body      { 
+	font-family: Arial, Verdana, Tahoma, sans-serif; 
+	font-size: 13px; 
+	line-height: 1.0; 
+	color: $text-main; 
+}
+
+
+
+ul,ol,dl  { 
+	margin: 0; 
+	padding: 0; 
+	list-style-type: none;
+}
+
+
+/* breadcrumb */
+a { 
+	text-decoration: underline;
+	color: $color-breadcrumb;
+	&:hover {
+		//background: rgba(0,0,0,0.2);
+		color: lighten($color-breadcrumb, 15%);
+	}
+}
+.ind-location-divider, .ind-location-segment {
+	color: $color-breadcrumb;
+}
+
+/* status display */
+#filename-save label {
+	color: $color-label;
+}

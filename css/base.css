@@ -1,5 +1,6 @@
 /* --- Table of Contents --- */
 /*
+Variables
 
 @font-face
 
@@ -35,14 +36,6 @@ Specific Layout
     - Status Panel
 
 */
-/* Entypo pictograms by Daniel Bruce — www.entypo.com */
-@font-face {
-  font-family: "entypo";
-  src: url("../fonts/entypo.eot");
-  src: url("../fonts/entypo.eot?#iefix") format("embedded-opentype"), url("../fonts/entypo.woff") format("woff"), url("../fonts/entypo.ttf") format("truetype"), url("../fonts/entypo.svg#entypo") format("svg");
-  font-weight: normal;
-  font-style: normal; }
-
 /* --- Universal Styles --- */
 *, *:before, *:after {
   -moz-box-sizing: border-box;
@@ -58,31 +51,13 @@ html, body {
   height: 100%;
   width: 100%; }
 
-body {
-  font-family: Arial, Verdana, Tahoma, sans-serif;
-  font-size: 13px;
-  line-height: 1.0;
-  color: #444; }
-
 img {
   max-width: 100%;
   max-height: 100%; }
 
-a {
-  color: #dd514c;
-  text-decoration: underline; }
-
 a,
 a > * {
   cursor: pointer; }
-
-a:hover {
-  background: rgba(0, 0, 0, 0.2); }
-
-ul, ol, dl {
-  margin: 0;
-  padding: 0;
-  list-style-type: none; }
 
 input {
   cursor: text; }
@@ -92,7 +67,16 @@ input {
   display: table;
   clear: both; }
 
-/* --- */
+/* Universal Styles */
+/* Icon Font */
+/* Entypo pictograms by Daniel Bruce — www.entypo.com */
+@font-face {
+  font-family: "entypo";
+  src: url("../fonts/entypo.eot");
+  src: url("../fonts/entypo.eot?#iefix") format("embedded-opentype"), url("../fonts/entypo.woff") format("woff"), url("../fonts/entypo.ttf") format("truetype"), url("../fonts/entypo.svg#entypo") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+
 /* --- Icons --- */
 .entypo {
   font-family: "entypo";
@@ -114,10 +98,19 @@ input {
   font-size: 2.2em;
   line-height: 1.0em; }
 
+/* Icon Font (Entypo) */
+/*==============================
+      VARIABLES, RULES          
+===============================*/
+/* Theme - Basic  */
+/* Civil Beat Theme */
+/* Dark Theme */
+/* Other Variable Settings */
+/* text colors */
 /* --- */
 /* --- Buttons --- */
 .ind-btn {
-  background: #ccc;
+  background: #b0c7d3;
   padding: 10px 15px;
   color: #333;
   text-align: center;
@@ -129,27 +122,31 @@ input {
   vertical-align: baseline;
   overflow: hidden;
   text-decoration: none; }
-
-.ind-btn:hover {
-  color: inherit; }
+  .ind-btn:hover {
+    color: inherit;
+    background: #c0d3dc; }
+  .ind-btn.entypo {
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    font-size: 35px; }
 
 .ind-btn-dis {
   background: #ddd;
   color: #aaa;
   cursor: no-drop; }
-
-.ind-btn.entypo {
-  width: 35px;
-  height: 35px;
-  padding: 0;
-  font-size: 35px; }
+  .ind-btn-dis:hover {
+    background: #aac9d9; }
 
 .ind-btn-active {
-  background: #0078e7;
+  background: #639cba;
   color: #fff !important; }
+  .ind-btn-active:hover {
+    background: #75a7c2;
+    color: #333333; }
+  .ind-btn-active:active {
+    background: #5d9ec0; }
 
-/* Keeps color from changing on hover */
-/* --- */
 /* --- Overall Content --- */
 .ind-wrapper {
   position: absolute;
@@ -184,7 +181,7 @@ input {
 /* Shortcut Window */
 #aside-wrapper-left {
   left: 0;
-  background: #fafafa;
+  background: #3b3b3b;
   border-right: 1px solid #aaa; }
 
 .ind-show-preview {
@@ -200,7 +197,7 @@ input {
 /* Preview Window */
 #aside-wrapper-right {
   right: 0;
-  background: #fff;
+  background: #444444;
   border-left: 1px solid #aaa;
   padding: 15px 20px; }
 
@@ -216,7 +213,7 @@ input {
 /* --- */
 /* --- Header Sections --- */
 #title-control {
-  background: #333;
+  background: black;
   text-align: center;
   padding: 10px 15px;
   text-transform: uppercase;
@@ -262,11 +259,15 @@ input {
 .ind-shortcut-list li {
   padding: 15px 15px;
   font-weight: bold;
-  background: red; }
+  color: white; }
 
 .ind-shortcut-selected {
-  background: #0078e7;
-  color: #fff; }
+  background: black;
+  color: #333333; }
+  .ind-shortcut-selected:hover {
+    background: #1a1a1a !important; }
+  .ind-shortcut-selected:active {
+    background: #333333 !important; }
 
 /* --- Center Content --- */
 .ind-content {
@@ -285,9 +286,9 @@ input {
       cursor: default;
       /* Remove text cursor - Add to mobile */ }
     .ind-content li:nth-child(6n+1), .ind-content li:nth-child(6n+2), .ind-content li:nth-child(6n+3) {
-      background: #f7f7f7; }
+      background: #404040; }
   .ind-content tr:nth-child(odd) {
-    background: #f7f7f7; }
+    background: #404040; }
   .ind-content .ind-content-selected {
     background: #0078e7 !important;
     color: #fff !important; }
@@ -321,7 +322,7 @@ input {
     text-align: left;
     background: #ccc;
     padding: 7px 10px;
-    border-left: 1px solid #fff;
+    border-left: 1px solid white;
     position: relative; }
     .ind-detaillist th:first-child {
       border-left: none; }
@@ -338,7 +339,7 @@ input {
 th.ind-col-sort-asc,
 th.ind-col-sort-desc {
   background: #0078e7;
-  color: #fff; }
+  color: #333333; }
 
 .ind-col-sort {
   display: inline-block;
@@ -381,7 +382,7 @@ th.ind-col-sort-desc {
   width: 30%; }
 
 #status-panel {
-  background: #ccc;
+  background: #0d0d0d;
   bottom: 0px;
   position: absolute;
   width: 100%; }

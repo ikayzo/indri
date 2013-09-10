@@ -1,0 +1,45 @@
+/* --- Buttons --- */
+
+.ind-btn { 
+  background: desaturate(lighten($btn-color, 20%), 10%);
+  padding: 10px 15px; 
+  color: #333; 
+  text-align: center; 
+  display: inline-block; 
+  zoom:1; 
+  *display: block;
+	position: relative; 
+	line-height: inherit; 
+  vertical-align: baseline; 
+  overflow: hidden; 
+  text-decoration: none; 
+  &:hover {
+    color: inherit;
+    background: desaturate(lighten($btn-color, 25%), 10%);
+  }
+  &.entypo {
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    font-size: 35px;
+  }
+}
+.ind-btn-dis 	  { 
+  background: #ddd; 
+  color: #aaa; 
+  cursor: no-drop;
+  &:hover { 
+    background: $highlight-color;
+  }
+}
+.ind-btn-active   { 
+  background: $btn-color; 
+  color: #fff !important;
+  &:hover {
+    background: lighten($btn-color, 5%); 
+    color: $text-light;
+  }
+  &:active {
+    background: saturate($btn-color, 5%);
+  }
+} 

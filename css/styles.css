@@ -1,22 +1,16 @@
 /*==============================
-		   VARIABLES           
+		   MAIN VARIABLES           
 ===============================*/
-/* Custom Theme - Civil Beat 
-$primary-color: #639cba;
-$highlight-color: #9bc8dd;
-
-$secondary-color: #ef9109;
-$medium-color: #9bc8dd;
-$base-color: #edece7;   */
 /* HOT Theme */
-/* Civil Beat Theme */
 /* Theme - Basic  */
-/*--------base colors / subsidiary colors ----------------*/
+/* Civil Beat Theme */
+/*==============================
+		  DEFAULT THEME           
+===============================*/
+/*--------base colors, subsidiary colors ----------------*/
 /* text colors */
 /* opposite text colors 
-$text-main: #f0f0f0;
-$text-dark: #fff;
-$text-light: #333;*/
+*/
 /*---------typography-----------------*/
 body {
   font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
@@ -29,53 +23,57 @@ body {
 
 /*-----------PANEL BGS------------- */
 #title-control {
-  background: #333333;
+  background: #ef9109;
   color: white; }
 
-#header-wrapper, #footer-wrapper {
-  border-color: #d4d4d4;
-  background: #eeeeee; }
+#header-wrapper {
+  border-color: #aaaaaa;
+  background: #edece7; }
+
+#footer-wrapper {
+  border-color: #aaaaaa;
+  background: #edece7; }
 
 #aside-wrapper-left {
   /* shortcuts panel */
-  background: #f6f6f6;
-  border-right: 1px solid #d4d4d4; }
+  background: #f4f3f0;
+  border-right: 1px solid #aaaaaa; }
 
 #contents-panel {
   background: white; }
 
 #aside-wrapper-right {
   background: white;
-  border-left: 1px solid #d4d4d4; }
+  border-left: 1px solid #aaaaaa; }
 
 #status-panel {
-  background: #c8c8c8; }
+  background: #ccc9bb; }
 
 #status-display {
   color: #1e1e1e; }
 
 /*-----------BUTTONS, links------------- */
 .ind-btn {
-  background: #57aaf6;
+  background: #b0c7d3;
   color: #1e1e1e; }
   .ind-btn:hover {
-    background: #359eff;
+    background: #c0d3dc;
     color: #1e1e1e; }
 
 .ind-btn-dis {
-  background: #79bbf8;
+  background: #ccc;
   color: #aaa; }
   .ind-btn-dis:hover {
-    background: #79bbf8; }
+    background: #aac9d9; }
 
 .ind-btn-active {
-  background: #0078e7;
+  background: #639cba;
   color: white; }
   .ind-btn-active:hover {
-    background: #0185ff;
+    background: #75a7c2;
     color: white; }
   .ind-btn-active:active {
-    background: #0078e7; }
+    background: #5d9ec0; }
 
 a {
   color: #333333;
@@ -90,55 +88,54 @@ a {
 .ind-content li:nth-child(6n+2),
 .ind-content li:nth-child(6n+3),
 .ind-content tr:nth-child(odd) {
-  background: #fbfbfb; }
+  background: #f8f8f6; }
 
 .ind-listitem:hover {
-  background: #9bcfff !important; }
+  background: #dfebf1 !important; }
 
 /*---shortcuts list----*/
 .ind-shortcut-selected:first-child {
-  background: #333333;
+  background: #ef9109;
   color: white; }
 
 .ind-listitem.ind-shortcut-item:hover {
-  background: #e1e1e1 !important; }
+  background: #e2e0d8 !important; }
 
 .ind-listitem.ind-shortcut-selected:hover {
-  background: #4d4d4d !important; }
+  background: #f7a734 !important; }
 .ind-listitem.ind-shortcut-selected:active {
-  background: #666666 !important; }
+  background: #f9bd65 !important; }
 
 /*---default view----*/
 .ind-content .ind-content-selected {
-  background: #0078e7 !important;
+  background: #639cba !important;
   color: white !important; }
 
 .ind-listitem.ind-content-selected:hover {
-  background: #5db1ff !important; }
-
+  background: #b4d0de !important; }
 .ind-listitem:active {
-  background: #0078e7 !important; }
+  background: #639cba !important; }
 
 /*---detail list view----*/
 .ind-detaillist th {
-  background: #81c2ff;
+  background: #cddfe9;
   border-left: 1px solid white; }
   .ind-detaillist th:hover {
-    background: #b4dbff; }
+    background: #f0f6f9; }
 
 .ind-detaillist .ind-content-selected:hover {
-  background: #5db1ff !important; }
+  background: #b4d0de !important; }
 
 th.ind-col-sort-asc, th.ind-col-sort-desc {
-  background: #0078e7 !important;
+  background: #639cba !important;
   color: white; }
 
 /*---icon view----*/
 .ind-iconitem:hover {
-  background: #b4dbff !important; }
+  background: #f0f6f9 !important; }
 
 .ind-iconitem.ind-content-selected:hover {
-  background: #5db1ff !important; }
+  background: #b4d0de !important; }
 
 tr:hover {
-  background: #b4dbff !important; }
+  background: #f0f6f9 !important; }

@@ -1,62 +1,59 @@
 
 /*==============================
-		   MAIN VARIABLES           
+		   VARIABLES           
 ===============================*/
+
+/* Custom Theme - Civil Beat 
+$primary-color: #639cba;
+$highlight-color: #9bc8dd;
+
+$secondary-color: #ef9109;
+$medium-color: #9bc8dd;
+$base-color: #edece7;   */
+
+
+
 
 /* HOT Theme */
 $primary-color: #ee0043;
 $secondary-color: #000000;
-$panel-color: #333; 
-
+$base-color: #333; 
 
 
 /* Theme - Basic  */
 $primary-color: #0078e7;
 $secondary-color: #333;
-$panel-color: #eee;
+$base-color: #eee;
 
 /* Civil Beat Theme */
 $primary-color: #639cba;
 $secondary-color: #ef9109;
-$panel-color: #edece7; 
+$base-color: #edece7; 
 
 
-/*==============================
-		  DEFAULT THEME           
-===============================*/
-$theme: light;
-$btn-color: $primary-color;
-$title-color: $secondary-color;
-$link-color: #333;
-$bg-color: white;
-$header-panel: $panel-color;
-$footer-panel: $panel-color;
-$status-panel: darken($panel-color, 15%);
-$shortcut-panel: lighten($panel-color, 3%);
-$list-shading: lighten($panel-color, 5%);
+
+/*--------base colors / subsidiary colors ----------------*/
 $highlight-color: lighten($primary-color, 20%);
+$medium-color: desaturate(lighten($primary-color, 20%), 10%);
 
+$lighter-color: lighten($base-color, 3%);
+$lightest-color: lighten($base-color, 5%);
 
-/*--------base colors, subsidiary colors ----------------*/
+//$white: #fff;
+$white: lighten($base-color, 10%);
 
-$border-dark: #aaa;
-$border-light: white;
+$border-dark: darken($base-color, 10%);
+$border-light: $white;
 
 /* text colors */
 $text-main: #444;
 $text-dark: darken($text-main, 15%);
 $text-light: #fff;
 
-body {
-	@if $theme == dark {
-		$text-main: #f0f0f0;
-		$text-dark: #fff;
-		$text-light: #333;
-	}
-}
-
 /* opposite text colors 
-*/
+$text-main: #f0f0f0;
+$text-dark: #fff;
+$text-light: #333;*/
 
 
 /*---------typography-----------------*/
@@ -83,36 +80,31 @@ body {
 /*-----------PANEL BGS------------- */
 
 #title-control {
-	background: $title-color;
+	background: $secondary-color;
 	color: $text-light;
 }
 
-#header-wrapper { 
+#header-wrapper, #footer-wrapper { 
 	border-color: $border-dark;
-	background: $header-panel;
-}
-
-#footer-wrapper { 
-	border-color: $border-dark;
-	background: $footer-panel;
+	background: $base-color;
 }
 
 #aside-wrapper-left {    /* shortcuts panel */
-	background: $shortcut-panel;
+	background: $lighter-color;
 	border-right: 1px solid $border-dark;
 }
 
 #contents-panel {
-	background: $bg-color;
+	background: $white;
 }
 
 #aside-wrapper-right {
-	background: $bg-color;
+	background: $white;
 	border-left: 1px solid $border-dark;
 }
 
 #status-panel {
-	background: $status-panel;
+	background: darken($base-color, 15%);
 }
 
 #status-display {
@@ -124,32 +116,32 @@ body {
 
 
 .ind-btn {
-	background: desaturate(lighten($btn-color, 20%), 10%);
+	background: $medium-color;
 	color: $text-dark;
-	&:hover { background: desaturate(lighten($btn-color, 25%), 10%); color: $text-dark;}
+	&:hover { background: lighten($primary-color, 15%); color: $text-dark;}
 }
 
 .ind-btn-dis {
-	background: #ccc;
+	background: lighten($medium-color, 7%);
 	color: #aaa;
-	&:hover { background: $highlight-color;}
+	&:hover { background: lighten($medium-color, 7%);}
 }
 
 .ind-btn-active {
-	background: $btn-color;
+	background: $primary-color;
 	color: $text-light;
 	&:hover {
-		background: lighten($btn-color, 5%); 
+		background: lighten($primary-color, 5%); 
 		color: $text-light;
 	}
-	&:active {background: saturate($btn-color, 5%)}
+	&:active {background: saturate($primary-color, 5%)}
 }
 
 a {
-	color: $link-color;
+	color: $secondary-color;
 	text-decoration: underline;
-	&:hover { color: lighten($link-color, 15%); }
-	&:active { color: lighten($link-color, 25%); }
+	&:hover { color: lighten($secondary-color, 15%); }
+	&:active { color: lighten($secondary-color, 25%); }
 }
 
 
@@ -161,7 +153,7 @@ a {
 .ind-content li:nth-child(6n+3),
 /* .ind-content li:nth-child(8n+4), This is for 4 columns */
 .ind-content tr:nth-child(odd) {
-	background: $list-shading;
+	background: $lightest-color;
 }
 
 .ind-listitem:hover {
@@ -176,7 +168,7 @@ a {
 }
 
 .ind-listitem.ind-shortcut-item:hover {
-	background: darken($panel-color, 5%) !important;
+	background: darken($base-color, 5%) !important;
 }
 
 .ind-listitem.ind-shortcut-selected {
@@ -193,13 +185,12 @@ a {
 }
 
 
-.ind-listitem {
-	&.ind-content-selected:hover {
-		background: lighten($highlight-color, 3%)!important;
-	}
-	&:active {
-		background: $primary-color !important;
-	}
+.ind-listitem.ind-content-selected:hover {
+	background: lighten($highlight-color, 3%)!important;
+}
+
+.ind-listitem:active {
+	background: $primary-color !important;
 }
 
 /*---detail list view----*/
