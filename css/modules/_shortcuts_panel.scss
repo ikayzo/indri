@@ -6,10 +6,26 @@
 .ind-shortcut-list li 	{ 
   padding: 15px 15px; 
   font-weight: bold; 
-  color: $text-dark;}
-.ind-shortcut-selected{ 
-  background: $secondary-color; 
-  color: $text-light;
-  &:hover {background: lighten($secondary-color, 10%) !important;}
-  &:active {background: lighten($secondary-color, 20%) !important;}
+  color: $text-dark;
+}
+
+.ind-listitem.ind-shortcut-item {
+	background: $shortcut;
+  border-bottom: 1px solid $color-base;
+  color: $text-dark;
+  &:hover {
+    background: desaturate(lighten($color-secondary, 30%), 20%) !important; 
+    color: $text-main;
+  }
+}
+
+.ind-listitem.ind-shortcut-selected{ 
+  background: $shortcut-selected !important; 
+  .ind-shortcut-name {
+	color: $text-light;
+  }
+  &:hover {
+  	background: lighten($shortcut-selected, 10%) !important;
+  }
+  &:active {background: lighten($shortcut-selected, 20%) !important;}
 }

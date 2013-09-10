@@ -2,22 +2,25 @@
       BASIC CUSTOMIZATIONS          
 ===============================*/
 
+/* Retro Theme */
+$color-primary: #b90016;
+$color-secondary: #1e4952;
+$color-base: #e9e6df;
+
+/* Theme - Basic  */
+$color-primary: #0078e7;
+$color-secondary: #333;
+$color-base: #eee;
 
 /* Dark Theme */
-$primary-color: #f8c600;
-$secondary-color: black;
+$color-primary: #f8c600;
+$color-secondary: black;
 $color-base: #333; 
 
 /* Civil Beat Theme */
-$primary-color: #639cba;
-$secondary-color: #ef9109;
+$color-primary: #639cba;
+$color-secondary: #ef9109;
 $color-base: #edece7; 
-
-/* Theme - Basic  */
-$primary-color: #0078e7;
-$secondary-color: #333;
-$color-base: #eee;
-
 
 $theme: light; /* 'dark' or 'light' */
 
@@ -27,29 +30,43 @@ $theme: light; /* 'dark' or 'light' */
 ===============================*/
 
 // Button, Interactivity Colors
-$btn-color: $primary-color;
-$highlight-color: lighten($primary-color, 20%);
+$btn-color: $color-primary;
+$highlight-color: lighten($color-primary, 30%);
 
-// Panel Background Colors
-$color-title: $secondary-color;
+// Header Section
+$color-title: $color-secondary;
 $panel-header: $color-base;
+
+// Shortcuts Section
+$panel-shortcut: lighten($color-base, 3%);
+$shortcut: $color-base;
+$shortcut-selected: $color-secondary;
+
+// Content Section
 $bg-color: white;
+$list-shading: lighten($color-base, 5%);
+$list-item-selected: $color-primary;
+$th: darken($color-base, 15%);
+$th-selected: $color-primary;
+
+//Preview Section
+$panel-preview: $bg-color;
+
+//Footer Section
 $panel-footer: $color-base;
 $panel-status: darken($color-base, 15%); 
 
-$panel-shortcut: lighten($color-base, 3%);
-$panel-preview: $bg-color;
-$list-shading: lighten($color-base, 5%);
-
-// border-colors
+// border colors
 $border-dark: #aaa;
-$border-light: white;
+$border-light: $bg-color;
 
 // text colors
 $text-main: #444;
 $text-dark: darken($text-main, 15%);
 $text-light: #fff;
 $color-breadcrumb: #333;
+
+$icon-folder: #e8aa50; 
 
 // Conditional for dark themes
 body {
@@ -58,17 +75,17 @@ body {
     $text-dark: #fff;
     $text-light: #333;
     $bg-color: #444 !important;
-	$border-dark: black !important;
-	$border-light: #333 !important;
-	$color-breadcrumb: $primary-color;
+	  $border-dark: black !important;
+	  $border-light: #333 !important;
+	  $color-breadcrumb: $color-primary;
+    $icon-folder: $color-secondary;
   }
 }
 
-// label color
-$color-label: $text-main;  
+// labels, icon colors
+$color-label: $text-main;    
+$color-icon: $text-main;
 
-// icon color 	
-$color-icon: $text-main; 	
 
 /*=========Write your variable overrides below==============*/
 

@@ -1,0 +1,52 @@
+/* --- Header Sections --- */
+#title-control  { 
+  background: $color-title; 
+  text-align: center; 
+  padding: 10px 15px; 
+  text-transform: uppercase; 
+  color: #fff; }
+
+#control-panel  { 
+  padding: 15px; 
+  width: 100%;
+}
+
+#header-wrapper { 
+  border-color: $border-dark;
+  background: $panel-header;
+}
+
+#footer-wrapper { 
+  border-color: $border-dark;
+  background: $panel-footer;
+}
+
+  
+  /*==================
+        controls 
+  ===================*/
+
+  /* --- Left --- */
+  
+  #layout-controls-left,
+  #shortcuts-controls,
+  #layout-contorols 		{ 
+    float: left; 
+  }
+  
+  /* Buttons */
+  #location-controls    { float: left; margin: 0 0 0 10px;}
+  #location-display    	{ float: left; padding: 10px; font-weight: bold;}
+  .ind-location-divider { margin: 0 10px;}
+
+  /* --- Right --- */
+  #layout-controls-right  { float: right;}
+  #aside-wrapper-right {
+    //background: $panel-preview;
+  }
+
+    /* Buttons */
+    #view-controls          { float: left;}
+    #detail-controls        { float: right; margin: 0 0 0 10px;}
+
+  

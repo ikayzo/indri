@@ -25,30 +25,42 @@
     &:nth-child(6n+3) { 
       background: $list-shading;
       }
-    }
-    tr:nth-child(odd) { 
-      background: $list-shading;
-    }
-    .ind-editable-name { 
-      white-space: nowrap; 
-      overflow: hidden; 
-      text-overflow: ellipsis; 
-      width: 100%; 
-      padding: 4px 0; 
-      letter-spacing: 0.06em; 
-    } /* Truncates text. Width needs to be set to work properly */
-    .ind-content-selected { 
-      background: $primary-color !important; 
+  }
+  tr:nth-child(odd) { 
+    background: $list-shading;
+  }
+  .ind-editable-name { 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    width: 100%; 
+    padding: 4px 0; 
+    letter-spacing: 0.06em; 
+  } /* Truncates text. Width needs to be set to work properly */
+  .ind-content-selected { 
+    background: $list-item-selected !important; 
+    td, .ind-editable-name,.entypo {
       color: $text-light !important;
     }
+    .icon-folder {
+      color: $icon-folder !important;
+    }
+    &:hover {
+      background: lighten($list-item-selected, 10%) !important;
+    }
+  }
+}
+
+table tr.even, table tr.alt, table tr:nth-of-type(even) {
+  background: $bg-color;
 }
 
 /* --- List View --- */
   .ind-listitem  { 
     padding: 5px; 
     &:hover {
-      background: lighten($highlight-color, 15%)!important;
-      color: $text-light;
+      background: $highlight-color !important;
+      color: $text-main;
     }
     .ind-editable-name  { 
       margin: 0 0 0 5px; 
@@ -66,7 +78,7 @@
   }
   .ind-iconitem {
     &:hover {
-      background: lighten($highlight-color, 10%) !important;
+      background: $highlight-color !important;
       color: $text-dark;
     }
   }
@@ -82,10 +94,12 @@
       text-align: left; 
       padding: 7px 10px; 
       position: relative;
-      background: darken($color-base, 15%); 
+      background: $th; 
       color: $text-dark;
-      &:hover {background: lighten($highlight-color, 10%);}
       border-left: 1px solid $border-light; 
+      &:hover {
+        background: $highlight-color;
+      }
       &:first-child { 
         border-left: none;
       }
@@ -93,7 +107,7 @@
     tr {
       background: $bg-color;
       &:hover {
-        background: lighten($highlight-color, 10%) !important;
+        background: $highlight-color !important;
       }
       td { 
         padding: 0 10px; 
@@ -106,14 +120,18 @@
         }
       }
     }
+
   }
   
   /* Table Sort */
   
     th.ind-col-sort-asc,
     th.ind-col-sort-desc  { 
-      background: $primary-color !important; 
+      background: $th-selected !important; 
       color: $text-light;
+      &:hover {
+        background: lighten($th-selected, 10%) !important;
+      }
     }
     .ind-col-sort         { 
       display: inline-block; 
@@ -125,3 +143,7 @@
       position: absolute; 
       color: $text-light;
     }
+
+
+
+

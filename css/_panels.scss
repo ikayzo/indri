@@ -1,4 +1,4 @@
-/* Panel Styling */
+/* Panels */
 
 /*Specific Layout
   Header
@@ -17,94 +17,9 @@
     - Filename Panel
     - Status Panel*/
 
+@import "modules/header.scss";
 @import "modules/shortcuts_panel.scss";
 @import "modules/contents_panel.scss";
+@import "modules/footer.scss";
 
-/* --- Header Sections --- */
-#title-control  { 
-  background: $color-title; 
-  text-align: center; 
-  padding: 10px 15px; 
-  text-transform: uppercase; 
-  color: #fff; }
 
-#control-panel  { 
-  padding: 15px; 
-  width: 100%;
-}
-
-#header-wrapper { 
-  border-color: $border-dark;
-  background: $panel-header;
-}
-
-#footer-wrapper { 
-  border-color: $border-dark;
-  background: $panel-footer;
-}
-
-  
-  /* --- Left --- */
-  
-
-  /*==================
-        controls 
-  ===================*/
-  
-  #layout-controls-left,
-  #shortcuts-controls,
-  #layout-contorols 		{ 
-    float: left; 
-  }
-  
-  /* Buttons */
-  #location-controls    { float: left; margin: 0 0 0 10px;}
-  #location-display    	{ float: left; padding: 10px; font-weight: bold;}
-  .ind-location-divider { margin: 0 10px;}
-
-  /* --- Right --- */
-  #layout-controls-right  { float: right;}
-  #aside-wrapper-right {
-    //background: $panel-preview;
-  }
-
-    /* Buttons */
-    #view-controls          { float: left;}
-    #detail-controls        { float: right; margin: 0 0 0 10px;}
-
-  
-/* --- */
-
-    /* --- Footer Sections --- */
-#filename-panel { 
-  padding: 10px 20px; 
-  width: 100%;
-  .ind-btn { 
-    margin-left: 10px;
-    &:first-child { 
-      margin: 0; 
-    }
-  }
-}
-  
-  /* --- Controls --- */
-  #filename-options,  
-  #filename-save,   
-  #filename-action  { float: left; width: 33.3333333%;}
-  #filename-save    { padding: 5px 0 0 0;}
-  #filename-action  { text-align: right;}
-  #filename-control { width: 50%;}
-  #filterSelector   { width: 30%;}
-  
-#status-panel       { 
-  background: $panel-status; 
-  bottom: 0px; 
-  position: absolute; 
-  width: 100%;
-}
-
-  /* --- Status --- */
-  #status-display   { 
-    padding: 10px; 
-    text-transform: capitalize;
-  }

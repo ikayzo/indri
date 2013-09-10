@@ -1,0 +1,33 @@
+    /* --- Footer Sections --- */
+#filename-panel { 
+  padding: 10px 20px; 
+  width: 100%;
+  .ind-btn { 
+    margin-left: 10px;
+    &:first-child { 
+      margin: 0; 
+    }
+  }
+}
+  
+  /* --- Controls --- */
+  #filename-options,  
+  #filename-save,   
+  #filename-action  { float: left; width: 33.3333333%;}
+  #filename-save    { padding: 5px 0 0 0;}
+  #filename-action  { text-align: right;}
+  #filename-control { width: 50%;}
+  #filterSelector   { width: 30%;}
+  
+#status-panel       { 
+  background: $panel-status; 
+  bottom: 0px; 
+  position: absolute; 
+  width: 100%;
+}
+
+  /* --- Status --- */
+  #status-display   { 
+    padding: 10px; 
+    text-transform: capitalize;
+  }
