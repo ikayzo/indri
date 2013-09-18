@@ -12,7 +12,7 @@
 .ind-listitem.ind-shortcut-item {
 	background: $shortcut;
   border-bottom: 1px solid $color-base;
-  color: $text-dark;
+  color: $text-main;
   &:hover {
     background: desaturate(lighten($color-secondary, 30%), 20%) !important; 
     color: $text-main;
