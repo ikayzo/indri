@@ -41,7 +41,7 @@ FileBrowser.prototype = {
 		Primary API
 	*/
 	navigateToRoot : function() {
-		this.fsm.getRootLocation(this._makeCallback(this.navigateToLocation));
+		this.fsm.getRootLocation(this._makeCallback(this.navigateToLocation), this._makeCallback(this._updateStatus));
 	},
 
 	navigateToLocation : function(location) {

@@ -15,10 +15,14 @@ FileSystemManager.prototype = {
 		this._doQuery(url, success, error);
 	},
 
-	getRootLocation : function(callback) {
-		var url = this.rootUrl + "?action=navigate&direction=home";
+	getRootLocation : function(success, error) {
+		// NOTE: needs trailing '&' or something between here and the server fails silently
+		var url = this.rootUrl + "?action=navigate&direction=home&";
 		jQuery.getJSON(url, function(data, textStatus, jqXHR) {
-			callback(data.loc);
+			success(data.loc);
+		}).fail(function(jqXHR, textStatus, errorThrown) {
+			console.log("FSM Error:", textStatus);
+			error("FSM Error: " + textStatus);
 		});	
 	},
 
@@ -66,9 +70,23 @@ FileSystemManager.prototype = {
 			else {
 				success(data.contents, textStatus);
 			}
-		}).fail(function(jqXHR, testStatus, errorThrown) {
-			console.log(errorThrown);
-			error(errorThrown);
+		}).fail(function(jqXHR, textStatus, errorThrown) {
+			console.log("FSM Error:", textStatus);
+			error("FSM Error: " + textStatus);
+		});	
+	},
+
+	_doQuery2 : function(url, success, error) {
+		//		console.log("_doQuery: " + url);
+		jQuery.ajax({
+			url : url,
+			dataType : 'json'
+		}).done(function(jqXHR, textStatus, errorThrown) {
+			console.log(textStatus);
+		}).fail(function(jqXHR, textStatus, errorThrown) {
+			console.log(textStatus);
+		}).always(function(jqXHR, textStatus, errorThrown) {
+			console.log(textStatus);
 		});	
 	},
 
