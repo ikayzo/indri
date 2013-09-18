@@ -42,15 +42,19 @@ function encodeLocation(location) {
 }
 
 function handleFileRequest(req, res) {
+	console.log(req.url);
 	var result = { };
 
 	try {
 		var parsedQuery = require('url').parse(req.url, true);
+		console.log('parsed query:', parsedQuery);
 
 		var action = parsedQuery.query.action || "browse";
 		var loc = parseLocation(parsedQuery.query.loc);
 		console.log(parsedQuery.query.loc, ' -> ', loc);
 
+		console.log('parsed query:', parsedQuery);
+		
 		if(action == "navigate") {
 			result.origLoc = loc;
 			var direction = parsedQuery.query.direction;
@@ -59,8 +63,9 @@ function handleFileRequest(req, res) {
 					loc = path.dirname(loc);
 				}
 			}
-
+			console.log(loc);
 			result.loc = encodeLocation(loc);
+			console.log(result);
 		}
 		else if(action == "browse") {
 			result.realLoc = constrainPath(path.join(config.rootDir, loc));

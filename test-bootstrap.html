@@ -74,7 +74,7 @@
 					}
 				};
 
-				new FileBrowser(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
+				FileBrowser.attach(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
 				jQuery('#indriDialog').modal('show'); 
 			});
 		}

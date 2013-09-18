@@ -19,7 +19,7 @@ FileSystemManager.prototype = {
 		var url = this.rootUrl + "?action=navigate&direction=home";
 		jQuery.getJSON(url, function(data, textStatus, jqXHR) {
 			callback(data.loc);
-		});			
+		});	
 	},
 
 	getRelativeLocation : function(location, direction, callback) {

@@ -13,6 +13,11 @@ function FileBrowser(rootElem, fileSystemManager, initializer) {
 
 	this._initialize(initializer);
 }
+
+FileBrowser.attach = function(rootElem, fileSystemManager, initializer) {
+	return new FileBrowser(rootElem, fileSystemManager, initializer);
+}
+
 FileBrowser.prototype = {
 	currentLocation : {},
 	currentContents : {},
@@ -142,14 +147,6 @@ FileBrowser.prototype = {
 		if(evt == "clear") {
 			this.clearSelection();
 		}
-/*		
-		else if(evt == "longpress") {
-			this.currentSelection.length = 0;
-			this.currentSelection.push(contentItem);			
-
-			this._selectionChanged();
-		}
-*/
 		else if(evt == "rename") {
 			this.renameItem(contentItem, newName);
 		}
