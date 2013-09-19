@@ -4,5 +4,6 @@
 /filesystems/aws-credentials.json
 /filesystems/civilbeat-credentials.json
 *-ck.js
+.ruby-*
 .sass-cache
 node_modules

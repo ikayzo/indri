@@ -22,19 +22,15 @@ module.exports = function(grunt) {
     },
     sass: {
       dist: {
-        files: [{
-          expand: true,
-          cwd: 'styles',
-          src: ['css/*.scss'],
-          dest: 'css/',
-          ext: '.css'
-        }]
+        files: {
+          'css/indri.css': 'css/indri.scss'
+        }
       }
     }
   });
 
-  //grunt.loadNpmTasks('grunt-contrib-sass');
+  grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
-  grunt.registerTask('default', ['uglify']);
+  grunt.registerTask('default', ['sass', 'uglify']);
 };
