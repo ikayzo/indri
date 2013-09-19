@@ -15,14 +15,14 @@
   color: $text-main;
   &:hover {
     background: desaturate(lighten($color-secondary, 30%), 20%) !important; 
-    color: $text-main;
+    color: $text-main !important;
   }
 }
 
 .ind-listitem.ind-shortcut-selected{ 
   background: $shortcut-selected !important; 
   .ind-shortcut-name {
-	color: $text-light;
+	color: $text-shortcut-selected;
   }
   &:hover {
   	background: lighten($shortcut-selected, 10%) !important;
