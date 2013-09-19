@@ -36,12 +36,25 @@ module.exports = function(grunt) {
           'build/<%= pkg.name %>-<%= pkg.version %>.min.css': ['css/indri.css']
         }
       }
+    },
+    copy: {
+      main: {
+        files: [{
+          expand: true,
+          flatten: true,
+          src: [
+            'build/<%= pkg.name %>-<%= pkg.version %>.min.css',
+            'build/<%= pkg.name %>-<%= pkg.version %>.min.js'
+          ],
+          dest: 'examples/', filter: 'isFile'}
+        ]}
     }
   });
 
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
-  grunt.registerTask('default', ['sass', 'cssmin', 'uglify']);
+  grunt.registerTask('default', ['sass', 'cssmin', 'uglify', 'copy']);
 };

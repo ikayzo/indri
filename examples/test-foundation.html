@@ -2,24 +2,26 @@
 <html>
 
 <head>
-	<link rel="stylesheet" type="text/css" href="css/reset.css">
-	<script type="text/javascript" src="js/3rdparty/jquery-1.10.2.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../css/reset.css">
+	<script type="text/javascript" src="../../js/3rdparty/jquery-1.10.2.js"></script>
 
-	<!-- jQueryUI -->
-	<script type="text/javascript" src="js/3rdparty/jquery-ui-1.10.3.custom.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/ui-lightness/jquery-ui-1.10.3.custom.min.css">
+	<!-- Foundation -->
+	<script type="text/javascript" src="../../js/3rdparty/foundation.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../css/foundation.min.css">
 
 	<style type="text/css">
-		/* jQueryUI specific styles */
-		.ui-widget[role="dialog"] {  -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0; border: 0; padding: 0; width: 80%!important; height: 80%!important;  }
-		.ui-widget #indriDialog { width: 100% !important; height: 100%!important; padding:0; border: 1px solid #ddd; background: none;}
+		/* Foundation specific styles */
+
+		/* Override Foundation Styling for pop up */
+		.reveal-modal 		{ height: 80%; padding: 0px;}
+
 	</style>
 
-	<link rel="stylesheet" type="text/css" href="css/indri.css">
+	<link rel="stylesheet" type="text/css" href="../../css/indri.css">
 </head>
 
 <body>
-	<h2>Indri with jQueryUI test page</h2>
+	<h2>Indri with Foundation test page</h2>
 	<div>
 		File system:
 		<select id="fileSystem">
@@ -42,25 +44,27 @@
 
 	<hr>
 
-<script type="text/javascript" src="js/indri.fsm.js"></script>
-<script type="text/javascript" src="js/indri.base.js"></script>
-<script type="text/javascript" src="js/indri.content.renderer.base.js"></script>
-<script type="text/javascript" src="js/indri.content.renderers.js"></script>
-<script type="text/javascript" src="js/indri.location.renderers.js"></script>
-<script type="text/javascript" src="js/indri.main.js"></script>
+<script type="text/javascript" src="../../js/indri.fsm.js"></script>
+<script type="text/javascript" src="../../js/indri.base.js"></script>
+<script type="text/javascript" src="../../js/indri.content.renderer.base.js"></script>
+<script type="text/javascript" src="../../js/indri.content.renderers.js"></script>
+<script type="text/javascript" src="../../js/indri.location.renderers.js"></script>
+<script type="text/javascript" src="../../js/indri.main.js"></script>
 
 <script type="text/javascript" src="test-dlg.js"></script>
 
 <script type="text/javascript">
 
 	jQuery(document).ready(function() {
+		jQuery(document).foundation();
+
 		function showDialog(defaults) {
 			jQuery('#indriDialog').load('indri.html #browserui', function() {
 				var initializer = getDialogInitializer(defaults);
 
 				initializer.resultCallback = function(result) { 
-					jQuery('#indriDialog').dialog('close'); 
-
+					jQuery('#indriDialog').foundation('reveal', 'close'); 
+					
 					console.log(result); 
 					if(result.success){
 						jQuery("#results").html("Selected items: " + JSON.stringify(result.results));						
@@ -71,7 +75,7 @@
 				};
 
 				FileBrowser.attach(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
-				jQuery('#indriDialog').dialog(); 
+				jQuery('#indriDialog').foundation('reveal', 'open'); 
 			});
 		}
 
