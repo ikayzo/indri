@@ -116,5 +116,5 @@ ContentRenderer.prototype = {
 		}
 		
 		return $icon;
-	},	
+	}	
 }

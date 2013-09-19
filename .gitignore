@@ -5,3 +5,4 @@
 /filesystems/civilbeat-credentials.json
 *-ck.js
 .sass-cache
+node_modules

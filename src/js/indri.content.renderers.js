@@ -10,6 +10,7 @@ function ListContentRenderer() {
 	this.name = "List";
 	this.text = IndriIcons.ICON_LIST_VIEW;
 }
+
 ListContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 		_renderContainer : function() {
 			return jQuery(document.createElement("ul")).addClass("ind-content ind-filelist").click(this, function(evt) { 
@@ -24,7 +25,7 @@ ListContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 			this._initItem($listItem, contentItem);
 
 			return $listItem;
-		},
+		}
 	});
 
 
@@ -52,7 +53,7 @@ IconContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 			this._initItem($listItem, contentItem);
 
 			return $listItem;
-		},	
+		}	
 
 	});
 
