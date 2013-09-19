@@ -1,7 +1,37 @@
+
+
+/* --- Overall Content --- */
+.ind-wrapper    { 
+  position:absolute; 
+  left: 0; 
+  right: 0; 
+}
+
 /* --- Center Content --- */
 #contents-panel {
   background: $bg-color;
 }
+
+#aside-wrapper-left,
+#section-wrapper,
+#aside-wrapper-right  { 
+  top: 100px; 
+  bottom: 90px; 
+}
+#aside-wrapper-left,
+#aside-wrapper-right  { 
+  position: absolute; 
+  width: 300px;
+}
+
+/* Content Window */
+#section-wrapper { 
+  overflow: auto; 
+}
+#contents-panel { 
+  height: 100%;
+}
+
 
 .ind-content {
   span { 
@@ -40,7 +70,7 @@
   .ind-content-selected { 
     background: $list-item-selected !important; 
     td, .ind-editable-name,.entypo {
-      color: $text-light !important;
+      color: $text-list-item-selected !important;
     }
     .icon-folder {
       color: $icon-folder !important;
@@ -60,7 +90,10 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
     padding: 5px; 
     &:hover {
       background: $highlight-color !important;
-      color: $text-main;
+      color: $text-list-item-hover !important;
+      .entypo {
+        color: $text-list-item-hover;
+      }
     }
     .ind-editable-name  { 
       margin: 0 0 0 5px; 
@@ -79,7 +112,10 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
   .ind-iconitem {
     &:hover {
       background: $highlight-color !important;
-      color: $text-dark;
+      color: $text-list-item-hover; 
+      .entypo {
+        color: $text-list-item-hover;
+      }
     }
   }
 
@@ -108,6 +144,15 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
       background: $bg-color;
       &:hover {
         background: $highlight-color !important;
+        td {
+          color: $text-list-item-hover;
+          .icon-file {
+            color: $text-list-item-hover;
+          }
+          .icon-folder {
+            color: $text-list-item-hover;
+          }
+        }
       }
       td { 
         padding: 0 10px; 

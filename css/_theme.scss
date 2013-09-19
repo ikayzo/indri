@@ -2,37 +2,46 @@
       BASIC CUSTOMIZATIONS          
 ===============================*/
 
-/* Dark Theme */
-$color-primary: #f8c600;
-$color-secondary: black;
-$color-base: #333; 
-
-/* Retro Theme */
-$color-primary: #b90016;
-$color-secondary: #1e4952;
-$color-base: #e9e6df;
-
-/* Theme - Basic  */
-$color-primary: #0078e7;
-$color-secondary: #333;
-$color-base: #eee;
-
-/* Civil Beat Theme */
-$color-primary: #639cba;
-$color-secondary: #ef9109;
-$color-base: #edece7; 
-
 /* Ikayzo Theme */
 $color-primary: #ea5d00;
 $color-secondary: #3d9297;
 $color-base: #edece7; 
 
+/* Retro Theme */
+$color-primary: #b90016;
+$color-secondary: #1e4952;
+$color-base: #e9e6df;
+$theme: light;
+
 /* Minimal Theme */
 $color-primary: #ccc;
 $color-secondary: #aaa;
 $color-base: #f2f2f2; 
+$theme: light;
 
-$theme: light; /* 'dark' or 'light' */
+/* Theme - Basic  */
+$color-primary: #0078e7;
+$color-secondary: #333;
+$color-base: #eee;
+$theme: light;
+
+/* Dark & Yellow Theme */
+$color-primary: #f8c600;
+$color-secondary: black;
+$color-base: #333; 
+$theme: dark;
+
+/* Dark & Hot Pink Theme */
+$color-primary: #ee0043;
+$color-secondary: black;
+$color-base: #333; 
+$theme: dark; /* 'dark' or 'light' */
+
+/* Civil Beat Theme */
+$color-primary: #639cba;
+$color-secondary: #ef9109;
+$color-base: #edece7;  
+$theme: light;
 
 
 /*==============================
@@ -75,6 +84,11 @@ $text-main: #444;
 $text-dark: darken($text-main, 15%);
 $text-light: #fff;
 $color-breadcrumb: #333;
+$text-shortcut: $text-light;
+$text-shortcut-selected: $text-light;
+$btn-text-color: $text-main;
+$text-list-item-selected: $text-light;
+$text-list-item-hover: $text-dark;
 
 $icon-folder: #e8aa50; 
 
@@ -89,6 +103,11 @@ body {
 	  $border-light: #333 !important;
 	  $color-breadcrumb: $color-primary;
     $icon-folder: $color-secondary;
+    $text-shortcut: $text-dark !important;
+    $text-shortcut-selected: $color-primary;
+    $btn-text-color: $text-light !important;
+    $text-list-item-selected: $text-light;
+    $text-list-item-hover: $text-light;
   }
 }
 
