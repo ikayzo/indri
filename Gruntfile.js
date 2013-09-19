@@ -10,12 +10,12 @@ module.exports = function(grunt) {
       build: {
         files: {
           'build/<%= pkg.name %>.min.js': [
-            'src/js/indri.fsm.js',
-            'src/js/indri.base.js',
-            'src/js/indri.content.renderer.base.js',
-            'src/js/indri.content.renderers.js',
-            'src/js/indri.location.renderers.js',
-            'src/js/indri.main.js'
+            'js/indri.fsm.js',
+            'js/indri.base.js',
+            'js/indri.content.renderer.base.js',
+            'js/indri.content.renderers.js',
+            'js/indri.location.renderers.js',
+            'js/indri.main.js'
           ]
         }
       }
