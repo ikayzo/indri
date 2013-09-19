@@ -45,14 +45,14 @@
 	<hr>
 
 	<div>
-		<h3>Dialogs with default initializers and custom callback</h3>
+		<h3>Dialogs with default initializers and callback</h3>
 
 		<button id="openBtn2">Open...</button>
 		<button id="saveBtn2">Save...</button>
 	</div>
 
 	Results:
-	<div id="results2"/>
+	<div id="results2"></div>
 
 	<hr>
 
@@ -63,7 +63,7 @@
 	</div>
 
 	Results:
-	<div id="results3"/>
+	<div id="results3"></div>
 
 	<hr>
 
@@ -81,29 +81,40 @@
 	jQuery(document).ready(function() {
 		jQuery(document).foundation();
 
+		var fileSystemManager = new FileSystemManager("http://localhost:1337/");
+
 		jQuery("#openBtn1").click(function() {
 			jQuery('#indriDialog').load('indri.html #browserui', function() {
-				FileBrowser.attach(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), FileBrowser.prototype.OpenDialogInitializer);
+				var initializer = jQuery.extend(true, {}, FileBrowser.prototype.OpenDialogInitializer, {
+
+					resultCallback : function(result) { 
+						jQuery('#indriDialog').foundation('reveal', 'close'); 
+						console.log(result);						
+					}
+				});
+
+				FileBrowser.attach(jQuery("#browserui"), fileSystemManager, initializer);
 				jQuery('#indriDialog').foundation('reveal', 'open'); 
 			});
 		});
 
 		function showDialog(defaults) {
 			jQuery('#indriDialog').load('indri.html #browserui', function() {
-				var initializer = jQuery.extend(true, {}, defaults);
+				var initializer = jQuery.extend(true, {}, defaults, {
 
-				initializer.resultCallback = function(result) { 
-					jQuery('#indriDialog').foundation('reveal', 'close'); 
-					
-					if(result.success){
-						jQuery("#results2").html("Selected items: " + JSON.stringify(result.results));						
+					resultCallback : function(result) { 
+						jQuery('#indriDialog').foundation('reveal', 'close'); 
+						
+						if(result.success){
+							jQuery("#results2").html("Selected items: " + JSON.stringify(result.results));						
+						}
+						else {
+							jQuery("#results2").html("Operation cancelled.");
+						}
 					}
-					else {
-						jQuery("#results2").html("Operation cancelled.");
-					}
-				};
+				});
 
-				FileBrowser.attach(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
+				FileBrowser.attach(jQuery("#browserui"), fileSystemManager, initializer);
 				jQuery('#indriDialog').foundation('reveal', 'open'); 
 			});
 		}
@@ -151,7 +162,7 @@
 				initializer.viewFactory.views.push(new IconContentRenderer());
 				initializer.viewFactory.views.push(new DetailContentRenderer());
 
-				FileBrowser.attach(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
+				FileBrowser.attach(jQuery("#browserui"), fileSystemManager, initializer);
 				jQuery('#indriDialog').foundation('reveal', 'open'); 
 			});
 		})

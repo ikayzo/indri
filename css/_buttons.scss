@@ -3,7 +3,7 @@
 .ind-btn { 
   background: desaturate(lighten($btn-color, 20%), 10%);
   padding: 10px 15px; 
-  color: $text-main; 
+  color: $btn-text-color; 
   text-align: center; 
   display: inline-block; 
   zoom:1; 
@@ -34,7 +34,7 @@
 }
 .ind-btn-active   { 
   background: $btn-color; 
-  color: #fff !important;
+  color: $btn-text-color !important; /*#fff*/ 
   &:hover {
     background: lighten($btn-color, 5%); 
     color: $text-light;

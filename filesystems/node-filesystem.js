@@ -42,10 +42,10 @@ function encodeLocation(location) {
 }
 
 function handleFileRequest(req, res) {
-	console.log(req.url);
-	var result = { };
-
 	try {
+		console.log(req.url);
+		var result = { };
+
 		var parsedQuery = require('url').parse(req.url, true);
 		console.log('parsed query:', parsedQuery);
 
