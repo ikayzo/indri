@@ -1,0 +1,10 @@
+{
+    "rootDir" : "/path_to/directoy/you_want_to_serve",
+    "serverName" : "localhost",
+    "serverPort" : 1337,
+
+    "shortcuts" : [
+        { "name" : "Foo", "location": "/foo"},
+        { "name" : "Bar", "location": "/bar"},
+     ]
+}
