@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Indri : File browser web control" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Indri</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/ikayzo/indri">View on GitHub</a>
+
+          <h1 id="project_title">Indri</h1>
+          <h2 id="project_tagline">File browser web control</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/ikayzo/indri/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/ikayzo/indri/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="indri" class="anchor" href="#indri"><span class="octicon octicon-link"></span></a>Indri</h1>
+
+<p>Indri is a client-side web file dialog for selecting file or specifying a destination in a remote file repository. It can be styled to integrate with web applications, and provides full configuration through rendering and file system plugins.</p>
+
+<h2>
+<a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>Getting Started</h2>
+
+<p>First, Indri needs a web-based file system to talk to. The distribution provides a few sample implementations. To set up a file system for a local hard drive:</p>
+
+<ol>
+<li>Download/install Node.js</li>
+<li>Open a shell and cd to the indri/filesystems folder</li>
+<li>Execute this:  <code>node node-filesystem.js</code>
+</li>
+</ol><p>Optionally, you can provide a path to a config file, use the <code>.example</code>
+files in <code>filesystems/</code> as an template:</p>
+
+<div class="highlight highlight-bash"><pre>node node-filesystem.js config-nathan.json
+</pre></div>
+
+<p>If no file is specified, <code>node-filesystem.js</code> defaults to loading <code>./config-default.json</code>, which is configured to host the filesystem at <code>http://localhost:1337/</code>. You can view this location in a web browser to make sure it's set up correctly.</p>
+
+<h3>
+<a name="embedding-indri-in-a-web-page" class="anchor" href="#embedding-indri-in-a-web-page"><span class="octicon octicon-link"></span></a>Embedding Indri in a web page</h3>
+
+<p>Indri comes with standard configurations for open and save dialogs. The only additional configuration option that must be supplied is a callback for when file system items are selected or when the dialog is cancelled.</p>
+
+<p>The web page needs to have the <code>build/indri-current.version.number</code> folder uploaded to it, then include the indri.min.css stylesheet and indri-min.js script. Then, given an empty <code>div</code> with the id <code>mydialog</code>, the simplest Indri setup script using jQueryUI looks like this (version <code>0.5.0</code> is used in this example):</p>
+
+<div class="highlight highlight-html"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"jquery-1.10.2.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"jquery-ui-1.10.3.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"indri-0.5.0/indri.min.css"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">type=</span><span class="s">"text/css"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"indri-0.5.0/indri.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">fileSystemManager</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FileSystemManager</span><span class="p">(</span><span class="s2">"http://localhost:1337/"</span><span class="p">);</span>
+
+      <span class="nx">jQuery</span><span class="p">(</span><span class="s1">'#myDialog'</span><span class="p">).</span><span class="nx">load</span><span class="p">(</span><span class="s1">'indri-0.5.0/templates/indri.html #browserui'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">initializer</span> <span class="o">=</span> <span class="nx">jQuery</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="p">{},</span> <span class="nx">FileBrowser</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">OpenDialogInitializer</span><span class="p">,</span> <span class="p">{</span>
+
+        <span class="nx">resultCallback</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span> 
+            <span class="nx">jQuery</span><span class="p">(</span><span class="s1">'#myDialog'</span><span class="p">).</span><span class="nx">dialog</span><span class="p">(</span><span class="s1">'close'</span><span class="p">);</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>                        
+        <span class="p">}</span>
+    <span class="p">});</span>
+
+    <span class="nx">FileBrowser</span><span class="p">.</span><span class="nx">attach</span><span class="p">(</span><span class="nx">jQuery</span><span class="p">(</span><span class="s2">"#browserui"</span><span class="p">),</span> <span class="nx">fileSystemManager</span><span class="p">,</span> <span class="nx">initializer</span><span class="p">);</span>
+    <span class="nx">jQuery</span><span class="p">(</span><span class="s1">'#myDialog'</span><span class="p">).</span><span class="nx">dialog</span><span class="p">();</span> 
+<span class="p">});</span>
+</pre></div>
+
+<p>This uses the default settings for an Open File dialog, and provides a callback that closes the dialog and logs the result to the javascript console.</p>
+
+<p>The full documentation (<a href="https://github.com/ikayzo/indri/wiki">https://github.com/ikayzo/indri/wiki</a>) explains the parameters to FileBrowser.attach() in detail, and covers how to customize Indri's functionality and appearance.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Indri maintained by <a href="https://github.com/ikayzo">ikayzo</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
