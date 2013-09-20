@@ -9,7 +9,7 @@ module.exports = function(grunt) {
       },
       build: {
         files: {
-          'build/<%= pkg.name %>-<%= pkg.version %>.min.js': [
+          'build/<%= pkg.name %>-<%= pkg.version %>/indri.min.js': [
             'js/indri.fsm.js',
             'js/indri.base.js',
             'js/indri.content.renderer.base.js',
@@ -33,28 +33,30 @@ module.exports = function(grunt) {
           banner: '/* <%= pkg.name %>-<%= pkg.version %> minified css file */'
         },
         files: {
-          'build/<%= pkg.name %>-<%= pkg.version %>.min.css': ['css/indri.css']
+          'build/<%= pkg.name %>-<%= pkg.version %>/indri.min.css': ['css/indri.css']
         }
       }
     },
     copy: {
       main: {
         files: [{
-          expand: true,
-          flatten: true,
           src: [
-            'build/<%= pkg.name %>-<%= pkg.version %>.min.css',
-            'build/<%= pkg.name %>-<%= pkg.version %>.min.js'
+            'templates/*.html',
+            'fonts/*',
+            'img/*'
           ],
-          dest: 'examples/', filter: 'isFile'}
+          dest: 'build/<%= pkg.name %>-<%= pkg.version %>/', filter: 'isFile'}
         ]}
-    }
+    },
+    clean: ["build"]
   });
 
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
-  grunt.registerTask('default', ['sass', 'cssmin', 'uglify', 'copy']);
+  grunt.registerTask('default', ['sass']);
+  grunt.registerTask('release', ['clean', 'sass', 'cssmin', 'uglify', 'copy']);
 };

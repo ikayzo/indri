@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <script type="text/javascript" src="../../js/3rdparty/jquery-1.10.2.js"></script>
+    <link href="indri-0.5.0.min.css" rel="stylesheet" type="text/css">
+    <!--<script type="text/javascript" src="indri-0.5.0.min.js"></script>-->
+    <script type="text/javascript" src="../../js/indri.fsm.js"></script>
+    <script type="text/javascript" src="../../js/indri.base.js"></script>
+    <script type="text/javascript" src="../../js/indri.content.renderer.base.js"></script>
+    <script type="text/javascript" src="../../js/indri.content.renderers.js"></script>
+    <script type="text/javascript" src="../../js/indri.location.renderers.js"></script>
+    <script type="text/javascript" src="../../js/indri.main.js"></script>
+
+  </head>
+  <body>
+    <h1>FML</h1>
+    <div id="myDialog"></div>
+    <script type="text/javascript">
+      var fileSystemManager = new FileSystemManager("http://localhost:1337/");
+
+jQuery('#myDialog').load('indri.html #browserui', function() {
+    var initializer = jQuery.extend(true, {}, FileBrowser.prototype.OpenDialogInitializer, {
+
+        resultCallback : function(result) { 
+            jQuery('#myDialog').dialog('close');
+            console.log(result);                        
+        }
+    });
+
+    FileBrowser.attach(jQuery("#browserui"), fileSystemManager, initializer);
+    jQuery('#myDialog').dialog(); 
+});
+
+
+    </script>
+  </body>
+</html>
+
+
