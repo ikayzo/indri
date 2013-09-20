@@ -14,12 +14,11 @@
 
   </head>
   <body>
-    <h1>FML</h1>
     <div id="myDialog"></div>
     <script type="text/javascript">
       var fileSystemManager = new FileSystemManager("http://localhost:1337/");
 
-jQuery('#myDialog').load('indri.html #browserui', function() {
+jQuery('#myDialog').load('../templates/indri.html #browserui', function() {
     var initializer = jQuery.extend(true, {}, FileBrowser.prototype.OpenDialogInitializer, {
 
         resultCallback : function(result) { 

@@ -4,7 +4,6 @@ function ContentRenderer() {
 ContentRenderer.prototype = {
 
 	render : function(contents) {
-    console.log("rendering")
 		this._beginRender();
 
 		$list = this._renderContainer();

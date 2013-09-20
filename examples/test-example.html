@@ -83,7 +83,7 @@
 		var fileSystemManager = new FileSystemManager("http://localhost:1337/");
 
 		jQuery("#openBtn1").click(function() {
-			jQuery('#indriDialog').load('indri.html #browserui', function() {
+			jQuery('#indriDialog').load('../templates/indri.html #browserui', function() {
 				var initializer = jQuery.extend(true, {}, FileBrowser.prototype.OpenDialogInitializer, {
 
 					resultCallback : function(result) { 
