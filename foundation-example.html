@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="stylesheet" type="text/css" href="stylesheets/reset.css">
+	<script type="text/javascript" src="javascripts/jquery-1.10.2.js"></script>
+
+	<!-- Foundation -->
+	<script type="text/javascript" src="javascripts/foundation.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="stylesheets/foundation.min.css">
+
+	<style type="text/css">
+		/* Foundation specific styles */
+
+		/* Override Foundation Styling for pop up */
+		.reveal-modal 		{ height: 80%; padding: 0px;}
+
+	</style>
+
+	<link rel="stylesheet" type="text/css" href="indri-0.5.0/indri.min.css">
+</head>
+
+<body>
+  
+  <div class="row">
+	  <h2>Indri with Foundation test page</h2>
+  </div>
+  <div class="row">
+		<div class="large-6 columns">
+			File system:
+			<select id="fileSystem">
+				<option value="local">Local file system</option>
+				<option value="ikayzo">Ikayzo S3</option>
+			</select>
+		</div>
+		<div class="large-6 columns">
+			<button id="openBtn">Open...</button>
+			<button id="saveBtn">Save...</button>
+			<button id="debugBtn">Debug...</button>
+		</div>
+  </div>
+
+
+	<div id="indriDialog" class="reveal-modal"></div>
+ 
+  <div class="row panel">
+    <label>Results:</label>
+		<hr>
+		<table id="results"/>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Location</th>
+          <th>Created</th>
+          <th>Updated</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </ul>
+  </div>
+
+<script type="text/javascript" src="indri-0.5.0/indri.min.js"></script>
+<script type="text/javascript" src="javascripts/test-dlg.js"></script>
+
+<script type="text/javascript">
+
+	jQuery(document).ready(function() {
+		jQuery(document).foundation();
+
+		function showDialog(defaults) {
+			jQuery('#indriDialog').load('indri-0.5.0/templates/indri.html #browserui', function() {
+				var initializer = getDialogInitializer(defaults);
+
+				initializer.resultCallback = function(result) { 
+					jQuery('#indriDialog').foundation('reveal', 'close'); 
+					
+            jQuery("#results tbody").html("");
+					console.log(result); 
+					if(result.success){
+            var resultRow, resultCol, resultLink;
+            result.results.forEach( function(file, index) {
+              resultRow = jQuery(document.createElement("tr"))
+              resultCol = jQuery(document.createElement("td")).html(file.name);
+              resultRow.append(resultCol);
+              resultLink = jQuery(document.createElement("a")).attr("href", file.location).html(file.location);
+              console.log("resultLink", resultLink);
+              resultCol = jQuery(document.createElement("td")).html(resultLink);
+              resultRow.append(resultCol);
+              resultCol = jQuery(document.createElement("td")).html((new Date(file.created)));
+              resultRow.append(resultCol);
+              resultCol = jQuery(document.createElement("td")).html((new Date(file.modified)));
+              resultRow.append(resultCol);
+						  jQuery("#results tbody").append(resultRow);
+              console.log(file.name);
+            });
+					}
+					else {
+						jQuery("#results").html("Operation cancelled.");
+					}
+				};
+
+				FileBrowser.attach(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
+				jQuery('#indriDialog').foundation('reveal', 'open'); 
+			});
+		}
+
+		jQuery("#openBtn").click(function() { showDialog(FileBrowser.prototype.OpenDialogInitializer); });
+		jQuery("#saveBtn").click(function() { showDialog(FileBrowser.prototype.SaveDialogInitializer); });
+		jQuery("#debugBtn").click(function() { showDialog(FileBrowser.prototype.DebugDialogInitializer); });
+	});
+</script>
+
+</body>
+</html>

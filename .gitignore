@@ -1,7 +1,7 @@
 .DS_Store
 /aws-credentials.json
 /civilbeat-credentials.json
-filesystems/*.json
+filesystems
 *-ck.js
 .ruby-*
 .sass-cache
