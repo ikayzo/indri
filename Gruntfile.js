@@ -37,9 +37,20 @@ module.exports = function(grunt) {
         }
       }
     },
+    combine:{
+      single:{
+        input: "build/<%= pkg.name %>-<%= pkg.version %>/<%= pkg.name %>.min.css",
+        output: "build/<%= pkg.name %>-<%= pkg.version %>/<%= pkg.name %>.min.css",
+        tokens:[{
+          token: "\.\.\/fonts",
+          string: "fonts"
+        }]
+      }
+    },
     copy: {
       main: {
         files: [{
+          expand: true,
           src: [
             'templates/*.html',
             'fonts/*',
@@ -52,11 +63,13 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks("grunt-combine");
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
+
   grunt.registerTask('default', ['sass']);
-  grunt.registerTask('release', ['clean', 'sass', 'cssmin', 'uglify', 'copy']);
+  grunt.registerTask('release', ['clean', 'sass', 'cssmin', 'uglify', 'combine:single', 'copy']);
 };
