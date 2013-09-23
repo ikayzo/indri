@@ -76,7 +76,6 @@
 					jQuery('#indriDialog').foundation('reveal', 'close'); 
 					
             jQuery("#results tbody").html("");
-					console.log(result); 
 					if(result.success){
             var resultRow, resultCol, resultLink;
             result.results.forEach( function(file, index) {
@@ -84,7 +83,6 @@
               resultCol = jQuery(document.createElement("td")).html(file.name);
               resultRow.append(resultCol);
               resultLink = jQuery(document.createElement("a")).attr("href", file.location).html(file.location);
-              console.log("resultLink", resultLink);
               resultCol = jQuery(document.createElement("td")).html(resultLink);
               resultRow.append(resultCol);
               resultCol = jQuery(document.createElement("td")).html((new Date(file.created)));
@@ -92,7 +90,6 @@
               resultCol = jQuery(document.createElement("td")).html((new Date(file.modified)));
               resultRow.append(resultCol);
 						  jQuery("#results tbody").append(resultRow);
-              console.log(file.name);
             });
 					}
 					else {
