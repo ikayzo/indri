@@ -29,7 +29,7 @@
 		<div class="large-6 columns">
 			File system:
 			<select id="fileSystem">
-				<option value="local">Local file system</option>
+				<option value="local">Node file system</option>
 				<option value="ikayzo">Ikayzo S3</option>
 			</select>
 		</div>
@@ -66,6 +66,7 @@
 <script type="text/javascript">
 
 	jQuery(document).ready(function() {
+      var nodeUrl = 'http://indri-filesystem.herokuapp.com/';
 		jQuery(document).foundation();
 
 		function showDialog(defaults) {
@@ -77,12 +78,14 @@
 					
             jQuery("#results tbody").html("");
 					if(result.success){
-            var resultRow, resultCol, resultLink;
+            var resultRow, resultCol, resultHref, resultLink;
             result.results.forEach( function(file, index) {
               resultRow = jQuery(document.createElement("tr"))
               resultCol = jQuery(document.createElement("td")).html(file.name);
               resultRow.append(resultCol);
-              resultLink = jQuery(document.createElement("a")).attr("href", file.location).html(file.location);
+              resultHref = 
+              resultLink =
+              jQuery(document.createElement("a")).attr("href", nodeUrl + file.previewUrl).html(nodeUrl + file.previewUrl);
               resultCol = jQuery(document.createElement("td")).html(resultLink);
               resultRow.append(resultCol);
               resultCol = jQuery(document.createElement("td")).html((new Date(file.created)));
@@ -97,7 +100,8 @@
 					}
 				};
 
-				FileBrowser.attach(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
+				FileBrowser.attach(jQuery("#browserui"), new
+            FileSystemManager(nodeUrl), initializer);
 				jQuery('#indriDialog').foundation('reveal', 'open'); 
 			});
 		}
