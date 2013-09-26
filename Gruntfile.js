@@ -73,8 +73,18 @@ module.exports = function(grunt) {
             '<%= pkg.name %>-<%= pkg.version %>/templates/*'
           ],
           dest: 'examples/'
-        }
-        ]}
+        }]
+      },
+      update_filesystem: {
+        files: [{
+          cwd: 'src/filesystems',
+          expand: true,
+          filter: 'isFile',
+          src: ['*'],
+          filter: 'isFile',
+          dest: '../indri-filesystem/'
+        }],
+      }
     },
     clean: ['build', 'examples/<%= pkg.name %>-*/']
   });
@@ -89,4 +99,5 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', ['sass']);
   grunt.registerTask('release', ['clean', 'sass', 'cssmin', 'uglify', 'copy', 'copy']);
+  grunt.registerTask('update-filesystem', ['copy:update_filesystem']);
 };
