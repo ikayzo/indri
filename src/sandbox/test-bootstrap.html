@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="stylesheet" type="text/css" href="../../css/reset.css">
+	<script type="text/javascript" src="../../js/3rdparty/jquery-1.10.2.js"></script>
+
+	<!-- Bootstrap CDN -->
+	<!--<script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">-->
+
+	<script type="text/javascript" src="../../js/3rdparty/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../css/bootstrap.min.css">
+
+	<style type="text/css">
+		/* Bootstrap specific styles */
+		.modal { width: 80%; margin: 0 10%; left: 0; height: 80%;}
+
+	</style>
+
+
+	<link rel="stylesheet" type="text/css" href="../../css/indri.css">
+</head>
+
+<body>
+	<h2>Indri with Bootstrap test page</h2>
+	<div>
+		File system:
+		<select id="fileSystem">
+			<option value="local">Local file system</option>
+			<option value="ikayzo">Ikayzo S3</option>
+			<option value="civilbeat">Civil Beat S3</option>
+		</select>
+	</div>
+
+	<div>
+		<button id="openBtn">Open...</button>
+		<button id="saveBtn">Save...</button>
+		<button id="debugBtn">Debug...</button>
+	</div>
+
+	<div id="indriDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+ 
+	Results:
+	<div id="results"/>
+
+	<hr>
+
+<script type="text/javascript" src="../../js/indri.fsm.js"></script>
+<script type="text/javascript" src="../../js/indri.base.js"></script>
+<script type="text/javascript" src="../../js/indri.content.renderer.base.js"></script>
+<script type="text/javascript" src="../../js/indri.content.renderers.js"></script>
+<script type="text/javascript" src="../../js/indri.location.renderers.js"></script>
+<script type="text/javascript" src="../../js/indri.main.js"></script>
+
+<script type="text/javascript" src="test-dlg.js"></script>
+
+<script type="text/javascript">
+
+	jQuery(document).ready(function() {
+		function showDialog(defaults) {
+			jQuery('#indriDialog').load('../templates/indri.html #browserui', function() {
+				var initializer = getDialogInitializer(defaults);
+
+				initializer.resultCallback = function(result) { 
+					jQuery('#indriDialog').modal('hide'); 
+
+					console.log(result); 
+					if(result.success){
+						jQuery("#results").html("Selected items: " + JSON.stringify(result.results));						
+					}
+					else {
+						jQuery("#results").html("Operation cancelled.");
+					}
+				};
+
+				FileBrowser.attach(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
+				jQuery('#indriDialog').modal('show'); 
+			});
+		}
+
+		jQuery("#openBtn").click(function() { showDialog(FileBrowser.prototype.OpenDialogInitializer); });
+		jQuery("#saveBtn").click(function() { showDialog(FileBrowser.prototype.SaveDialogInitializer); });
+		jQuery("#debugBtn").click(function() { showDialog(FileBrowser.prototype.DebugDialogInitializer); });
+	});
+</script>
+
+</body>
+</html>

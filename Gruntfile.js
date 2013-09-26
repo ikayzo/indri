@@ -10,12 +10,12 @@ module.exports = function(grunt) {
       build: {
         files: {
           'build/<%= pkg.name %>-<%= pkg.version %>/indri.min.js': [
-            'js/indri.fsm.js',
-            'js/indri.base.js',
-            'js/indri.content.renderer.base.js',
-            'js/indri.content.renderers.js',
-            'js/indri.location.renderers.js',
-            'js/indri.main.js'
+            'src/js/indri.fsm.js',
+            'src/js/indri.base.js',
+            'src/js/indri.content.renderer.base.js',
+            'src/js/indri.content.renderers.js',
+            'src/js/indri.location.renderers.js',
+            'src/js/indri.main.js'
           ]
         }
       }
@@ -23,7 +23,7 @@ module.exports = function(grunt) {
     sass: {
       dist: {
         files: {
-          'css/indri.css': 'css/indri.scss'
+          'src/css/indri.css': 'src/css/indri.scss'
         }
       }
     },
@@ -33,11 +33,11 @@ module.exports = function(grunt) {
           banner: '/* <%= pkg.name %>-<%= pkg.version %> minified css file */'
         },
         files: {
-          'build/<%= pkg.name %>-<%= pkg.version %>/indri.min.css': ['css/indri.css']
+          'build/<%= pkg.name %>-<%= pkg.version %>/indri.min.css': ['src/css/indri.css']
         }
       }
     },
-    combine:{
+    /*combine:{
       single:{
         input: "build/<%= pkg.name %>-<%= pkg.version %>/<%= pkg.name %>.min.css",
         output: "build/<%= pkg.name %>-<%= pkg.version %>/<%= pkg.name %>.min.css",
@@ -46,20 +46,37 @@ module.exports = function(grunt) {
           string: "fonts"
         }]
       }
-    },
+    },*/
     copy: {
       main: {
         files: [{
+          cwd: 'src',
+          expand: true,
+          filter: 'isFile',
+          src: ['templates/*.html', 'img/*'],
+          dest: 'build/<%= pkg.name %>-<%= pkg.version %>/',
+          filter: 'isFile'
+        },{
+          cwd: 'src/css',
+          expand: true,
+          filter: 'isFile',
+          src: ['fonts/*'],
+          dest: 'build/<%= pkg.name %>-<%= pkg.version %>/',
+          filter: 'isFile'
+        },{
+          cwd: 'build',
           expand: true,
           src: [
-            'templates/*.html',
-            'fonts/*',
-            'img/*'
+            '<%= pkg.name %>-<%= pkg.version %>/*',
+            '<%= pkg.name %>-<%= pkg.version %>/fonts/*',
+            '<%= pkg.name %>-<%= pkg.version %>/img/*',
+            '<%= pkg.name %>-<%= pkg.version %>/templates/*'
           ],
-          dest: 'build/<%= pkg.name %>-<%= pkg.version %>/', filter: 'isFile'}
+          dest: 'examples/'
+        }
         ]}
     },
-    clean: ["build"]
+    clean: ['build', 'examples/<%= pkg.name %>-*/']
   });
 
   grunt.loadNpmTasks('grunt-contrib-clean');
@@ -71,5 +88,5 @@ module.exports = function(grunt) {
 
 
   grunt.registerTask('default', ['sass']);
-  grunt.registerTask('release', ['clean', 'sass', 'cssmin', 'uglify', 'combine:single', 'copy']);
+  grunt.registerTask('release', ['clean', 'sass', 'cssmin', 'uglify', 'copy', 'copy']);
 };
