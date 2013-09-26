@@ -98,6 +98,6 @@ module.exports = function(grunt) {
 
 
   grunt.registerTask('default', ['sass']);
-  grunt.registerTask('release', ['clean', 'sass', 'cssmin', 'uglify', 'copy', 'copy']);
+  grunt.registerTask('release', ['clean', 'sass', 'cssmin', 'uglify', 'copy:main', 'copy:main']);
   grunt.registerTask('update-filesystem', ['copy:update_filesystem']);
 };
