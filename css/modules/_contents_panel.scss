@@ -131,10 +131,11 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
       padding: 7px 10px; 
       position: relative;
       background: $th; 
-      color: $text-dark;
+      color: $text-th;
       border-left: 1px solid $border-light; 
       &:hover {
         background: $highlight-color;
+        color: $text-th-hover;
       }
       &:first-child { 
         border-left: none;

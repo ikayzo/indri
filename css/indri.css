@@ -19,14 +19,6 @@ Buttons
 /*==============================
       BASIC CUSTOMIZATIONS          
 ===============================*/
-/* Ikayzo Theme */
-/* Retro Theme */
-/* Minimal Theme */
-/* Theme - Basic  */
-/* Dark & Yellow Theme */
-/* Dark & Hot Pink Theme */
-/* 'dark' or 'light' */
-/* Civil Beat Theme */
 /*==============================
       DEFAULT STYLE RULES       
 ===============================*/
@@ -69,7 +61,7 @@ body {
   font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
   font-size: 13px;
   line-height: 1.0;
-  color: #444444; }
+  color: white; }
 
 ul, ol, dl {
   margin: 0;
@@ -79,16 +71,16 @@ ul, ol, dl {
 /* breadcrumb */
 a {
   text-decoration: underline;
-  color: #333333; }
+  color: #f8c600; }
   a:hover {
-    color: #595959; }
+    color: #ffda45; }
 
 .ind-location-divider, .ind-location-segment {
-  color: #333333; }
+  color: #f8c600; }
 
 /* status display */
 #filename-save label {
-  color: #444444; }
+  color: white; }
 
 /* Typography */
 /* Icon Font */
@@ -104,7 +96,7 @@ a {
 .entypo {
   font-family: "entypo";
   line-height: 1.0em;
-  color: #444444; }
+  color: white; }
 
 .icon-folder {
   color: #e8aa50; }
@@ -124,9 +116,9 @@ a {
 /* Icon Font (Entypo) */
 /* --- Buttons --- */
 .ind-btn {
-  background: #b0c7d3;
+  background: #f7da67;
   padding: 10px 15px;
-  color: #444444;
+  color: #333333 !important;
   text-align: center;
   display: inline-block;
   zoom: 1;
@@ -138,7 +130,7 @@ a {
   text-decoration: none; }
   .ind-btn:hover {
     color: inherit;
-    background: #c0d3dc; }
+    background: #f8e07f; }
   .ind-btn.entypo {
     width: 35px;
     height: 35px;
@@ -150,17 +142,17 @@ a {
   color: #aaa;
   cursor: no-drop; }
   .ind-btn-dis:hover {
-    background: #cddfe9; }
+    background: #ffe992; }
 
 .ind-btn-active {
-  background: #639cba;
-  color: #444444 !important;
+  background: #f8c600;
+  color: #333333 !important !important;
   /*#fff*/ }
   .ind-btn-active:hover {
-    background: #75a7c2;
-    color: white; }
+    background: #ffcf13;
+    color: #333333; }
   .ind-btn-active:active {
-    background: #5d9ec0; }
+    background: #f8c600; }
 
 /* Button Settings */
 /* General Structure */
@@ -185,7 +177,7 @@ a {
 
 #header-wrapper,
 #footer-wrapper {
-  border-color: #aaaaaa;
+  border-color: black !important;
   border-style: solid;
   overflow: hidden; }
 
@@ -204,7 +196,7 @@ a {
 /* Shortcut Window */
 #aside-wrapper-left {
   left: 0;
-  border-right: 1px solid #aaaaaa; }
+  border-right: 1px solid black !important; }
 
 .ind-show-preview {
   margin-right: 300px; }
@@ -219,8 +211,8 @@ a {
 /* Preview Window */
 #aside-wrapper-right {
   right: 0;
-  background: white;
-  border-left: 1px solid #aaaaaa;
+  background: #444444 !important;
+  border-left: 1px solid black !important;
   padding: 15px 20px; }
 
 .ind-show-shortcuts {
@@ -253,7 +245,7 @@ a {
 /* --- Header Sections --- */
 #title-control {
   font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-  background: #ef9109;
+  background: black;
   text-align: center;
   padding: 10px 15px;
   text-transform: uppercase;
@@ -264,12 +256,12 @@ a {
   width: 100%; }
 
 #header-wrapper {
-  border-color: #aaaaaa;
-  background: #edece7; }
+  border-color: black !important;
+  background: #333333; }
 
 #footer-wrapper {
-  border-color: #aaaaaa;
-  background: #edece7; }
+  border-color: black !important;
+  background: #333333; }
 
 /*==================
       controls 
@@ -307,29 +299,29 @@ a {
 
 /* --- Left Shortcut Content --- */
 #aside-wrapper-left {
-  background: #f4f3f0; }
+  background: #3b3b3b; }
 
 .ind-shortcut-list li {
   padding: 15px 15px;
   font-weight: bold;
-  color: #1e1e1e; }
+  color: white; }
 
 .ind-listitem.ind-shortcut-item {
-  background: #edece7;
-  border-bottom: 1px solid #edece7;
-  color: #444444; }
+  background: #333333;
+  border-bottom: 1px solid #333333;
+  color: white; }
   .ind-listitem.ind-shortcut-item:hover {
-    background: #f0d0a1 !important;
-    color: #444444 !important; }
+    background: #4d4d4d !important;
+    color: white !important; }
 
 .ind-listitem.ind-shortcut-selected {
-  background: #ef9109 !important; }
+  background: black !important; }
   .ind-listitem.ind-shortcut-selected .ind-shortcut-name {
-    color: white; }
+    color: #f8c600; }
   .ind-listitem.ind-shortcut-selected:hover {
-    background: #f7a734 !important; }
+    background: #1a1a1a !important; }
   .ind-listitem.ind-shortcut-selected:active {
-    background: #f9bd65 !important; }
+    background: #333333 !important; }
 
 /* --- Overall Content --- */
 .ind-wrapper {
@@ -339,7 +331,7 @@ a {
 
 /* --- Center Content --- */
 #contents-panel {
-  background: white; }
+  background: #444444 !important; }
 
 #aside-wrapper-left,
 #section-wrapper,
@@ -377,9 +369,9 @@ a {
       cursor: default;
       /* Remove text cursor - Add to mobile */ }
     .ind-content li:nth-child(6n+1), .ind-content li:nth-child(6n+2), .ind-content li:nth-child(6n+3) {
-      background: #f8f8f6; }
+      background: #404040; }
   .ind-content tr:nth-child(odd) {
-    background: #f8f8f6; }
+    background: #404040; }
   .ind-content .ind-editable-name {
     white-space: nowrap;
     overflow: hidden;
@@ -388,25 +380,25 @@ a {
     padding: 4px 0;
     letter-spacing: 0.06em; }
   .ind-content .ind-content-selected {
-    background: #639cba !important; }
+    background: #f8c600 !important; }
     .ind-content .ind-content-selected td, .ind-content .ind-content-selected .ind-editable-name, .ind-content .ind-content-selected .entypo {
-      color: white !important; }
+      color: #333333 !important; }
     .ind-content .ind-content-selected .icon-folder {
-      color: #e8aa50 !important; }
+      color: black !important; }
     .ind-content .ind-content-selected:hover {
-      background: #86b2ca !important; }
+      background: #ffd42c !important; }
 
 table tr.even, table tr.alt, table tr:nth-of-type(even) {
-  background: white; }
+  background: #444444 !important; }
 
 /* --- List View --- */
 .ind-listitem {
   padding: 5px; }
   .ind-listitem:hover {
-    background: #cddfe9 !important;
-    color: #1e1e1e !important; }
+    background: #ffe992 !important;
+    color: #333333 !important; }
     .ind-listitem:hover .entypo {
-      color: #1e1e1e; }
+      color: #333333; }
   .ind-listitem .ind-editable-name {
     margin: 0 0 0 5px;
     top: -4px;
@@ -419,10 +411,10 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
   text-align: center; }
 
 .ind-iconitem:hover {
-  background: #cddfe9 !important;
-  color: #1e1e1e; }
+  background: #ffe992 !important;
+  color: #333333; }
   .ind-iconitem:hover .entypo {
-    color: #1e1e1e; }
+    color: #333333; }
 
 /* --- Detail/Table View --- */
 .ind-detaillist {
@@ -433,29 +425,30 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
     text-align: left;
     padding: 7px 10px;
     position: relative;
-    background: #ccc9bb;
-    color: #1e1e1e;
-    border-left: 1px solid white; }
+    background: #0d0d0d;
+    color: white;
+    border-left: 1px solid #333333 !important; }
     .ind-detaillist th:hover {
-      background: #cddfe9; }
+      background: #ffe992;
+      color: #333333; }
     .ind-detaillist th:first-child {
       border-left: none; }
   .ind-detaillist tr {
-    background: white; }
+    background: #444444 !important; }
     .ind-detaillist tr:hover {
-      background: #cddfe9 !important; }
+      background: #ffe992 !important; }
       .ind-detaillist tr:hover td {
-        color: #1e1e1e; }
+        color: #333333; }
         .ind-detaillist tr:hover td .icon-file {
-          color: #1e1e1e; }
+          color: #333333; }
         .ind-detaillist tr:hover td .icon-folder {
-          color: #1e1e1e; }
+          color: #333333; }
     .ind-detaillist tr td {
       padding: 0 10px;
       height: 32px;
       /* Min Height */
       vertical-align: middle;
-      color: #1e1e1e; }
+      color: white; }
       .ind-detaillist tr td:first-child {
         width: 40px;
         text-align: center; }
@@ -463,11 +456,11 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
 /* Table Sort */
 th.ind-col-sort-asc,
 th.ind-col-sort-desc {
-  background: #639cba !important;
-  color: white; }
+  background: #f8c600 !important;
+  color: #333333; }
   th.ind-col-sort-asc:hover,
   th.ind-col-sort-desc:hover {
-    background: #86b2ca !important; }
+    background: #ffd42c !important; }
 
 .ind-col-sort {
   display: inline-block;
@@ -477,7 +470,7 @@ th.ind-col-sort-desc {
   top: 0;
   line-height: 0.55em;
   position: absolute;
-  color: white; }
+  color: #333333; }
 
 /* --- Footer Sections --- */
 #filename-panel {
@@ -508,7 +501,7 @@ th.ind-col-sort-desc {
   width: 30%; }
 
 #status-panel {
-  background: #ccc9bb;
+  background: #0d0d0d;
   bottom: 0px;
   position: absolute;
   width: 100%; }
