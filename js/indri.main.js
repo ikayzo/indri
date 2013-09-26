@@ -330,12 +330,17 @@ FileBrowser.prototype = {
 		this._getUiElem(this.uiNames.accept).click(function() { fileBrowser._returnResults(true, fileBrowser.currentSelection); });
 		this._getUiElem(this.uiNames.cancel).click(function() { fileBrowser._returnResults(false); });
 
+
 		if(initializer.visibility['shortcutsPanel']) {
-			this.fsm.getShortcuts(this._makeCallback(this._updateShortcuts), 
-				this._makeCallback(function() { 
-					this._setVisible(this.uiNames.shortcutsPanel, false);
-					this.navigateToRoot();
-				}));
+      fileBrowser.shortcuts = [];
+			this.fsm.getShortcuts(this._makeCallback(this._updateShortcuts));
+			this.fsm.getShortcuts(this._makeCallback(function(shortcuts){
+        if (shortcuts.length > 0) {
+		      this.navigateToLocation(shortcuts[0].location);
+        } else {
+			    this.navigateToRoot();
+        }
+      }));
 		}
 		else {
 			this.navigateToRoot();
@@ -379,6 +384,7 @@ FileBrowser.prototype = {
 		previewControls		: "#preview-panel",
 		preview 			: "#aside-wrapper-right",
 		shortcuts 			: '#shortcuts-control',
+		shortcutsList 			: '#ind-shortcut-list',
 		shortcutsPanel 		: "#aside-wrapper-left",
 	},
 
