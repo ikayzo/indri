@@ -38,7 +38,7 @@
 	</div>
 
 	<h3>Results:</h3>
-	<div id="results" style="color: black;"></div>
+	<div id="results" ></div>
 
 	<hr>
 
@@ -60,7 +60,7 @@
 		jQuery(document).foundation();
 
 		function showDialog(defaults) {
-			jQuery('#indriDialog').load('../templates/indri.html #browserui', function() {
+			jQuery('#indriDialog').load('../templates/indri.html #indriui', function() {
 				var initializer = getDialogInitializer(defaults);
 
 				initializer.resultCallback = function(result) { 
@@ -75,7 +75,7 @@
 					}
 				};
 
-				FileBrowser.attach(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
+				FileBrowser.attach(jQuery("#indriui"), new FileSystemManager("http://localhost:1337/"), initializer);
 				jQuery('#indriDialog').foundation('reveal', 'open'); 
 			});
 		}

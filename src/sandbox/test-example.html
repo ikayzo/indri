@@ -83,7 +83,7 @@
 		var fileSystemManager = new FileSystemManager("http://localhost:1337/");
 
 		jQuery("#openBtn1").click(function() {
-			jQuery('#indriDialog').load('../templates/indri.html #browserui', function() {
+			jQuery('#indriDialog').load('../templates/indri.html #indriui', function() {
 				var initializer = jQuery.extend(true, {}, FileBrowser.prototype.OpenDialogInitializer, {
 
 					resultCallback : function(result) { 
@@ -92,13 +92,13 @@
 					}
 				});
 
-				FileBrowser.attach(jQuery("#browserui"), fileSystemManager, initializer);
+				FileBrowser.attach(jQuery("#indriui"), fileSystemManager, initializer);
 				jQuery('#indriDialog').foundation('reveal', 'open'); 
 			});
 		});
 
 		function showDialog(defaults) {
-			jQuery('#indriDialog').load('indri.html #browserui', function() {
+			jQuery('#indriDialog').load('indri.html #indriui', function() {
 				var initializer = jQuery.extend(true, {}, defaults, {
 
 					resultCallback : function(result) { 
@@ -113,7 +113,7 @@
 					}
 				});
 
-				FileBrowser.attach(jQuery("#browserui"), fileSystemManager, initializer);
+				FileBrowser.attach(jQuery("#indriui"), fileSystemManager, initializer);
 				jQuery('#indriDialog').foundation('reveal', 'open'); 
 			});
 		}
@@ -122,7 +122,7 @@
 		jQuery("#saveBtn2").click(function() { showDialog(FileBrowser.prototype.SaveDialogInitializer); });
 
 		jQuery("#openBtn3").click(function() {
-			jQuery('#indriDialog').load('indri.html #browserui', function() {
+			jQuery('#indriDialog').load('indri.html #indriui', function() {
 				var initializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
 
 					multiSelect : true,
@@ -161,7 +161,7 @@
 				initializer.viewFactory.views.push(new IconContentRenderer());
 				initializer.viewFactory.views.push(new DetailContentRenderer());
 
-				FileBrowser.attach(jQuery("#browserui"), fileSystemManager, initializer);
+				FileBrowser.attach(jQuery("#indriui"), fileSystemManager, initializer);
 				jQuery('#indriDialog').foundation('reveal', 'open'); 
 			});
 		})

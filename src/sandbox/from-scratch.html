@@ -18,7 +18,7 @@
     <script type="text/javascript">
       var fileSystemManager = new FileSystemManager("http://localhost:1337/");
 
-jQuery('#myDialog').load('../templates/indri.html #browserui', function() {
+jQuery('#myDialog').load('../templates/indri.html #indriui', function() {
     var initializer = jQuery.extend(true, {}, FileBrowser.prototype.OpenDialogInitializer, {
 
         resultCallback : function(result) { 
