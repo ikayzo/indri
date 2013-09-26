@@ -1,85 +1,76 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-	<link rel="stylesheet" type="text/css" href="../../css/reset.css">
-	<script type="text/javascript" src="../../js/3rdparty/jquery-1.10.2.js"></script>
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/reset.css">
+    <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
 
-	<!-- jQueryUI -->
-	<script type="text/javascript" src="../../js/3rdparty/jquery-ui-1.10.3.custom.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="../../css/ui-lightness/jquery-ui-1.10.3.custom.min.css">
+    <script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/ui-lightness/jquery-ui-1.10.3.custom.min.css">
 
-	<style type="text/css">
-		/* jQueryUI specific styles */
-		.ui-widget[role="dialog"] {  -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0; border: 0; padding: 0; width: 80%!important; height: 80%!important;  }
-		.ui-widget #indriDialog { width: 100% !important; height: 100%!important; padding:0; border: 1px solid #ddd; background: none;}
-	</style>
+    <style type="text/css">
+      /* jQueryUI specific styles */
+      .ui-widget[role="dialog"] {  -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0; border: 0; padding: 0; width: 80%!important; height: 80%!important;  }
+      .ui-widget #indriDialog { width: 100% !important; height: 100%!important; padding:0; border: 1px solid #ddd; background: none;}
+    </style>
 
-	<link rel="stylesheet" type="text/css" href="../../css/indri.css">
-</head>
+    <link rel="stylesheet" type="text/css" href="indri-0.5.0/indri.min.css">
+  </head>
 
-<body>
-	<h2>Indri with jQueryUI test page</h2>
-	<div>
-		File system:
-		<select id="fileSystem">
-			<option value="local">Local file system</option>
-			<option value="ikayzo">Ikayzo S3</option>
-			<option value="civilbeat">Civil Beat S3</option>
-		</select>
-	</div>
+  <body>
+    <h2>Indri with jQueryUI test page</h2>
+    <div>
+      File system:
+      <select id="fileSystem">
+        <option value="local">Local file system</option>
+        <option value="ikayzo">Ikayzo S3</option>
+        <option value="civilbeat">Civil Beat S3</option>
+      </select>
+    </div>
 
-	<div>
-		<button id="openBtn">Open...</button>
-		<button id="saveBtn">Save...</button>
-		<button id="debugBtn">Debug...</button>
-	</div>
+    <div>
+      <button id="openBtn">Open...</button>
+      <button id="saveBtn">Save...</button>
+      <button id="debugBtn">Debug...</button>
+    </div>
 
-	<div id="indriDialog" class="reveal-modal"></div>
- 
-	Results:
-	<div id="results"/>
+    <div id="indriDialog" class="reveal-modal"></div>
 
-	<hr>
+    Results:
+    <div id="results"/>
 
-<script type="text/javascript" src="../../js/indri.fsm.js"></script>
-<script type="text/javascript" src="../../js/indri.base.js"></script>
-<script type="text/javascript" src="../../js/indri.content.renderer.base.js"></script>
-<script type="text/javascript" src="../../js/indri.content.renderers.js"></script>
-<script type="text/javascript" src="../../js/indri.location.renderers.js"></script>
-<script type="text/javascript" src="../../js/indri.main.js"></script>
+      <hr>
 
-<script type="text/javascript" src="test-dlg.js"></script>
+      <script type="text/javascript" src="indri-0.5.0/indri.min.js"></script>
+      <script type="text/javascript" src="test-dlg.js"></script>
+      <script type="text/javascript">
 
-<script type="text/javascript">
+        jQuery(document).ready(function() {
+            function showDialog(defaults) {
+            jQuery('#indriDialog').load('indri-0.5.0/templates/indri.html #browserui', function() {
+              var initializer = getDialogInitializer(defaults);
 
-	jQuery(document).ready(function() {
-		function showDialog(defaults) {
-			jQuery('#indriDialog').load('../templates/indri.html #browserui', function() {
-				var initializer = getDialogInitializer(defaults);
+              initializer.resultCallback = function(result) { 
+              jQuery('#indriDialog').dialog('close'); 
 
-				initializer.resultCallback = function(result) { 
-					jQuery('#indriDialog').dialog('close'); 
+              console.log(result); 
+              if(result.success){
+              jQuery("#results").html("Selected items: " + JSON.stringify(result.results));						
+              }
+              else {
+              jQuery("#results").html("Operation cancelled.");
+              }
+              };
 
-					console.log(result); 
-					if(result.success){
-						jQuery("#results").html("Selected items: " + JSON.stringify(result.results));						
-					}
-					else {
-						jQuery("#results").html("Operation cancelled.");
-					}
-				};
+              FileBrowser.attach(jQuery("#browserui"), new FileSystemManager("http://indri-filesystem.herokuapp.com/"), initializer);
+              jQuery('#indriDialog').dialog(); 
+              });
+            }
 
-				FileBrowser.attach(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
-				jQuery('#indriDialog').dialog(); 
-			});
-		}
-
-		jQuery("#openBtn").click(function() { showDialog(FileBrowser.prototype.OpenDialogInitializer); });
-		jQuery("#saveBtn").click(function() { showDialog(FileBrowser.prototype.SaveDialogInitializer); });
-		jQuery("#debugBtn").click(function() { showDialog(FileBrowser.prototype.DebugDialogInitializer); });
-	});
-</script>
-
-</body>
-</html>
+            jQuery("#openBtn").click(function() { showDialog(FileBrowser.prototype.OpenDialogInitializer); });
+            jQuery("#saveBtn").click(function() { showDialog(FileBrowser.prototype.SaveDialogInitializer); });
+            jQuery("#debugBtn").click(function() { showDialog(FileBrowser.prototype.DebugDialogInitializer); });
+        });
+      </script>
+    </body>
+  </html>

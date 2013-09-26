@@ -2,12 +2,12 @@
 <html>
 
 <head>
-	<link rel="stylesheet" type="text/css" href="../../css/reset.css">
-	<script type="text/javascript" src="../../js/3rdparty/jquery-1.10.2.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/reset.css">
+	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
 
 	<!-- Foundation -->
-	<script type="text/javascript" src="../../js/3rdparty/foundation.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="../../css/foundation.min.css">
+	<script type="text/javascript" src="js/foundation.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/foundation.min.css">
 
 	<style type="text/css">
 		/* Foundation specific styles */
@@ -17,7 +17,7 @@
 
 	</style>
 
-	<link rel="stylesheet" type="text/css" href="../../css/indri.css">
+	<link rel="stylesheet" type="text/css" href="indri-0.5.0/indri.min.css">
 </head>
 
 <body>
@@ -44,13 +44,7 @@
 
 	<hr>
 
-<script type="text/javascript" src="../../js/indri.fsm.js"></script>
-<script type="text/javascript" src="../../js/indri.base.js"></script>
-<script type="text/javascript" src="../../js/indri.content.renderer.base.js"></script>
-<script type="text/javascript" src="../../js/indri.content.renderers.js"></script>
-<script type="text/javascript" src="../../js/indri.location.renderers.js"></script>
-<script type="text/javascript" src="../../js/indri.main.js"></script>
-
+<script type="text/javascript" src="indri-0.5.0/indri.min.js"></script>
 <script type="text/javascript" src="test-dlg.js"></script>
 
 <script type="text/javascript">
@@ -59,7 +53,7 @@
 		jQuery(document).foundation();
 
 		function showDialog(defaults) {
-			jQuery('#indriDialog').load('../templates/indri.html #browserui', function() {
+			jQuery('#indriDialog').load('indri-0.5.0/templates/indri.html #browserui', function() {
 				var initializer = getDialogInitializer(defaults);
 
 				initializer.resultCallback = function(result) { 
@@ -74,7 +68,7 @@
 					}
 				};
 
-				FileBrowser.attach(jQuery("#browserui"), new FileSystemManager("http://localhost:1337/"), initializer);
+				FileBrowser.attach(jQuery("#browserui"), new FileSystemManager("http://indri-filesystem.herokuapp.com/"), initializer);
 				jQuery('#indriDialog').foundation('reveal', 'open'); 
 			});
 		}
