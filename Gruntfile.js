@@ -37,16 +37,6 @@ module.exports = function(grunt) {
         }
       }
     },
-    /*combine:{
-      single:{
-        input: "build/<%= pkg.name %>-<%= pkg.version %>/<%= pkg.name %>.min.css",
-        output: "build/<%= pkg.name %>-<%= pkg.version %>/<%= pkg.name %>.min.css",
-        tokens:[{
-          token: "\.\.\/fonts",
-          string: "fonts"
-        }]
-      }
-    },*/
     copy: {
       main: {
         files: [{
@@ -90,7 +80,6 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks("grunt-combine");
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-sass');
