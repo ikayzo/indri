@@ -30,6 +30,7 @@ function getDialogInitializer(defaults) {
 	function initLocalFileSystem(initializer) {
 		initializer.locationRenderer = new SegmentedLocationRenderer();
 		initializer.visibility.shortcutsPanel = true;
+		initializer.previewRenderer.baseUrl = 'http://indri-filesystem.herokuapp.com/';
 	}
 
 	function initAwsFileSystem(initializer) {
@@ -37,7 +38,6 @@ function getDialogInitializer(defaults) {
 
 		initializer.locationRenderer = new BucketLocationRenderer();
 
-		initializer.previewRenderer.baseUrl = 'http://ikayzo-files.s3.amazonaws.com/';
 	}
 
 	function initCivilBeatFileSystem(initializer) {

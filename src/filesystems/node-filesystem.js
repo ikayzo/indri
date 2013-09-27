@@ -49,6 +49,7 @@ function handleFileRequest(req, res) {
 		var parsedQuery = require('url').parse(req.url, true);
 		console.log('parsed query:', parsedQuery);
 
+    // if action is undefined serve the file
 		var action = parsedQuery.query.action || "browse";
 		var loc = parseLocation(parsedQuery.query.loc);
 		console.log(parsedQuery.query.loc, ' -> ', loc);
