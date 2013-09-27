@@ -38,7 +38,7 @@
 	</div>
 
 	<h3>Results:</h3>
-	<div id="results" ></div>
+    <div id="results">Dialog not opened yet.</div>
 
 	<hr>
 
@@ -75,7 +75,7 @@
 					}
 				};
 
-				FileBrowser.attach(jQuery("#indriui"), new FileSystemManager("http://localhost:1337/"), initializer);
+				FileBrowser.attach(jQuery(this).children("div").first(), new FileSystemManager("http://localhost:1337/"), initializer);
 				jQuery('#indriDialog').foundation('reveal', 'open'); 
 			});
 		}

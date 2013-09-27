@@ -2,12 +2,12 @@
 <html>
 
 <head>
-	<link rel="stylesheet" type="text/css" href="../../css/reset.css">
-	<script type="text/javascript" src="../../js/3rdparty/jquery-1.10.2.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/reset.css">
+	<script type="text/javascript" src="js/3rdparty/jquery-1.10.2.js"></script>
 
 	<!-- Foundation -->
-	<script type="text/javascript" src="../../js/3rdparty/foundation.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="../../css/foundation.min.css">
+	<script type="text/javascript" src="js/3rdparty/foundation.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/foundation.min.css">
 
 	<style type="text/css">
 		/* Foundation specific styles */
@@ -17,7 +17,7 @@
 
 	</style>
 
-	<link rel="stylesheet" type="text/css" href="../../css/indri.css">-->
+	<link rel="stylesheet" type="text/css" href="../css/indri.css">-->
 </head>
 
 <body>
@@ -51,7 +51,7 @@
 	</div>
 
 	Results:
-	<div id="results2"></div>
+	<div id="results2">Dialog not opened yet.</div>
 
 	<hr>
 
@@ -62,18 +62,18 @@
 	</div>
 
 	Results:
-	<div id="results3"></div>
+	<div id="results3">Dialog not opened yet.</div>
 
 	<hr>
 
-<script type="text/javascript" src="../../js/indri.fsm.js"></script>
-<script type="text/javascript" src="../../js/indri.base.js"></script>
-<script type="text/javascript" src="../../js/indri.content.renderer.base.js"></script>
-<script type="text/javascript" src="../../js/indri.content.renderers.js"></script>
-<script type="text/javascript" src="../../js/indri.location.renderers.js"></script>
-<script type="text/javascript" src="../../js/indri.main.js"></script>
+<script type="text/javascript" src="../js/indri.fsm.js"></script>
+<script type="text/javascript" src="../js/indri.base.js"></script>
+<script type="text/javascript" src="../js/indri.content.renderer.base.js"></script>
+<script type="text/javascript" src="../js/indri.content.renderers.js"></script>
+<script type="text/javascript" src="../js/indri.location.renderers.js"></script>
+<script type="text/javascript" src="../js/indri.main.js"></script>
 
-<script type="text/javascript" src="test-dlg.js"></script>
+<script type="text/javascript" src="js/test-common.js"></script>
 
 <script type="text/javascript">
 
@@ -92,13 +92,13 @@
 					}
 				});
 
-				FileBrowser.attach(jQuery("#indriui"), fileSystemManager, initializer);
+				FileBrowser.attach(jQuery(this).children("div").first(), fileSystemManager, initializer);
 				jQuery('#indriDialog').foundation('reveal', 'open'); 
 			});
 		});
 
 		function showDialog(defaults) {
-			jQuery('#indriDialog').load('indri.html', function() {
+			jQuery('#indriDialog').load('../templates/indri.html', function() {
 				var initializer = jQuery.extend(true, {}, defaults, {
 
 					resultCallback : function(result) { 
@@ -113,7 +113,7 @@
 					}
 				});
 
-				FileBrowser.attach(jQuery("#indriui"), fileSystemManager, initializer);
+				FileBrowser.attach(jQuery(this).children("div").first(), fileSystemManager, initializer);
 				jQuery('#indriDialog').foundation('reveal', 'open'); 
 			});
 		}
@@ -122,7 +122,7 @@
 		jQuery("#saveBtn2").click(function() { showDialog(FileBrowser.prototype.SaveDialogInitializer); });
 
 		jQuery("#openBtn3").click(function() {
-			jQuery('#indriDialog').load('indri.html', function() {
+			jQuery('#indriDialog').load('../templates/indri.html', function() {
 				var initializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
 
 					multiSelect : true,
@@ -161,7 +161,7 @@
 				initializer.viewFactory.views.push(new IconContentRenderer());
 				initializer.viewFactory.views.push(new DetailContentRenderer());
 
-				FileBrowser.attach(jQuery("#indriui"), fileSystemManager, initializer);
+				FileBrowser.attach(jQuery(this).children("div").first(), fileSystemManager, initializer);
 				jQuery('#indriDialog').foundation('reveal', 'open'); 
 			});
 		})

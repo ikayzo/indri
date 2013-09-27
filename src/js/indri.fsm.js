@@ -11,7 +11,8 @@ function FileSystemManager(rootUrl) {
 
 FileSystemManager.prototype = {
 	getShortcuts : function(success, error) {
-		var url = this.rootUrl + "?action=shortcuts";
+		// NOTE: needs trailing '&' or something between here and the server fails silently
+		var url = this.rootUrl + "?action=shortcuts&";
 		this._doQuery(url, success, error);
 	},
 
@@ -72,7 +73,9 @@ FileSystemManager.prototype = {
 			}
 		}).fail(function(jqXHR, textStatus, errorThrown) {
 			console.log("FSM Error:", textStatus);
-			error("FSM Error: " + textStatus);
+			if(error) {
+				error("FSM Error: " + textStatus);
+			}
 		});	
 	},
 

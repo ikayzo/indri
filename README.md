@@ -21,8 +21,6 @@ The web page needs to have the `build/indri-current.version.number` folder uploa
 
 ```
 ```javascript
-	var fileSystemManager = new FileSystemManager("http://localhost:1337/");
-
     jQuery('#myDialog').load('indri-0.5.0/templates/indri.html', function() {
 		var initializer = jQuery.extend(true, {}, FileBrowser.prototype.OpenDialogInitializer, {
 
@@ -32,7 +30,7 @@ The web page needs to have the `build/indri-current.version.number` folder uploa
 			}
 		});
 
-		FileBrowser.attach(jQuery("#indriui"), fileSystemManager, initializer);
+		FileBrowser.attach(jQuery("#indriui"), new FileSystemManager("http://indri-filesystem.herokuapp.com/"), initializer);
 		jQuery('#myDialog').dialog(); 
 	});
 ```
