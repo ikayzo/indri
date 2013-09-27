@@ -42,12 +42,12 @@
       <hr>
 
       <script type="text/javascript" src="indri-0.5.0/indri.min.js"></script>
-      <script type="text/javascript" src="test-dlg.js"></script>
+      <script type="text/javascript" src="js/test-common.js"></script>
       <script type="text/javascript">
 
         jQuery(document).ready(function() {
             function showDialog(defaults) {
-            jQuery('#indriDialog').load('indri-0.5.0/templates/indri.html #browserui', function() {
+            jQuery('#indriDialog').load('indri-0.5.0/templates/indri.html #indriui', function() {
               var initializer = getDialogInitializer(defaults);
 
               initializer.resultCallback = function(result) { 
@@ -62,7 +62,7 @@
               }
               };
 
-              FileBrowser.attach(jQuery("#browserui"), new FileSystemManager("http://indri-filesystem.herokuapp.com/"), initializer);
+              FileBrowser.attach(jQuery("#indriui"), new FileSystemManager("http://indri-filesystem.herokuapp.com/"), initializer);
               jQuery('#indriDialog').dialog(); 
               });
             }
