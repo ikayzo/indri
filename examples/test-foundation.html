@@ -40,7 +40,7 @@
 	<div id="indriDialog" class="reveal-modal"></div>
  
 	Results:
-	<div id="results"/>
+    <div id="results">Dialog not opened yet.</div>
 
 	<hr>
 
@@ -53,7 +53,7 @@
 		jQuery(document).foundation();
 
 		function showDialog(defaults) {
-			jQuery('#indriDialog').load('indri-0.5.0/templates/indri.html #indriui', function() {
+			jQuery('#indriDialog').load('indri-0.5.0/templates/indri.html', function() {
 				var initializer = getDialogInitializer(defaults);
 
 				initializer.resultCallback = function(result) { 
@@ -68,7 +68,7 @@
 					}
 				};
 
-				FileBrowser.attach(jQuery("#indriui"), new FileSystemManager("http://indri-filesystem.herokuapp.com/"), initializer);
+				FileBrowser.attach(this, new FileSystemManager("http://indri-filesystem.herokuapp.com/"), initializer);
 				jQuery('#indriDialog').foundation('reveal', 'open'); 
 			});
 		}

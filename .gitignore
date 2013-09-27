@@ -2,6 +2,7 @@
 /aws-credentials.json
 /civilbeat-credentials.json
 filesystems/*.json
+src/filesystems/*.json
 *-ck.js
 .ruby-*
 .sass-cache

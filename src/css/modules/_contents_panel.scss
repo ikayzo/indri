@@ -94,6 +94,9 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
       .entypo {
         color: $text-list-item-hover;
       }
+      .icon-folder {
+        color: $icon-folder !important;
+      }
     }
     .ind-editable-name  { 
       margin: 0 0 0 5px; 
@@ -115,6 +118,9 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
       color: $text-list-item-hover; 
       .entypo {
         color: $text-list-item-hover;
+      }
+      .icon-folder {
+        color: $icon-folder;
       }
     }
   }
@@ -151,7 +157,7 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
             color: $text-list-item-hover;
           }
           .icon-folder {
-            color: $text-list-item-hover;
+            color: $icon-folder;
           }
         }
       }

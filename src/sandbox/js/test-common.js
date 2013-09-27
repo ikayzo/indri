@@ -29,7 +29,7 @@ function getDialogInitializer(defaults) {
 
 	function initLocalFileSystem(initializer) {
 		initializer.locationRenderer = new SegmentedLocationRenderer();
-		initializer.visibility.shortcutsPanel = true;
+		initializer.visibility.shortcutsPanel = false;
 	}
 
 	function initAwsFileSystem(initializer) {

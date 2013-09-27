@@ -7,15 +7,20 @@
 		- a list of that location's contents
 		- display and filtering data
 */
-function FileBrowser(rootElem, fileSystemManager, initializer) {
-	this.rootElem = jQuery(rootElem);
+function FileBrowser($rootElem, fileSystemManager, initializer) {
+	// Make sure $rootElem really is a jQuery instance
+    if(!$rootElem.prop)
+        $rootElem = jQuery($rootElem);
+
+    // Make sure we have the correct root element
+	this.rootElem = ($rootElem.prop('id') == 'indriui') ? $rootElem : $rootElem.find('#indriui').first();
 	this.fsm = fileSystemManager;
 
 	this._initialize(initializer);
 }
 
-FileBrowser.attach = function(rootElem, fileSystemManager, initializer) {
-	return new FileBrowser(rootElem, fileSystemManager, initializer);
+FileBrowser.attach = function($rootElem, fileSystemManager, initializer) {
+	return new FileBrowser($rootElem, fileSystemManager, initializer);
 }
 
 FileBrowser.prototype = {
@@ -172,7 +177,6 @@ FileBrowser.prototype = {
 					this.currentSelection.push(contentItem);
 				}
 			}
-			
 
 			this._selectionChanged();
 		}
@@ -188,7 +192,16 @@ FileBrowser.prototype = {
 		}
 	},
 
-	_updateShortcuts : function(shortcuts) {
+	_updateShortcuts : function(callback) {
+		if(!callback) {
+			callback = this._makeCallback(this._populateShortcuts);
+		}
+
+    this.shortcuts = [];
+		this.fsm.getShortcuts(callback, this._makeCallback(this._updateStatus));
+	},
+
+	_populateShortcuts : function(shortcuts) {
 		if(this.shortcutsRenderer) {
 			this._getUiElem(this.uiNames.shortcutsPanel).empty().append(
 				this.shortcutsRenderer.render(shortcuts, this._makeCallback(this.navigateToLocation)));
@@ -332,9 +345,8 @@ FileBrowser.prototype = {
 
 
 		if(initializer.visibility['shortcutsPanel']) {
-      fileBrowser.shortcuts = [];
-			this.fsm.getShortcuts(this._makeCallback(this._updateShortcuts));
-			this.fsm.getShortcuts(this._makeCallback(function(shortcuts){
+			this._updateShortcuts(this._makeCallback(function(shortcuts){
+				this._populateShortcuts(shortcuts);
         if (shortcuts.length > 0) {
 		      this.navigateToLocation(shortcuts[0].location);
         } else {
@@ -381,10 +393,11 @@ FileBrowser.prototype = {
 		status 				: '#status-display',
 		filter 				: '#filter-controls',
 		filename 			: "#filename-control",
+		filenameLabel 			: "#filename-control-label",
 		previewControls		: "#preview-panel",
 		preview 			: "#aside-wrapper-right",
 		shortcuts 			: '#shortcuts-control',
-		shortcutsList 			: '#ind-shortcut-list',
+		shortcutsList 		: '#ind-shortcut-list',
 		shortcutsPanel 		: "#aside-wrapper-left",
 	},
 
@@ -397,6 +410,7 @@ FileBrowser.prototype = {
 		this._getUiElem(name).css('display', displayMode);
 
 		// Some special cases for the shortcuts and preview panels
+		// TODO There should be a more systematic way to do this
 		if(name == this.uiNames.preview || name == this.uiNames.shortcutsPanel) {
 			var controlName = name == this.uiNames.preview ? this.uiNames.detail : this.uiNames.shortcuts;
 			var className = name == this.uiNames.preview ? "ind-show-preview" : "ind-show-shortcuts";
@@ -409,6 +423,15 @@ FileBrowser.prototype = {
 				this._getUiElem(this.uiNames.contentsWrapper).removeClass(className);				
 				this._getUiElem(controlName).removeClass("ind-btn-active ");
 			}
+		}
+
+		if(name == this.uiNames.shortcutsPanel) {
+			this._updateShortcuts();
+		}
+
+		// If we hide the filename, also hide the label
+		if(name == this.uiNames.filename) {
+			this._getUiElem(this.uiNames.filenameLabel).css('display', displayMode);
 		}
 	},
 
