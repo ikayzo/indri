@@ -53,7 +53,7 @@
 		jQuery(document).foundation();
 
 		function showDialog(defaults) {
-			jQuery('#indriDialog').load('indri-0.5.0/templates/indri.html #indriui', function() {
+			jQuery('#indriDialog').load('indri-0.5.0/templates/indri.html', function() {
 				var initializer = getDialogInitializer(defaults);
 
 				initializer.resultCallback = function(result) { 

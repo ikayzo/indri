@@ -3,21 +3,9 @@ Indri
 
 Indri is a client-side web file dialog for selecting file or specifying a destination in a remote file repository. It can be styled to integrate with web applications, and provides full configuration through rendering and file system plugins.
 
-Getting Started
----------------
+### Getting Started
 
-First, Indri needs a web-based file system to talk to. The distribution provides a few sample implementations. To set up a file system for a local hard drive:
-
-1. Download/install Node.js
-2. Open a shell and cd to the indri/filesystems folder
-3. Execute this:  `node node-filesystem.js`
-
-Optionally, you can provide a path to a config file, use the `.example`
-files in `filesystems/` as an template:
-```bash
-node node-filesystem.js config-nathan.json
-```
-If no file is specified, `node-filesystem.js` defaults to loading `./config-default.json`, which is configured to host the filesystem at `http://localhost:1337/`. You can view this location in a web browser to make sure it's set up correctly.
+The Indri distribution comes with example files that show how Indri may be used with various popular frameworks. To view the files, make the `indri/examples` available via an HTTP server and browse to any of the `test-*.html` files. 
 
 ### Embedding Indri in a web page
 
@@ -33,20 +21,20 @@ The web page needs to have the `build/indri-current.version.number` folder uploa
 
 ```
 ```javascript
-var fileSystemManager = new FileSystemManager("http://localhost:1337/");
+	var fileSystemManager = new FileSystemManager("http://localhost:1337/");
 
-      jQuery('#myDialog').load('indri-0.5.0/templates/indri.html #browserui', function() {
-	var initializer = jQuery.extend(true, {}, FileBrowser.prototype.OpenDialogInitializer, {
+    jQuery('#myDialog').load('indri-0.5.0/templates/indri.html', function() {
+		var initializer = jQuery.extend(true, {}, FileBrowser.prototype.OpenDialogInitializer, {
 
-		resultCallback : function(result) { 
-			jQuery('#myDialog').dialog('close');
-			console.log(result);						
-		}
+			resultCallback : function(result) { 
+				jQuery('#myDialog').dialog('close');
+				console.log(result);						
+			}
+		});
+
+		FileBrowser.attach(jQuery("#indriui"), fileSystemManager, initializer);
+		jQuery('#myDialog').dialog(); 
 	});
-
-	FileBrowser.attach(jQuery("#browserui"), fileSystemManager, initializer);
-	jQuery('#myDialog').dialog(); 
-});
 ```
 
 This uses the default settings for an Open File dialog, and provides a callback that closes the dialog and logs the result to the javascript console.
