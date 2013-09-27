@@ -192,7 +192,16 @@ FileBrowser.prototype = {
 		}
 	},
 
-	_updateShortcuts : function(shortcuts) {
+	_updateShortcuts : function(callback) {
+		if(!callback) {
+			callback = this._makeCallback(this._populateShortcuts);
+		}
+
+    this.shortcuts = [];
+		this.fsm.getShortcuts(callback, this._makeCallback(this._updateStatus));
+	},
+
+	_populateShortcuts : function(shortcuts) {
 		if(this.shortcutsRenderer) {
 			this._getUiElem(this.uiNames.shortcutsPanel).empty().append(
 				this.shortcutsRenderer.render(shortcuts, this._makeCallback(this.navigateToLocation)));
@@ -336,9 +345,8 @@ FileBrowser.prototype = {
 
 
 		if(initializer.visibility['shortcutsPanel']) {
-      fileBrowser.shortcuts = [];
-			this.fsm.getShortcuts(this._makeCallback(this._updateShortcuts));
-			this.fsm.getShortcuts(this._makeCallback(function(shortcuts){
+			this._updateShortcuts(this._makeCallback(function(shortcuts){
+				this._populateShortcuts(shortcuts);
         if (shortcuts.length > 0) {
 		      this.navigateToLocation(shortcuts[0].location);
         } else {
@@ -415,6 +423,10 @@ FileBrowser.prototype = {
 				this._getUiElem(this.uiNames.contentsWrapper).removeClass(className);				
 				this._getUiElem(controlName).removeClass("ind-btn-active ");
 			}
+		}
+
+		if(name == this.uiNames.shortcutsPanel) {
+			this._updateShortcuts();
 		}
 
 		// If we hide the filename, also hide the label
