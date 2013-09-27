@@ -12,7 +12,7 @@ function isValidFile(fileName) {
 function getFileInfo(fullPath) {
 
 	var ext = path.extname(fullPath);
-	var previewUrl = (ext == ".png" || ext == ".jpg" || ext == ".gif") ? fullPath : null;
+	var previewUrl = (ext == ".png" || ext == ".jpeg"|| ext == ".jpg" || ext == ".gif") ? fullPath : null;
 
 	var stats = fs.statSync(fullPath);
 	return { 
@@ -40,6 +40,11 @@ function parseLocation(location) {
 function encodeLocation(location) {
 	return JSON.stringify(location);
 }
+
+function jsonifyResult(result) {
+	return JSON.stringify(result) + "\n";
+}
+
 
 function handleFileRequest(req, res) {
 	try {
@@ -78,6 +83,7 @@ function handleFileRequest(req, res) {
 					result.contents.push(getFileInfo(path.join(result.realLoc, fileName)));
 				}
 			});
+      result = jsonifyResult(result);
 		}
 		else if(action == "rename") {
 			if(!parsedQuery.query.loc) {
@@ -103,6 +109,7 @@ function handleFileRequest(req, res) {
 					result.error = "File doesn't exist: " + loc;
 				}
 			}
+      result = jsonifyResult(result);
 		}
 		else if(action == "delete") {
 			if(!parsedQuery.query.locs) {
@@ -141,7 +148,7 @@ function handleFileRequest(req, res) {
 					}
 				}
 			});
-
+      result = jsonifyResult(result);
 		}
 		else if(action == "makedir") {
 			if(!parsedQuery.query.name) {
@@ -153,6 +160,7 @@ function handleFileRequest(req, res) {
 
 			fs.mkdirSync(fullPath);
 			result.contents = [getFileInfo(fullPath)];
+      result = jsonifyResult(result);
 		}
 		else if(action == 'shortcuts') {
     		result.contents = [];
@@ -161,6 +169,7 @@ function handleFileRequest(req, res) {
                     result.contents.push({name: item.name, location: encodeLocation(item.location)});
                 });
             }
+        result = jsonifyResult(result);
 		}
 		else {
 			result.error = "Invalid action";
@@ -173,7 +182,9 @@ function handleFileRequest(req, res) {
 
 		result.error = "Error accessing " + loc;
 		result.exception = ex.toString();
+    result = jsonifyResult(result);
 	}
+  console.log("ACTION")
 
 	res.end(JSON.stringify(result) + '\n');
 }
