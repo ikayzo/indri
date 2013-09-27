@@ -22,14 +22,14 @@ ul,ol,dl  {
 /* breadcrumb */
 a { 
 	text-decoration: underline;
-	color: $color-breadcrumb;
+	color: $text-breadcrumb;
 	&:hover {
 		//background: rgba(0,0,0,0.2);
-		color: lighten($color-breadcrumb, 15%);
+		color: lighten($text-breadcrumb, 15%);
 	}
 }
 .ind-location-divider, .ind-location-segment {
-	color: $color-breadcrumb;
+	color: $text-breadcrumb;
 }
 
 /* status display */

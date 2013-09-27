@@ -2,17 +2,6 @@
       BASIC CUSTOMIZATIONS          
 ===============================*/
 
-// Ikayzo Theme
-$color-primary: #ea5d00;
-$color-secondary: #3d9297;
-$color-base: #edece7; 
-
-// Retro Theme
-$color-primary: #b90016;
-$color-secondary: #1e4952;
-$color-base: #e9e6df;
-$theme: light;
-
 // Minimal Theme
 $color-primary: #ccc;
 $color-secondary: #aaa;
@@ -24,6 +13,30 @@ $color-primary: #ee0043;
 $color-secondary: black;
 $color-base: #333; 
 $theme: dark;
+
+// Dark & Yellow Theme
+$color-primary: #f8c600;
+$color-secondary: black;
+$color-base: #333; 
+$theme: dark;
+
+// Minimal Theme
+$color-primary: #ccc;
+$color-secondary: #aaa;
+$color-base: #f2f2f2; 
+$theme: light;
+
+// Retro Theme
+$color-primary: #b90016;
+$color-secondary: #1e4952;
+$color-base: #e9e6df;
+$theme: light;
+
+// Ikayzo Theme
+$color-primary: #ea5d00;
+$color-secondary: #3d9297;
+$color-base: #f0f0f0; 
+$theme: light;
 
 // Theme - Basic
 $color-primary: #0078e7;
@@ -37,27 +50,44 @@ $color-secondary: #ef9109;
 $color-base: #edece7;  
 $theme: light;
 
-// Dark & Yellow Theme
-$color-primary: #f8c600;
+// Black and White Theme
+$color-primary: #666;
 $color-secondary: black;
-$color-base: #333; 
-$theme: dark;
+$color-base: #f2f2f2;  
+$theme: light;
+
+// Spring Theme
+$color-primary: #55b7ce;
+$color-secondary: #aab25b;
+$color-base: #e8e8e8;  
+$theme: light;
+
 /*==============================
       DEFAULT STYLE RULES       
 ===============================*/
 
+// text colors
+$text-main: #444;
+$text-dark: darken($text-main, 15%);
+$text-light: #fff;
+
 // Button, Interactivity Colors
 $btn-color:         $color-primary;
-$highlight-color:   lighten($color-primary, 30%);
+$highlight-color:   lighten($btn-color, 30%);
+$btn-text-color: $text-main;
+$color-icon: $text-main;
 
 // Header Section
 $text-title:       $color-secondary;
 $panel-header:    $color-base;
+$text-breadcrumb: #333;
 
 // Shortcuts Section
 $panel-shortcut: lighten($color-base, 3%);
 $shortcut: $color-base;
 $shortcut-selected: $color-secondary;
+$text-shortcut: $text-light;
+$text-shortcut-selected: $text-light;
 
 // Content Section
 $bg-color: white;
@@ -65,6 +95,11 @@ $list-shading: lighten($color-base, 5%);
 $list-item-selected: $color-primary;
 $th: darken($color-base, 15%);
 $th-selected: $color-primary;
+$text-list-item-selected: $text-light;
+$text-list-item-hover: $text-dark;
+$text-th: $text-dark;
+$text-th-hover: $text-dark;
+$icon-folder: #e8aa50; 
 
 //Preview Section
 $panel-preview: $bg-color;
@@ -72,25 +107,13 @@ $panel-preview: $bg-color;
 //Footer Section
 $panel-footer: $color-base;
 $panel-status: darken($color-base, 15%); 
+$color-label: $text-main;  
 
 // border colors
 $border-dark: #aaa;
 $border-light: $bg-color;
 
-// text colors
-$text-main: #444;
-$text-dark: darken($text-main, 15%);
-$text-light: #fff;
-$btn-text-color: $text-main;
-$color-breadcrumb: #333;
-$text-shortcut: $text-light;
-$text-shortcut-selected: $text-light;
-$text-list-item-selected: $text-light;
-$text-list-item-hover: $text-dark;
-$text-th: $text-dark;
-$text-th-hover: $text-dark;
 
-$icon-folder: #e8aa50; 
 
 // Conditional for dark themes
 body {
@@ -113,14 +136,8 @@ body {
   }
 }
 
-// labels, icon colors
-$color-label: $text-main;    
-$color-icon: $text-main;
 
 
 /*=========Write your variable overrides below==============*/
-
-
-
 
 
