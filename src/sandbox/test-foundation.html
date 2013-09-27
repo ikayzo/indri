@@ -61,10 +61,11 @@
 
 		function showDialog(defaults) {
 			jQuery('#indriDialog').load('../templates/indri.html', function() {
+				var $dlg = jQuery(this);
 				var initializer = getDialogInitializer(defaults);
 
-				initializer.resultCallback = function(result) { 
-					jQuery('#indriDialog').foundation('reveal', 'close'); 
+				initializer.resultCallback = function(result) {
+					$dlg.foundation('reveal', 'close'); 
 					
 					console.log(result); 
 					if(result.success){
@@ -75,8 +76,8 @@
 					}
 				};
 
-				FileBrowser.attach(jQuery(this).children("div").first(), new FileSystemManager("http://localhost:1337/"), initializer);
-				jQuery('#indriDialog').foundation('reveal', 'open'); 
+				FileBrowser.attach($dlg, new FileSystemManager("http://localhost:1337/"), initializer);
+				$dlg.foundation('reveal', 'open'); 
 			});
 		}
 

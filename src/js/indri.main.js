@@ -7,15 +7,20 @@
 		- a list of that location's contents
 		- display and filtering data
 */
-function FileBrowser(rootElem, fileSystemManager, initializer) {
-	this.rootElem = jQuery(rootElem);
+function FileBrowser($rootElem, fileSystemManager, initializer) {
+	// Make sure $rootElem really is a jQuery instance
+    if(!$rootElem.prop)
+        $rootElem = jQuery($rootElem);
+
+    // Make sure we have the correct root element
+	this.rootElem = ($rootElem.prop('id') == 'indriui') ? $rootElem : $rootElem.find('#indriui').first();
 	this.fsm = fileSystemManager;
 
 	this._initialize(initializer);
 }
 
-FileBrowser.attach = function(rootElem, fileSystemManager, initializer) {
-	return new FileBrowser(rootElem, fileSystemManager, initializer);
+FileBrowser.attach = function($rootElem, fileSystemManager, initializer) {
+	return new FileBrowser($rootElem, fileSystemManager, initializer);
 }
 
 FileBrowser.prototype = {
@@ -384,7 +389,7 @@ FileBrowser.prototype = {
 		previewControls		: "#preview-panel",
 		preview 			: "#aside-wrapper-right",
 		shortcuts 			: '#shortcuts-control',
-		shortcutsList 			: '#ind-shortcut-list',
+		shortcutsList 		: '#ind-shortcut-list',
 		shortcutsPanel 		: "#aside-wrapper-left",
 	},
 
