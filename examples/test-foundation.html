@@ -68,7 +68,7 @@
 					}
 				};
 
-				FileBrowser.attach(jQuery(this).children("div").first(), new FileSystemManager("http://indri-filesystem.herokuapp.com/"), initializer);
+				FileBrowser.attach(this, new FileSystemManager("http://indri-filesystem.herokuapp.com/"), initializer);
 				jQuery('#indriDialog').foundation('reveal', 'open'); 
 			});
 		}
