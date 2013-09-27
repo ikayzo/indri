@@ -177,7 +177,6 @@ FileBrowser.prototype = {
 					this.currentSelection.push(contentItem);
 				}
 			}
-			
 
 			this._selectionChanged();
 		}
@@ -386,6 +385,7 @@ FileBrowser.prototype = {
 		status 				: '#status-display',
 		filter 				: '#filter-controls',
 		filename 			: "#filename-control",
+		filenameLabel 			: "#filename-control-label",
 		previewControls		: "#preview-panel",
 		preview 			: "#aside-wrapper-right",
 		shortcuts 			: '#shortcuts-control',
@@ -402,6 +402,7 @@ FileBrowser.prototype = {
 		this._getUiElem(name).css('display', displayMode);
 
 		// Some special cases for the shortcuts and preview panels
+		// TODO There should be a more systematic way to do this
 		if(name == this.uiNames.preview || name == this.uiNames.shortcutsPanel) {
 			var controlName = name == this.uiNames.preview ? this.uiNames.detail : this.uiNames.shortcuts;
 			var className = name == this.uiNames.preview ? "ind-show-preview" : "ind-show-shortcuts";
@@ -414,6 +415,11 @@ FileBrowser.prototype = {
 				this._getUiElem(this.uiNames.contentsWrapper).removeClass(className);				
 				this._getUiElem(controlName).removeClass("ind-btn-active ");
 			}
+		}
+
+		// If we hide the filename, also hide the label
+		if(name == this.uiNames.filename) {
+			this._getUiElem(this.uiNames.filenameLabel).css('display', displayMode);
 		}
 	},
 
