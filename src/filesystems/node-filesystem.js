@@ -10,10 +10,18 @@ function isValidFile(fileName) {
 	return fileName[0] != '.';
 }
 
+function fsUrl() {
+  var url = config.useHttps ? 'https://' : 'http://';
+  url += config.serverName;
+  if (config.serverPort != 80 && config.serverPort != 443)
+    url += ':' + config.serverPort;
+  return url;
+}
+
 function getFileInfo(fullPath) {
 
 	var ext = path.extname(fullPath);
-	var previewUrl = (ext == ".png" || ext == ".jpeg"|| ext == ".jpg" || ext == ".gif") ? fullPath.slice(config.rootDir.length) : null;
+	var previewUrl = (ext == ".png" || ext == ".jpeg"|| ext == ".jpg" || ext == ".gif") ? fsUrl() + fullPath.slice(config.rootDir.length) : null;
 
 	var stats = fs.statSync(fullPath);
 	return { 
