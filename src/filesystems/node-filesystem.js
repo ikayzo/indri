@@ -64,6 +64,7 @@ function handleFileRequest(req, res) {
 				}
 			}
 			console.log(loc);
+      result.loc = encodeLocation(loc);
 			console.log(result);
 		}
 		else if(action == "browse") {
@@ -195,7 +196,7 @@ fs.readFile(configFile, 'utf8', function (err, data) {
   http.createServer(function (req, res) {
     var parsedQuery = require('url').parse(req.url, true);
 
-    console.log('parsed query length:', parsedQuery.query.length);
+    console.log('parsed query:', parsedQuery.query);
     // if action is undefined serve the file
     if (parsedQuery.query.action == undefined) {
       //serveUpFile(req, res, file);
