@@ -183,9 +183,6 @@ function handleFileRequest(req, res) {
 	res.end(JSON.stringify(result) + '\n');
 }
 
-function serveUpFile(res, req, file) {
-}
-
 
 var configFile = (process.argv.length > 2) ? process.argv[2] : './config-default.json';
 console.log("Parsing settings from: ", configFile);
@@ -207,7 +204,6 @@ fs.readFile(configFile, 'utf8', function (err, data) {
     console.log('parsed query:', parsedQuery.query);
     // if action is undefined serve the file
     if (parsedQuery.query.action == undefined) {
-      //serveUpFile(req, res, file);
       file.serve(req, res, function(err, result) {
         if (err) {
           console.error('Error serving %s - %s', req.url, err.message);
