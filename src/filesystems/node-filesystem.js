@@ -1,4 +1,5 @@
 
+var static= require('node-static');
 var fs = require('fs');
 var path = require('path');
 var http = require('http');
@@ -41,11 +42,6 @@ function encodeLocation(location) {
 	return JSON.stringify(location);
 }
 
-function jsonifyResult(result) {
-	return JSON.stringify(result) + "\n";
-}
-
-
 function handleFileRequest(req, res) {
 	try {
 		console.log(req.url);
@@ -68,7 +64,6 @@ function handleFileRequest(req, res) {
 				}
 			}
 			console.log(loc);
-			result.loc = encodeLocation(loc);
 			console.log(result);
 		}
 		else if(action == "browse") {
@@ -81,7 +76,6 @@ function handleFileRequest(req, res) {
 					result.contents.push(getFileInfo(path.join(result.realLoc, fileName)));
 				}
 			});
-      result = jsonifyResult(result);
 		}
 		else if(action == "rename") {
 			if(!parsedQuery.query.loc) {
@@ -107,7 +101,6 @@ function handleFileRequest(req, res) {
 					result.error = "File doesn't exist: " + loc;
 				}
 			}
-      result = jsonifyResult(result);
 		}
 		else if(action == "delete") {
 			if(!parsedQuery.query.locs) {
@@ -146,7 +139,6 @@ function handleFileRequest(req, res) {
 					}
 				}
 			});
-      result = jsonifyResult(result);
 		}
 		else if(action == "makedir") {
 			if(!parsedQuery.query.name) {
@@ -158,7 +150,6 @@ function handleFileRequest(req, res) {
 
 			fs.mkdirSync(fullPath);
 			result.contents = [getFileInfo(fullPath)];
-      result = jsonifyResult(result);
 		}
 		else if(action == 'shortcuts') {
     		result.contents = [];
@@ -167,7 +158,6 @@ function handleFileRequest(req, res) {
                     result.contents.push({name: item.name, location: encodeLocation(item.location)});
                 });
             }
-        result = jsonifyResult(result);
 		}
 		else {
 			result.error = "Invalid action";
@@ -180,28 +170,53 @@ function handleFileRequest(req, res) {
 
 		result.error = "Error accessing " + loc;
 		result.exception = ex.toString();
-    result = jsonifyResult(result);
 	}
-  console.log("ACTION")
-
 	res.end(JSON.stringify(result) + '\n');
+}
+
+function serveUpFile(res, req, file) {
 }
 
 
 var configFile = (process.argv.length > 2) ? process.argv[2] : './config-default.json';
 console.log("Parsing settings from: ", configFile);
 fs.readFile(configFile, 'utf8', function (err, data) {
-    if (err) {
-        console.log('Error: ' + err);
-        return;
-    }
+  if (err) {
+    console.log('Error: ' + err);
+    return;
+  }
 
-    config = JSON.parse(data);
+  config = JSON.parse(data);
+  var file = new(static.Server)(config.rootDir, { 
+    cache: 600, 
+    headers: { 'X-Powered-By': 'node-static' } 
+  });
 
-    http.createServer(function (req, res) {
+  http.createServer(function (req, res) {
+    var parsedQuery = require('url').parse(req.url, true);
+
+    console.log('parsed query length:', parsedQuery.query.length);
+    // if action is undefined serve the file
+    if (parsedQuery.query.action == undefined) {
+      //serveUpFile(req, res, file);
+      file.serve(req, res, function(err, result) {
+        if (err) {
+          console.error('Error serving %s - %s', req.url, err.message);
+          if (err.status === 404 || err.status === 500) {
+            file.serveFile(util.format('/%d.html', err.status), err.status, {}, req, res);
+          } else {
+            res.writeHead(err.status, err.headers);
+            res.end();
+          }
+        } else {
+          console.log('%s - %s', req.url, res.message); 
+        }
+      });
+    } else {
       res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
       handleFileRequest(req, res);
-    }).listen(config.serverPort, config.serverName);
-    console.log('Server running at http://' + config.serverName + ':' + config.serverPort);
-    console.log('Serving files from ', config.rootDir);
+    }
+  }).listen(config.serverPort, config.serverName);
+  console.log('Server running at http://' + config.serverName + ':' + config.serverPort);
+  console.log('Serving files from ', config.rootDir);
 });
