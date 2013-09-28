@@ -12,20 +12,20 @@
   background: $bg-color;
 }
 
-#aside-wrapper-left,
-#section-wrapper,
-#aside-wrapper-right  { 
+#shortcuts-wrapper,
+#contents-wrapper,
+#preview-wrapper  { 
   top: 100px; 
   bottom: 90px; 
 }
-#aside-wrapper-left,
-#aside-wrapper-right  { 
+#shortcuts-wrapper,
+#preview-wrapper  { 
   position: absolute; 
   width: 300px;
 }
 
 /* Content Window */
-#section-wrapper { 
+#contents-wrapper { 
   overflow: auto; 
 }
 #contents-panel { 
