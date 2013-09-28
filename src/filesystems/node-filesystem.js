@@ -13,7 +13,7 @@ function isValidFile(fileName) {
 function getFileInfo(fullPath) {
 
 	var ext = path.extname(fullPath);
-	var previewUrl = (ext == ".png" || ext == ".jpeg"|| ext == ".jpg" || ext == ".gif") ? fullPath : null;
+	var previewUrl = (ext == ".png" || ext == ".jpeg"|| ext == ".jpg" || ext == ".gif") ? fullPath.slice(config.rootDir.length) : null;
 
 	var stats = fs.statSync(fullPath);
 	return { 
