@@ -1,35 +1,28 @@
 
+var static= require('node-static');
 var fs = require('fs');
 var path = require('path');
 var http = require('http');
+var util = require('util');
 
 var config = {};
-
-var previewRegEx = null;
 
 function isValidFile(fileName) {
 	return fileName[0] != '.';
 }
 
-function isPreviewable(fullPath) {
-	if(!config.previewTypes) {
-		return null;
-	}
-
-	if(!previewRegEx) {
-		previewRegEx = new RegExp(config.previewTypes);
-	}
-
-	return fullPath && fullPath.match(previewRegEx);
-}
-
-function getPreviewUrl(fullPath) {
-	return isPreviewable(fullPath) ? (config.previewBase + fullPath) : null;
+function fsUrl() {
+  var url = config.useHttps ? 'https://' : 'http://';
+  url += config.serverName;
+  if (config.serverPort != 80 && config.serverPort != 443)
+    url += ':' + config.serverPort;
+  return url;
 }
 
 function getFileInfo(fullPath) {
 
-	var previewUrl = getPreviewUrl(fullPath);
+	var ext = path.extname(fullPath);
+	var previewUrl = (ext == ".png" || ext == ".jpeg"|| ext == ".jpg" || ext == ".gif") ? fsUrl() + fullPath.slice(config.rootDir.length) : null;
 
 	var stats = fs.statSync(fullPath);
 	return { 
@@ -80,7 +73,7 @@ function handleFileRequest(req, res) {
 				}
 			}
 			console.log(loc);
-			result.loc = encodeLocation(loc);
+      result.loc = encodeLocation(loc);
 			console.log(result);
 		}
 		else if(action == "browse") {
@@ -156,7 +149,6 @@ function handleFileRequest(req, res) {
 					}
 				}
 			});
-
 		}
 		else if(action == "makedir") {
 			if(!parsedQuery.query.name) {
@@ -189,7 +181,6 @@ function handleFileRequest(req, res) {
 		result.error = "Error accessing " + loc;
 		result.exception = ex.toString();
 	}
-
 	res.end(JSON.stringify(result) + '\n');
 }
 
@@ -197,17 +188,41 @@ function handleFileRequest(req, res) {
 var configFile = (process.argv.length > 2) ? process.argv[2] : './config-default.json';
 console.log("Parsing settings from: ", configFile);
 fs.readFile(configFile, 'utf8', function (err, data) {
-    if (err) {
-        console.log('Error: ' + err);
-        return;
-    }
+  if (err) {
+    console.log('Error: ' + err);
+    return;
+  }
 
-    config = JSON.parse(data);
+  config = JSON.parse(data);
+  var file = new(static.Server)(config.rootDir, { 
+    cache: 600, 
+    headers: { 'X-Powered-By': 'node-static' } 
+  });
 
-    http.createServer(function (req, res) {
+  http.createServer(function (req, res) {
+    var parsedQuery = require('url').parse(req.url, true);
+
+    console.log('parsed query:', parsedQuery.query);
+    // if action is undefined serve the file
+    if (parsedQuery.query.action == undefined) {
+      file.serve(req, res, function(err, result) {
+        if (err) {
+          console.error('Error serving %s - %s', req.url, err.message);
+          if (err.status === 404 || err.status === 500) {
+            file.serveFile(util.format('/%d.html', err.status), err.status, {}, req, res);
+          } else {
+            res.writeHead(err.status, err.headers);
+            res.end();
+          }
+        } else {
+          console.log('%s - %s', req.url, res.message); 
+        }
+      });
+    } else {
       res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
       handleFileRequest(req, res);
-    }).listen(config.serverPort, config.serverName);
-    console.log('Server running at http://' + config.serverName + ':' + config.serverPort);
-    console.log('Serving files from ', config.rootDir);
+    }
+  }).listen(process.env.PORT || config.serverPort);
+  console.log('Server running at http://' + config.serverName + ':' + config.serverPort);
+  console.log('Serving files from ', config.rootDir);
 });
