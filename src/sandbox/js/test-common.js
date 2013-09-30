@@ -36,15 +36,11 @@ function getDialogInitializer(defaults) {
 		initializer.visibility.shortcutsPanel = true;
 
 		initializer.locationRenderer = new BucketLocationRenderer();
-
-		initializer.previewRenderer.baseUrl = 'http://ikayzo-files.s3.amazonaws.com/';
 	}
 
 	function initCivilBeatFileSystem(initializer) {
 		initializer.visibility.shortcutsPanel = true;
 
 		initializer.locationRenderer = new BucketLocationRenderer();
-
-		initializer.previewRenderer.baseUrl = 'http://civilbeat_production.s3.amazonaws.com/';
 	}
 }

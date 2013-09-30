@@ -5,14 +5,31 @@ var http = require('http');
 
 var config = {};
 
+var previewRegEx = null;
+
 function isValidFile(fileName) {
 	return fileName[0] != '.';
 }
 
+function isPreviewable(fullPath) {
+	if(!config.previewTypes) {
+		return null;
+	}
+
+	if(!previewRegEx) {
+		previewRegEx = new RegExp(config.previewTypes);
+	}
+
+	return fullPath && fullPath.match(previewRegEx);
+}
+
+function getPreviewUrl(fullPath) {
+	return isPreviewable(fullPath) ? (config.previewBase + fullPath) : null;
+}
+
 function getFileInfo(fullPath) {
 
-	var ext = path.extname(fullPath);
-	var previewUrl = (ext == ".png" || ext == ".jpg" || ext == ".gif") ? fullPath : null;
+	var previewUrl = getPreviewUrl(fullPath);
 
 	var stats = fs.statSync(fullPath);
 	return { 

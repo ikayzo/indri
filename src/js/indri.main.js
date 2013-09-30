@@ -626,11 +626,9 @@ FileBrowser.prototype.DefaultInitializer = {
 				return jQuery(document.createElement("span")).html("No preview available");
 			}
 			else {
-				return jQuery(document.createElement("img")).attr("src", this.baseUrl + selection[0].previewUrl);				
+				return jQuery(document.createElement("img")).attr("src", selection[0].previewUrl);				
 			}
 		},
-
-		baseUrl : ""
 	},
 
 	shortcutsRenderer : {
