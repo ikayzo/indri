@@ -3,22 +3,23 @@
   <header id="header-wrapper" class="ind-wrapper">
     <div id="title-control">File Dialog</div>
 
-    <div id="control-panel" class="ind-panel clearfix">
-      <div id="layout-controls-left" class="ind-cell">
-        <div id="shortcuts-controls" class="ind-layout-controls">
+    <div id="header-control-panel" class="ind-panel clearfix">
+      <div id="header-left-panel" class="ind-cell">
+        <div id="shortcuts-panel" class="ind-layout-controls">
           <a id="shortcuts-control" class="ind-detailbutton entypo ind-btn" title="Shortcut"><span>&#8627;</span></a>
         </div>
 
-        <div id="location-controls" class="ind-layout-controls">
-          <a id="parent-control" class="entypo icon-parent ind-btn" title="Back"><span>&#9666;</span></a><!-- Remove g	ap. Do not do a new line break --><a id="refresh-control" class="entypo icon-refresh ind-btn" title="Refresh"><span>&#128260;</span></a>
+        <div id="header-navigation-panel" class="ind-layout-controls">
+          <a id="parent-control" class="entypo icon-parent ind-btn" title="Back"><span>&#9666;</span></a><!--
+          --><a id="refresh-control" class="entypo icon-refresh ind-btn" title="Refresh"><span>&#128260;</span></a>
         </div>
 
-        <div id="location-display">Location</div>
+        <div id="location-control">Location</div>
       </div><!-- End LH Controls -->
 
-      <div id="layout-controls-right" class="ind-cell">
-        <div id="view-controls" class="ind-layout-controls"></div>
-        <div id="detail-controls" class="ind-layout-controls">
+      <div id="header-right-panel" class="ind-cell">
+        <div id="views-panel" class="ind-layout-controls"></div>
+        <div id="details-panel" class="ind-layout-controls">
           <a id="detail-control" class="ind-detailbutton entypo ind-btn"><span>&#59146;</span></a>
         </div>
       </div><!-- End RH Controls -->
@@ -30,9 +31,7 @@
   </aside><!-- End Short Cuts -->
 
   <section id="contents-wrapper" class="ind-wrapper">
-    <div id="contents-panel" class="ind-panel">
-      <div id="contents-display" class="ind-cell"></div>
-    </div>
+    <div id="contents-panel" class="ind-panel"></div>
   </section><!-- End Main Content -->
 
   <aside id="preview-wrapper">
@@ -40,28 +39,28 @@
   </aside><!-- End Preview -->
 
   <footer id="footer-wrapper" class="ind-wrapper">
-    <div id="filename-panel" class="ind-panel clearfix">
-      <div id="filename-options" class="ind-cell">
+    <div id="footer-control-panel" class="ind-panel clearfix">
+      <div id="operations-panel" class="ind-cell">
         <a id="newfolder-control" class="ind-btn" title="New Folder">New Folder</a><!--
         --><a id="delete-control" class="ind-btn ind-btn-dis" title="Delete">Delete</a><!--
         --><a id="rename-control" class="ind-btn ind-btn-dis" title="Rename">Rename</a>
 
       </div>
 
-      <div id="filename-save" class="ind-cell">
-        <label id="filename-control-label">Save As:</label>
+      <div id="filename-panel" class="ind-cell">
+        <label id="filename-label-control">Save As:</label>
         <input id="filename-control"></input>
-        <span id="filter-controls"></span>	
+        <span id="filters-panel"></span>	
       </div>
 
-      <div id="filename-action" class="ind-cell">				
+      <div id="action-panel" class="ind-cell">				
         <a id="accept-control" class="ind-btn" title="OK">OK</a><!--
         --><a id="cancel-control" class="ind-btn" title="Cancel">Cancel</a>
       </div>
     </div>
 
     <div id="status-panel" class="ind-panel">
-      <div id="status-display" class="ind-cell">Current status</div>
+      <div id="status-control" class="ind-cell">Current status</div>
     </div>
   </footer><!-- End Footer -->
 

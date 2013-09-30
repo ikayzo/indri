@@ -144,7 +144,7 @@ FileBrowser.prototype = {
 		var contents = this._applySorter(this._applyFilter(contents));
 
 		// use view to populate UI
-		this._getUiElem(this.uiNames.contents).empty().append(this.contentRenderer.render(contents, this._makeCallback(this._handleContentEvent)));
+		this._getUiElem(this.uiNames.contentsPanel).empty().append(this.contentRenderer.render(contents, this._makeCallback(this._handleContentEvent)));
 		this._selectionChanged();
 	},
 
@@ -384,16 +384,15 @@ FileBrowser.prototype = {
 		newFolder 			: '#newfolder-control',
 		delete 				: '#delete-control',
 		rename 				: '#rename-control',
-		location 			: '#location-display',
-		viewControls 		: '#view-controls',
+		location 			: '#location-control',
+		viewControls 		: '#views-panel',
 		detail 				: '#detail-control',
-		contents 			: '#contents-display',
 		contentsPanel		: '#contents-panel',
 		contentsWrapper		: '#contents-wrapper',
-		status 				: '#status-display',
-		filter 				: '#filter-controls',
+		status 				: '#status-control',
+		filter 				: '#filters-panel',
 		filename 			: "#filename-control",
-		filenameLabel 			: "#filename-control-label",
+		filenameLabel 			: "#filename-label-control",
 		previewControls		: "#preview-panel",
 		preview 			: "#preview-wrapper",
 		shortcuts 			: '#shortcuts-control',

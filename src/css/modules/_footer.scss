@@ -1,5 +1,5 @@
     /* --- Footer Sections --- */
-#filename-panel { 
+#footer-control-panel { 
   padding: 10px 20px; 
   width: 100%;
   .ind-btn { 
@@ -11,11 +11,12 @@
 }
   
   /* --- Controls --- */
-  #filename-options,  
-  #filename-save,   
-  #filename-action  { float: left; width: 33.3333333%;}
-  #filename-save    { padding: 5px 0 0 0;}
-  #filename-action  { text-align: right;}
+  #operations-panel,  
+  #filename-panel,   
+  #action-panel  { float: left; width: 33.3333333%;}
+  
+  #filename-panel    { padding: 5px 0 0 0;}
+  #action-panel  { text-align: right;}
   #filename-control { width: 50%;}
   #filterSelector   { width: 30%;}
   
@@ -27,7 +28,7 @@
 }
 
   /* --- Status --- */
-  #status-display   { 
+  #status-control   { 
     padding: 10px; 
     text-transform: capitalize;
   }

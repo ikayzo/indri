@@ -250,7 +250,7 @@ a {
   text-transform: uppercase;
   color: #fff; }
 
-#control-panel {
+#header-control-panel {
   padding: 15px;
   width: 100%; }
 
@@ -266,17 +266,16 @@ a {
       controls 
 ===================*/
 /* --- Left --- */
-#layout-controls-left,
-#shortcuts-controls,
-#layout-contorols {
+#header-left-panel,
+#shortcuts-panel {
   float: left; }
 
 /* Buttons */
-#location-controls {
+#header-navigation-panel {
   float: left;
   margin: 0 0 0 10px; }
 
-#location-display {
+#location-control {
   float: left;
   padding: 10px;
   font-weight: bold; }
@@ -285,14 +284,14 @@ a {
   margin: 0 10px; }
 
 /* --- Right --- */
-#layout-controls-right {
+#header-right-panel {
   float: right; }
 
 /* Buttons */
-#view-controls {
+#views-panel {
   float: left; }
 
-#detail-controls {
+#details-panel {
   float: right;
   margin: 0 0 0 10px; }
 
@@ -476,25 +475,25 @@ th.ind-col-sort-desc {
   color: white; }
 
 /* --- Footer Sections --- */
-#filename-panel {
+#footer-control-panel {
   padding: 10px 20px;
   width: 100%; }
-  #filename-panel .ind-btn {
+  #footer-control-panel .ind-btn {
     margin-left: 10px; }
-    #filename-panel .ind-btn:first-child {
+    #footer-control-panel .ind-btn:first-child {
       margin: 0; }
 
 /* --- Controls --- */
-#filename-options,
-#filename-save,
-#filename-action {
+#operations-panel,
+#filename-panel,
+#action-panel {
   float: left;
   width: 33.3333333%; }
 
-#filename-save {
+#filename-panel {
   padding: 5px 0 0 0; }
 
-#filename-action {
+#action-panel {
   text-align: right; }
 
 #filename-control {
@@ -510,7 +509,7 @@ th.ind-col-sort-desc {
   width: 100%; }
 
 /* --- Status --- */
-#status-display {
+#status-control {
   padding: 10px;
   text-transform: capitalize; }
 

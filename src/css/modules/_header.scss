@@ -7,7 +7,7 @@
   text-transform: uppercase; 
   color: #fff; }
 
-#control-panel  { 
+#header-control-panel  { 
   padding: 15px; 
   width: 100%;
 }
@@ -29,25 +29,24 @@
 
   /* --- Left --- */
   
-  #layout-controls-left,
-  #shortcuts-controls,
-  #layout-contorols 		{ 
+  #header-left-panel,
+  #shortcuts-panel { 
     float: left; 
   }
   
   /* Buttons */
-  #location-controls    { float: left; margin: 0 0 0 10px;}
-  #location-display    	{ float: left; padding: 10px; font-weight: bold;}
+  #header-navigation-panel    { float: left; margin: 0 0 0 10px;}
+  #location-control    	{ float: left; padding: 10px; font-weight: bold;}
   .ind-location-divider { margin: 0 10px;}
 
   /* --- Right --- */
-  #layout-controls-right  { float: right;}
+  #header-right-panel  { float: right;}
   #preview-wrapper {
     //background: $panel-preview;
   }
 
     /* Buttons */
-    #view-controls          { float: left;}
-    #detail-controls        { float: right; margin: 0 0 0 10px;}
+    #views-panel          { float: left;}
+    #details-panel        { float: right; margin: 0 0 0 10px;}
 
   
