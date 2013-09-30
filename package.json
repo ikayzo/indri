@@ -9,6 +9,7 @@
     "grunt-contrib-cssmin": "~0.6.1",
     "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-clean": "~0.5.0",
-    "node-static": "~0.7.1"
+    "node-static": "~0.7.1",
+    "aws-sdk": "~1.6.0"
   }
 }
