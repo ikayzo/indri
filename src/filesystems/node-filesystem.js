@@ -3,6 +3,7 @@ var static= require('node-static');
 var fs = require('fs');
 var path = require('path');
 var http = require('http');
+var util = require('util');
 
 var config = {};
 
@@ -221,7 +222,7 @@ fs.readFile(configFile, 'utf8', function (err, data) {
       res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
       handleFileRequest(req, res);
     }
-  }).listen(config.serverPort, config.serverName);
+  }).listen(process.env.PORT || config.serverPort);
   console.log('Server running at http://' + config.serverName + ':' + config.serverPort);
   console.log('Serving files from ', config.rootDir);
 });
