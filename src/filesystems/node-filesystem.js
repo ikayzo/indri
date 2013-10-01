@@ -7,6 +7,9 @@ var util = require('util');
 
 var config = {};
 
+var previewRegEx = null;
+
+
 function isValidFile(fileName) {
 	return fileName[0] != '.';
 }
@@ -19,10 +22,25 @@ function fsUrl() {
   return url;
 }
 
+function isPreviewable(fullPath) {
+	if(!config.previewTypes) {
+		return null;
+	}
+	
+	if(!previewRegEx) {
+		previewRegEx = new RegExp(config.previewTypes);
+	}
+
+	return fullPath && fullPath.match(previewRegEx);
+}
+
+function getPreviewUrl(fullPath) {
+	return isPreviewable(fullPath) ? (fsUrl() + fullPath.slice(config.rootDir.length)) : null;
+}
+
 function getFileInfo(fullPath) {
 
-	var ext = path.extname(fullPath);
-	var previewUrl = (ext == ".png" || ext == ".jpeg"|| ext == ".jpg" || ext == ".gif") ? fsUrl() + fullPath.slice(config.rootDir.length) : null;
+	var previewUrl = getPreviewUrl(fullPath);
 
 	var stats = fs.statSync(fullPath);
 	return { 
