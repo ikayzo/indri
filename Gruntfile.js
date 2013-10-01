@@ -67,6 +67,13 @@ module.exports = function(grunt) {
           cwd: 'src/css',
           expand: true,
           filter: 'isFile',
+          src: ['indri.css'],
+          dest: 'build/<%= pkg.name %>-<%= pkg.version %>/',
+          filter: 'isFile'
+        },{
+          cwd: 'src/css',
+          expand: true,
+          filter: 'isFile',
           src: ['fonts/*'],
           dest: 'build/<%= pkg.name %>-<%= pkg.version %>/',
           filter: 'isFile'
