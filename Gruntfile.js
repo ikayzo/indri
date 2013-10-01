@@ -37,6 +37,23 @@ module.exports = function(grunt) {
         }
       }
     },
+    concat: {
+      options: {
+        banner: '/*! <%= pkg.name %>-<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+        separator: ';'
+      },
+      dist: {
+        src: [
+          'src/js/indri.fsm.js',
+          'src/js/indri.base.js',
+          'src/js/indri.content.renderer.base.js',
+          'src/js/indri.content.renderers.js',
+          'src/js/indri.location.renderers.js',
+          'src/js/indri.main.js'
+        ],
+        dest: 'build/<%= pkg.name %>-<%= pkg.version %>/indri.js'
+      }
+    },
     copy: {
       main: {
         files: [{
@@ -44,6 +61,13 @@ module.exports = function(grunt) {
           expand: true,
           filter: 'isFile',
           src: ['templates/*.html', 'img/*'],
+          dest: 'build/<%= pkg.name %>-<%= pkg.version %>/',
+          filter: 'isFile'
+        },{
+          cwd: 'src/css',
+          expand: true,
+          filter: 'isFile',
+          src: ['indri.css'],
           dest: 'build/<%= pkg.name %>-<%= pkg.version %>/',
           filter: 'isFile'
         },{
@@ -80,6 +104,7 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-sass');
@@ -87,6 +112,6 @@ module.exports = function(grunt) {
 
 
   grunt.registerTask('default', ['sass']);
-  grunt.registerTask('release', ['clean', 'sass', 'cssmin', 'uglify', 'copy:main', 'copy:main']);
+  grunt.registerTask('release', ['clean', 'sass', 'cssmin', 'uglify', 'concat', 'copy:main', 'copy:main']);
   grunt.registerTask('update-filesystem', ['copy:update_filesystem']);
 };
