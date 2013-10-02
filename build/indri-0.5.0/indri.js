@@ -1,4 +1,4 @@
-/*! indri-0.5.0 2013-10-01 */
+/*! indri-0.5.0 2013-10-02 */
 
 /*
 	The FileSystemManager provides access to the remote file system.
@@ -212,13 +212,13 @@ ContentRenderer.prototype = {
 			}
 		});
 
-		if(!contentItem.isDir) {
+//		if(!contentItem.isDir) {
 			$listItem.off("dblclick").on("dblclick", this, function(evt) {
 				if(evt.which == MouseButtons.BUTTON_LEFT) {
 					evt.data.callback(contentItem, evt);
 				}
 			});
-		}
+//		}
 
 /*
 		var pressTimer;
@@ -551,7 +551,10 @@ FileBrowser.prototype = {
 	currentLocation : {},
 	currentContents : {},
 
-	multiSelect : false,
+	allowItemSelection : true,
+	allowMultipleSelection : false,
+	allowDirsInResults : false,
+
 	currentSelection : [],
 
 	filter : null,
@@ -563,7 +566,6 @@ FileBrowser.prototype = {
 	previewRenderer : null,
 	shortcutsRenderer : null,
 
-	allowMultipleResults : false,
 	resultCallback : null,
 
 	/*
@@ -680,29 +682,16 @@ FileBrowser.prototype = {
 			this.renameItem(contentItem, newName);
 		}
 		else if(evt.type == "dblclick") {
-			this._returnResults(true, this.currentSelection);
-		}	
-		else if(evt.type == "click") {
-			var index = jQuery.inArray(contentItem, this.currentSelection);
-			if(evt.metaKey && this.multiSelect) {
-				if(index == -1) {
-					this.currentSelection.push(contentItem);
-				}
-				else {
-					this.currentSelection.splice(index, 1);
-				}
+			if(contentItem.isDir) {
+				this.navigateToLocation(contentItem.location);
 			}
 			else {
-				if(index != -1 && contentItem.isDir) {
-					this.navigateToLocation(contentItem.location);
-				}
-				else {
-					this.currentSelection.length = 0;
-					this.currentSelection.push(contentItem);
-				}
+			this._applySelectionToItem(contentItem, evt.metaKey);
+				this._returnResults(true);
 			}
-
-			this._selectionChanged();
+		}	
+		else if(evt.type == "click") {
+			this._applySelectionToItem(contentItem, evt.metaKey);
 		}
 	},
 
@@ -752,32 +741,59 @@ FileBrowser.prototype = {
 		this._populateContentUI();
 	},
 
-	_selectionChanged : function() {
+	_applySelectionToItem : function(contentItem, metaKey) {
+		var includeInSelection = this.allowItemSelection || contentItem.isDir;
+
+		// See if the item is already in the selection
+		var index = jQuery.inArray(contentItem, this.currentSelection);
+
+		// If we're doing a multiselect
+		if(metaKey && this.allowMultipleSelection) {
+			// add or remove the item from currentSelection as needed
+			if(index == -1) {
+				if(includeInSelection) {
+					this.currentSelection.push(contentItem);
+				}
+			}
+			else {
+				this.currentSelection.splice(index, 1);
+			}
+		}
+		else {
+			// Otherwise, replace the selection with the new item
+			this.currentSelection.length = 0;
+			if(includeInSelection) {
+				this.currentSelection.push(contentItem);
+			}
+		}
+
+		// Pass the contentItem if we didn't add it to the selection list
+		this._selectionChanged(includeInSelection ? null : contentItem);
+	},
+
+	// Take a parameter and include it in the text field content
+	_selectionChanged : function(unincludedItem) {
 		// Have the content renderer update the content area
 		this.contentRenderer.updateSelection(this.currentSelection);
 
 		// Fill in the selected names
 		var filenameText = '';
-		if(this.currentSelection.length == 1) {
-			filenameText = this.currentSelection[0].name;
+		var prefix = '';
+
+		this.currentSelection.forEach(function(selectedItem) {
+				filenameText += prefix + selectedItem.name;
+				prefix = ';';
+		});
+		if(unincludedItem) {
+			filenameText += prefix + unincludedItem.name;
 		}
-		else if(this.currentSelection.length > 0) {
-			if(this.allowMultipleResults) {
-				var prefix = '';
-				this.currentSelection.forEach(function(selectedItem) {
-					filenameText += prefix + selectedItem.name;
-					prefix = ';';
-				});
-			}
-			else {
-				filenameText = "<Multiple Selection>";
-			}
-		}
+
 		this._getUiElem(this.uiNames.filename).val(filenameText);
 
-		// Enabled/disable the buttons button
+		// Enabled/disable the buttons
 		this._setEnabled(this.uiNames.delete, this.currentSelection.length != 0);
 		this._setEnabled(this.uiNames.rename, this.currentSelection.length == 1);
+		this._setEnabled(this.uiNames.accept, (this._getResults().length != 0) || unincludedItem);
 
 		if(this.previewRenderer) {
 			this._getUiElem(this.uiNames.preview).empty().append(this.previewRenderer.render(this.currentSelection));
@@ -808,13 +824,24 @@ FileBrowser.prototype = {
 		return function() { return callback.apply(fileBrowser, arguments); }
 	},
 
-	_returnResults : function(filesSelected, results) {
-		if(filesSelected && !this.allowMultipleResults && results.length != 1) {
-			this._updateStatus(IndriText.MULTI_SELECT_ERR);
-		}
-		else {
-			this.resultCallback({ success: filesSelected, results: results });
-		}
+	// Get results set from current selection
+	_getResults : function() {
+		var results = [];
+		this.currentSelection.forEach(function(selectedItem){
+			if(this.allowDirsInResults || !selectedItem.isDir) {
+				results.push(selectedItem);
+			}
+		}, this);
+		return results;
+	},
+
+	_returnResults : function(returnValue) {
+		this.resultCallback({ 
+			success: returnValue,
+			location: this.currentLocation, 
+			selection: this._getResults(), 
+			filename: this._getUiElem(this.uiNames.filename).val() 
+		});
 	},
 
 
@@ -836,8 +863,9 @@ FileBrowser.prototype = {
 		this.currentContents = {};
 		this.currentSelection = [];
 
-		this.multiSelect = initializer.multiSelect;
-		this.allowMultipleResults = initializer.allowMultipleResults;
+		this.allowItemSelection = initializer.allowItemSelection;
+		this.allowMultipleSelection = initializer.allowMultipleSelection;
+		this.allowDirsInResults = initializer.allowDirsInResults;
 
 		this.sorter = initializer.sorter;
 		this.sorter.browser = this;
@@ -851,20 +879,27 @@ FileBrowser.prototype = {
 		this._initializeFiltering(initializer.filter);
 		this._initializeViews(initializer.viewFactory);
 
+		// Standard event handlers
 		var fileBrowser = this;
 		this._getUiElem(this.uiNames.parent).click(function() { fileBrowser.navigateRelative("parent"); });
 		this._getUiElem(this.uiNames.refresh).click(function() { fileBrowser.navigateToLocation(fileBrowser.currentLocation); });
+		// Clear the selection if the user clicks away from any content item
 		this._getUiElem(this.uiNames.contentsPanel).click(function(evt) {
 			if(evt.toElement == this) {
 				fileBrowser.clearSelection();
 			}
+		});
+		// Update the accept button enabled state when the user types in the filename field
+		this._getUiElem(this.uiNames.filename).keyup(function() {
+			console.log(jQuery(this).val());
+			fileBrowser._setEnabled(fileBrowser.uiNames.accept, (fileBrowser._getResults().length != 0) || (jQuery(this).val() != ''));
 		});
 		this._getUiElem(this.uiNames.detail).click(function() { fileBrowser._toggleVisible(fileBrowser.uiNames.preview); });
 		this._getUiElem(this.uiNames.shortcuts).click(function() { fileBrowser._toggleVisible(fileBrowser.uiNames.shortcutsPanel); });
 		this._getUiElem(this.uiNames.delete).click(function() { fileBrowser.deleteSelected(); });
 		this._getUiElem(this.uiNames.newFolder).click(function() { fileBrowser.createFolder(); });
 		this._getUiElem(this.uiNames.rename).click(function() { fileBrowser._beginEditingContentItem(); });
-		this._getUiElem(this.uiNames.accept).click(function() { fileBrowser._returnResults(true, fileBrowser.currentSelection); });
+		this._getUiElem(this.uiNames.accept).click(function() { fileBrowser._returnResults(true); });
 		this._getUiElem(this.uiNames.cancel).click(function() { fileBrowser._returnResults(false); });
 
 
@@ -995,8 +1030,7 @@ FileBrowser.prototype.DefaultInitializer = {
 	},
 
 	directoriesOnly : false,
-	multiSelect : false,
-	allowMultipleResults : false,
+	allowMultipleSelection : false,
 	// fileMustExist : false,
 
 	sorter : {
@@ -1180,8 +1214,9 @@ FileBrowser.prototype.DefaultInitializer = {
 
 FileBrowser.prototype.DebugDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
 
-	multiSelect : true,
-	allowMultipleResults : true,
+	allowItemSelection : true,
+	allowMultipleSelection : true,
+	allowDirsInResults : false,
 
 	texts : {
 		title : "Test Dialog",
@@ -1200,7 +1235,12 @@ FileBrowser.prototype.DebugDialogInitializer = jQuery.extend(true, {}, FileBrows
 
 FileBrowser.prototype.SaveDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
 
-	multiSelect : false,
+	// This combination copies item names to the text field on selection, but doesn't
+	// maintain the selection in the ui. Whatever text ends up in the text field is what 
+	// we use to build the result
+	allowItemSelection : false,
+	allowMultipleSelection : false,
+	allowDirsInResults : false,
 
 	texts : {
 		title : "Save File",
@@ -1221,8 +1261,10 @@ FileBrowser.prototype.SaveDialogInitializer = jQuery.extend(true, {}, FileBrowse
 
 FileBrowser.prototype.OpenDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
 
-	multiSelect : true,
-	allowMultipleResults : true,
+	// Let the user select any number of existing items
+	allowItemSelection : true,
+	allowMultipleSelection : true,
+	allowDirsInResults : false,
 
 	texts : {
 		title : "Open File(s)",
@@ -1234,5 +1276,29 @@ FileBrowser.prototype.OpenDialogInitializer = jQuery.extend(true, {}, FileBrowse
 		preview : true,
 		shortcutsPanel : false,
 		filter : true,
+	},
+});
+
+// TODO hide the filename, and add a filter to only show folders
+FileBrowser.prototype.DestinationDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
+
+	// Let the user select one director
+	allowItemSelection : false,
+	allowMultipleSelection : false,
+	allowDirsInResults : true,
+
+	texts : {
+		title : "Select Target Folder",
+		accept : "Select",
+		cancel : "Cancel",
+	},
+
+	visibility : {
+		preview : true,
+		shortcutsPanel : false,
+		filter : false,
+		delete : true,
+		rename : true,
+		filename : true
 	},
 });

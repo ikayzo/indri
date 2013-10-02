@@ -80,13 +80,13 @@ ContentRenderer.prototype = {
 			}
 		});
 
-		if(!contentItem.isDir) {
+//		if(!contentItem.isDir) {
 			$listItem.off("dblclick").on("dblclick", this, function(evt) {
 				if(evt.which == MouseButtons.BUTTON_LEFT) {
 					evt.data.callback(contentItem, evt);
 				}
 			});
-		}
+//		}
 
 /*
 		var pressTimer;
