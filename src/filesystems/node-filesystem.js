@@ -85,6 +85,42 @@ function FileSystemRequestHandler(req, res) {
 }
 
 FileSystemRequestHandler.prototype = {
+  parseRequest : function() {
+    this.result = {};
+    this.parsedQuery = require('url').parse(this.req.url, true);
+    this.action = this.parsedQuery.query.action || "browse";
+    this.loc = parseLocation(this.parsedQuery.query.loc);
+    if (this.loc == 'undefined')
+      this.loc == '"/"';
+    console.log(this.parsedQuery.query.loc, ' -> ', this.loc);
+  },
+
+  routeRequest : function() {
+    if(this.action == "navigate") {
+      this.navigate();
+    } else if(this.action == "browse") {
+      this.browse();
+    } else if(this.action == "rename") {
+      this.rename();
+    } else if(this.action == "delete") {
+      this.delete();
+    }
+    else if(this.action == "makedir") {
+      this.makedir();
+    } else if(this.action == 'shortcuts') {
+      this.shortcuts();
+    } else {
+      this.invalidAction();
+    }
+  },
+
+  catchException : function(ex) {
+    console.log("Exception: " + ex);
+
+    this.result.error = "Error accessing " + this.loc;
+    this.result.exception = ex.toString();
+  },
+
   browse : function() {
     var result = this.result;
     result.realLoc = constrainPath(path.join(config.rootDir, this.loc));
@@ -97,18 +133,14 @@ FileSystemRequestHandler.prototype = {
       }
     });
   },
-  catchException : function(ex) {
-    console.log("Exception: " + ex);
 
-    this.result.error = "Error accessing " + this.loc;
-    this.result.exception = ex.toString();
-  },
   delete : function() {
-    if(!parsedQuery.query.locs) {
+    var result = this.result;
+    if(!this.parsedQuery.query.locs) {
       throw "Missing locations to delete";
     }
 
-    var locations = JSON.parse(parsedQuery.query.locs);
+    var locations = JSON.parse(this.parsedQuery.query.locs);
     result.locations = locations;
 
     result.attempt = [];
@@ -141,22 +173,26 @@ FileSystemRequestHandler.prototype = {
       }
     });
   },
+
   invalidAction : function() {
     result.error = "Invalid action";
     result.action = action;
     result.loc = loc;
   },
+
   makedir: function() {
-    if(!parsedQuery.query.name) {
+    var result = this.result;
+    if(!this.parsedQuery.query.name) {
       throw "Missing new folder name";
     }
 
-    var fullPath = path.join(config.rootDir, loc, parsedQuery.query.name);
+    var fullPath = path.join(config.rootDir, this.loc, this.parsedQuery.query.name);
     result.attemp = fullPath;
 
     fs.mkdirSync(fullPath);
     result.contents = [getFileInfo(fullPath)];
   },
+
   navigate : function() {
     this.result.origLoc = this.loc;
     var direction = this.parsedQuery.query.direction;
@@ -169,21 +205,14 @@ FileSystemRequestHandler.prototype = {
     this.result.loc = encodeLocation(this.loc);
     console.log(this.result);
   },
-  parseRequest : function() {
-    this.result = {};
-    this.parsedQuery = require('url').parse(this.req.url, true);
-    this.action = this.parsedQuery.query.action || "browse";
-    this.loc = parseLocation(this.parsedQuery.query.loc);
-    if (this.loc == 'undefined')
-      this.loc == '"/"';
-    console.log(this.parsedQuery.query.loc, ' -> ', this.loc);
-  },
+
   rename : function() {
-    if(!parsedQuery.query.loc) {
+    var result = this.result;
+    if(!this.parsedQuery.query.loc) {
       throw "Missing location";
     }
 
-    var newName = parsedQuery.query.newName;
+    var newName = this.parsedQuery.query.newName;
     if(!newName) {
       result.error = "No new name supplied for rename";
     }
@@ -203,24 +232,7 @@ FileSystemRequestHandler.prototype = {
       }
     }
   },
-  routeRequest : function() {
-    if(this.action == "navigate") {
-      this.navigate();
-    } else if(this.action == "browse") {
-      this.browse();
-    } else if(this.action == "rename") {
-      this.rename();
-    } else if(this.action == "delete") {
-      this.delete();
-    }
-    else if(this.action == "makedir") {
-      this.makedir();
-    } else if(this.action == 'shortcuts') {
-      this.shortcuts();
-    } else {
-      this.invalidAction();
-    }
-  },
+
   shortcuts : function() {
     this.result.contents = [];
     console.log("shortcuts result after", this.result);
