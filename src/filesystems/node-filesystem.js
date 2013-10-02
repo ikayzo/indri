@@ -11,7 +11,7 @@ var previewRegEx = null;
 
 
 function isValidFile(fileName) {
-	return fileName[0] != '.';
+  return fileName[0] != '.';
 }
 
 function fsUrl() {
@@ -23,183 +23,226 @@ function fsUrl() {
 }
 
 function isPreviewable(fullPath) {
-	if(!config.previewTypes) {
-		return null;
-	}
-	
-	if(!previewRegEx) {
-		previewRegEx = new RegExp(config.previewTypes);
-	}
+  if(!config.previewTypes) {
+    return null;
+  }
 
-	return fullPath && fullPath.match(previewRegEx);
+  if(!previewRegEx) {
+    previewRegEx = new RegExp(config.previewTypes);
+  }
+
+  return fullPath && fullPath.match(previewRegEx);
 }
 
 function getPreviewUrl(fullPath) {
-	return isPreviewable(fullPath) ? (fsUrl() + fullPath.slice(config.rootDir.length)) : null;
+  return isPreviewable(fullPath) ? (fsUrl() + fullPath.slice(config.rootDir.length)) : null;
 }
 
 function getFileInfo(fullPath) {
 
-	var previewUrl = getPreviewUrl(fullPath);
+  var previewUrl = getPreviewUrl(fullPath);
 
-	var stats = fs.statSync(fullPath);
-	return { 
-		name: path.basename(fullPath),
-		location: encodeLocation(fullPath.slice(config.rootDir.length)),
-		isDir: stats.isDirectory(),
-		size: (stats.isFile() ? stats.size : undefined),
-		created: stats.ctime.getTime(),
-		modified: stats.mtime.getTime(),
-		id: stats.ino,
-		previewUrl : previewUrl,
-	};
+  var stats = fs.statSync(fullPath);
+  return { 
+    name: path.basename(fullPath),
+    location: encodeLocation(fullPath.slice(config.rootDir.length)),
+    isDir: stats.isDirectory(),
+    size: (stats.isFile() ? stats.size : undefined),
+    created: stats.ctime.getTime(),
+    modified: stats.mtime.getTime(),
+    id: stats.ino,
+    previewUrl : previewUrl,
+  };
 }
 
+
+
 function constrainPath(path) {
-	// TODO Apply constraints
-	//return (path.indexOf(config.rootDir) != 0) ? config.rootDir : path;
-	return path;
+  // TODO Apply constraints
+  //return (path.indexOf(config.rootDir) != 0) ? config.rootDir : path;
+  return path;
 }
 
 function parseLocation(location) {
-	return location ? JSON.parse(location) : "/";
+  return location ? JSON.parse(location) : "/";
 }
 
 function encodeLocation(location) {
-	return JSON.stringify(location);
+  return JSON.stringify(location);
 }
 
-function handleFileRequest(req, res) {
-	try {
-		console.log(req.url);
-		var result = { };
+function FileSystemRequestHandler(req, res) {
+  try {
+    console.log(req.url);
+    this.req = req;
+    this.res = res;
+    this.parseRequest();
+    this.routeRequest();
+  } catch(ex) {
+    this.catchException(ex);
+  }
+  this.res.end(JSON.stringify(this.result) + '\n');
+}
 
-		var parsedQuery = require('url').parse(req.url, true);
-		//console.log('parsed query:', parsedQuery);
+FileSystemRequestHandler.prototype = {
+  parseRequest : function() {
+    this.result = {};
+    this.parsedQuery = require('url').parse(this.req.url, true);
+    this.action = this.parsedQuery.query.action || "browse";
+    this.loc = parseLocation(this.parsedQuery.query.loc);
+    if (this.loc == 'undefined')
+      this.loc == '"/"';
+    console.log(this.parsedQuery.query.loc, ' -> ', this.loc);
+  },
 
-    // if action is undefined serve the file
-		var action = parsedQuery.query.action || "browse";
-		var loc = parseLocation(parsedQuery.query.loc);
-		console.log(parsedQuery.query.loc, ' -> ', loc);
+  routeRequest : function() {
+    if(this.action == "navigate") {
+      this.navigate();
+    } else if(this.action == "browse") {
+      this.browse();
+    } else if(this.action == "rename") {
+      this.rename();
+    } else if(this.action == "delete") {
+      this.delete();
+    }
+    else if(this.action == "makedir") {
+      this.makedir();
+    } else if(this.action == 'shortcuts') {
+      this.shortcuts();
+    } else {
+      this.invalidAction();
+    }
+  },
 
-		if(action == "navigate") {
-			result.origLoc = loc;
-			var direction = parsedQuery.query.direction;
-			if(direction == "parent") {
-				if(loc != "/") {
-					loc = path.dirname(loc);
-				}
-			}
-			console.log(loc);
-      result.loc = encodeLocation(loc);
-			console.log(result);
-		}
-		else if(action == "browse") {
-			result.realLoc = constrainPath(path.join(config.rootDir, loc));
-			result.loc = loc = result.realLoc.slice(config.rootDir.length);
+  catchException : function(ex) {
+    console.log("Exception: " + ex);
 
-			result.contents = [];
-			fs.readdirSync(result.realLoc).forEach(function(fileName) {
-				if(isValidFile(fileName)) {
-					result.contents.push(getFileInfo(path.join(result.realLoc, fileName)));
-				}
-			});
-		}
-		else if(action == "rename") {
-			if(!parsedQuery.query.loc) {
-				throw "Missing location";
-			}
+    this.result.error = "Error accessing " + this.loc;
+    this.result.exception = ex.toString();
+  },
 
-			var newName = parsedQuery.query.newName;
-			if(!newName) {
-				result.error = "No new name supplied for rename";
-			}
-			else {
-				var oldFile = path.join(config.rootDir, loc);
-				if(fs.existsSync(oldFile)) {
-					var newFile = path.join(path.dirname(oldFile), newName);
+  browse : function() {
+    var result = this.result;
+    result.realLoc = constrainPath(path.join(config.rootDir, this.loc));
+    result.loc = this.loc = result.realLoc.slice(config.rootDir.length);
 
-					result.oldFile = oldFile;
-					result.newFile = newFile;
+    result.contents = [];
+    fs.readdirSync(result.realLoc).forEach(function(fileName) {
+      if(isValidFile(fileName)) {
+        result.contents.push(getFileInfo(path.join(result.realLoc, fileName)));
+      }
+    });
+  },
 
-					fs.renameSync(oldFile, newFile);
-					result.contents = [getFileInfo(newFile)];
-				}
-				else {
-					result.error = "File doesn't exist: " + loc;
-				}
-			}
-		}
-		else if(action == "delete") {
-			if(!parsedQuery.query.locs) {
-				throw "Missing locations to delete";
-			}
+  delete : function() {
+    var result = this.result;
+    if(!this.parsedQuery.query.locs) {
+      throw "Missing locations to delete";
+    }
 
-			var locations = JSON.parse(parsedQuery.query.locs);
-			result.locations = locations;
+    var locations = JSON.parse(this.parsedQuery.query.locs);
+    result.locations = locations;
 
-			result.attempt = [];
-			result.failure = {};
+    result.attempt = [];
+    result.failure = {};
 
-			result.contents = [];
+    result.contents = [];
 
-			locations.forEach(function(location) {
-				location = parseLocation(location);
-				if(location.length) {
-					var fullPath = path.join(config.rootDir, location);
-					result.attempt = fullPath;
+    locations.forEach(function(location) {
+      location = parseLocation(location);
+      if(location.length) {
+        var fullPath = path.join(config.rootDir, location);
+        result.attempt = fullPath;
 
-					try {
-						var fileInfo = getFileInfo(fullPath);
+        try {
+          var fileInfo = getFileInfo(fullPath);
 
-						var stats = fs.statSync(fullPath);
-						if(stats.isFile()) {
-							fs.unlinkSync(fullPath);
-						}
-						else {
-							fs.rmdirSync(fullPath);
-						}
+          var stats = fs.statSync(fullPath);
+          if(stats.isFile()) {
+            fs.unlinkSync(fullPath);
+          }
+          else {
+            fs.rmdirSync(fullPath);
+          }
 
-						result.contents.push(fileInfo);
-					}
-					catch(ex) {
-						result.failure[fullPath] = ex;
-					}
-				}
-			});
-		}
-		else if(action == "makedir") {
-			if(!parsedQuery.query.name) {
-				throw "Missing new folder name";
-			}
+          result.contents.push(fileInfo);
+        }
+        catch(ex) {
+          result.failure[fullPath] = ex;
+        }
+      }
+    });
+  },
 
-			var fullPath = path.join(config.rootDir, loc, parsedQuery.query.name);
-			result.attemp = fullPath;
+  invalidAction : function() {
+    result.error = "Invalid action";
+    result.action = action;
+    result.loc = loc;
+  },
 
-			fs.mkdirSync(fullPath);
-			result.contents = [getFileInfo(fullPath)];
-		}
-		else if(action == 'shortcuts') {
-    		result.contents = [];
-    		if(config.shortcuts) {
-                config.shortcuts.forEach(function(item) {
-                    result.contents.push({name: item.name, location: encodeLocation(item.location)});
-                });
-            }
-		}
-		else {
-			result.error = "Invalid action";
-			result.action = action;
-			result.loc = loc;
-		}
-	}
-	catch(ex) {
-		console.log("Exception: " + ex);
+  makedir: function() {
+    var result = this.result;
+    if(!this.parsedQuery.query.name) {
+      throw "Missing new folder name";
+    }
 
-		result.error = "Error accessing " + loc;
-		result.exception = ex.toString();
-	}
-	res.end(JSON.stringify(result) + '\n');
+    var fullPath = path.join(config.rootDir, this.loc, this.parsedQuery.query.name);
+    result.attemp = fullPath;
+
+    fs.mkdirSync(fullPath);
+    result.contents = [getFileInfo(fullPath)];
+  },
+
+  navigate : function() {
+    this.result.origLoc = this.loc;
+    var direction = this.parsedQuery.query.direction;
+    if(direction == "parent") {
+      if(this.loc != "/") {
+        this.loc = path.dirname(loc);
+      }
+    }
+    console.log(this.loc);
+    this.result.loc = encodeLocation(this.loc);
+    console.log(this.result);
+  },
+
+  rename : function() {
+    var result = this.result;
+    if(!this.parsedQuery.query.loc) {
+      throw "Missing location";
+    }
+
+    var newName = this.parsedQuery.query.newName;
+    if(!newName) {
+      result.error = "No new name supplied for rename";
+    }
+    else {
+      var oldFile = path.join(config.rootDir, loc);
+      if(fs.existsSync(oldFile)) {
+        var newFile = path.join(path.dirname(oldFile), newName);
+
+        result.oldFile = oldFile;
+        result.newFile = newFile;
+
+        fs.renameSync(oldFile, newFile);
+        result.contents = [getFileInfo(newFile)];
+      }
+      else {
+        result.error = "File doesn't exist: " + loc;
+      }
+    }
+  },
+
+  shortcuts : function() {
+    this.result.contents = [];
+    console.log("shortcuts result after", this.result);
+    var result = this.result;
+    if(config.shortcuts) {
+      config.shortcuts.forEach(function(item) {
+        result.contents.push({name: item.name, location: encodeLocation(item.location)});
+      });
+    }
+  }
 }
 
 
@@ -238,7 +281,7 @@ fs.readFile(configFile, 'utf8', function (err, data) {
       });
     } else {
       res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
-      handleFileRequest(req, res);
+      new FileSystemRequestHandler(req, res);
     }
   }).listen(process.env.PORT || config.serverPort);
   console.log('Server running at http://' + config.serverName + ':' + config.serverPort);
