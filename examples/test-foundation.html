@@ -39,7 +39,7 @@
 
 	<div id="indriDialog" class="reveal-modal"></div>
  
-	Results:
+	<h3>Results:</h3>
     <div id="results">Dialog not opened yet.</div>
 
 	<hr>
@@ -61,10 +61,10 @@
 					
 					console.log(result); 
 					if(result.success){
-						jQuery("#results").html("Selected items: " + JSON.stringify(result.results));						
+						jQuery("#results").html("User selection:<br>" + JSON.stringify(result));						
 					}
 					else {
-						jQuery("#results").html("Operation cancelled.");
+						jQuery("#results").html("Operation cancelled:<br>" + JSON.stringify(result));
 					}
 				};
 

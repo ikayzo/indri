@@ -36,7 +36,7 @@
 
     <div id="indriDialog" class="reveal-modal"></div>
 
-    Results:
+  <h3>Results:</h3>
     <div id="results">Dialog not opened yet.</div>
 
       <hr>
@@ -46,30 +46,30 @@
       <script type="text/javascript">
 
         jQuery(document).ready(function() {
-            function showDialog(defaults) {
+          function showDialog(defaults) {
             jQuery('#indriDialog').load('indri-0.5.0/templates/indri.html', function() {
               var initializer = getDialogInitializer(defaults);
 
               initializer.resultCallback = function(result) { 
-              jQuery('#indriDialog').dialog('close'); 
+                jQuery('#indriDialog').dialog('close'); 
 
-              console.log(result); 
-              if(result.success){
-              jQuery("#results").html("Selected items: " + JSON.stringify(result.results));						
-              }
-              else {
-              jQuery("#results").html("Operation cancelled.");
-              }
+                console.log(result); 
+                if(result.success){
+                  jQuery("#results").html("User selection:<br>" + JSON.stringify(result));            
+                }
+                else {
+                  jQuery("#results").html("Operation cancelled:<br>" + JSON.stringify(result));
+                }
               };
 
               FileBrowser.attach(this, new FileSystemManager("http://indri-filesystem.herokuapp.com/"), initializer);
               jQuery('#indriDialog').dialog(); 
-              });
-            }
+            });
+          }
 
-            jQuery("#openBtn").click(function() { showDialog(FileBrowser.prototype.OpenDialogInitializer); });
-            jQuery("#saveBtn").click(function() { showDialog(FileBrowser.prototype.SaveDialogInitializer); });
-            jQuery("#debugBtn").click(function() { showDialog(FileBrowser.prototype.DebugDialogInitializer); });
+          jQuery("#openBtn").click(function() { showDialog(FileBrowser.prototype.OpenDialogInitializer); });
+          jQuery("#saveBtn").click(function() { showDialog(FileBrowser.prototype.SaveDialogInitializer); });
+          jQuery("#debugBtn").click(function() { showDialog(FileBrowser.prototype.DebugDialogInitializer); });
         });
       </script>
     </body>
