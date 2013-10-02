@@ -11,28 +11,48 @@ The Indri distribution comes with example files that show how Indri may be used 
 
 Indri comes with standard configurations for open and save dialogs. The only additional configuration option that must be supplied is a callback for when file system items are selected or when the dialog is cancelled.
 
-The web page needs to have the `build/indri-current.version.number` folder uploaded to it, then include the indri.min.css stylesheet and indri-min.js script. Then, given an empty `div` with the id `mydialog`, the simplest Indri setup script using jQueryUI looks like this (version `0.5.0` is used in this example):
+Upload the `build/indri-current.version.number` folder to a web server. In your HTML file, include the indri.min.css stylesheet and indri-min.js script. Then, given an empty `div` with the id `mydialog`, the simplest Indri setup script using jQueryUI has these components (version `0.5.0` is used in this example):
 
+Include the javascript and CSS files:
 ```html
-<script type="text/javascript" src="jquery-1.10.2.js"></script>
-<script type="text/javascript" src="jquery-ui-1.10.3.min.js"></script>
-<link href="indri-0.5.0/indri.min.css" rel="stylesheet" type="text/css">
-<script type="text/javascript" src="indri-0.5.0/indri.min.js"></script>
+    <script type="text/javascript" src="jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="jquery-ui-1.10.3.min.js"></script>
+    <link href="indri-0.5.0/indri.min.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="indri-0.5.0/indri.min.js"></script>
 
 ```
+
+Add framework specific styles (jQueryUI in this case):
+```html
+    <style type="text/css">
+      /* jQueryUI specific styles */
+      .ui-widget[role="dialog"] {  -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0; border: 0; padding: 0; width: 80%!important; height: 80%!important;  }
+      .ui-widget #indriDialog { width: 100% !important; height: 100%!important; padding:0; border: 1px solid #ddd; background: none;}
+    </style>
+```
+
+Provide a function for opening the Indri dialog:
 ```javascript
-    jQuery('#myDialog').load('indri-0.5.0/templates/indri.html', function() {
-		var initializer = jQuery.extend(true, {}, FileBrowser.prototype.OpenDialogInitializer, {
+    function showDialog() {
+      jQuery('#myDialog').load('indri-0.5.0/templates/indri.html', function() {
+        var initializer = jQuery.extend(true, {}, FileBrowser.prototype.OpenDialogInitializer, {
 
-			resultCallback : function(result) { 
-				jQuery('#myDialog').dialog('close');
-				console.log(result);						
-			}
-		});
+          resultCallback : function(result) { 
+            jQuery('#myDialog').dialog('close');
+            console.log(result);            
+          }
+        });
 
-		FileBrowser.attach(jQuery("#indriui"), new FileSystemManager("http://indri-filesystem.herokuapp.com/"), initializer);
-		jQuery('#myDialog').dialog(); 
-	});
+        FileBrowser.attach(jQuery("#indriui"), new FileSystemManager("http://indri-filesystem.herokuapp.com/"), initializer);
+        jQuery('#myDialog').dialog(); 
+      });
+    }
+```
+
+You can attach the function to a button or other HTML element:
+```javascript
+    jQuery("#openIndriBtn").click(function() { showDialog(); });
+
 ```
 
 This uses the default settings for an Open File dialog, and provides a callback that closes the dialog and logs the result to the javascript console.
