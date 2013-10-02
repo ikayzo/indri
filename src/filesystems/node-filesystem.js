@@ -55,6 +55,8 @@ function getFileInfo(fullPath) {
 	};
 }
 
+
+
 function constrainPath(path) {
 	// TODO Apply constraints
 	//return (path.indexOf(config.rootDir) != 0) ? config.rootDir : path;
@@ -69,137 +71,166 @@ function encodeLocation(location) {
 	return JSON.stringify(location);
 }
 
-function handleFileRequest(req, res) {
+function FileSystemRequestHandler(req, res) {
 	try {
 		console.log(req.url);
-		var result = { };
-
-		var parsedQuery = require('url').parse(req.url, true);
-		//console.log('parsed query:', parsedQuery);
-
-    // if action is undefined serve the file
-		var action = parsedQuery.query.action || "browse";
-		var loc = parseLocation(parsedQuery.query.loc);
-		console.log(parsedQuery.query.loc, ' -> ', loc);
-
-		if(action == "navigate") {
-			result.origLoc = loc;
-			var direction = parsedQuery.query.direction;
-			if(direction == "parent") {
-				if(loc != "/") {
-					loc = path.dirname(loc);
-				}
-			}
-			console.log(loc);
-      result.loc = encodeLocation(loc);
-			console.log(result);
-		}
-		else if(action == "browse") {
-			result.realLoc = constrainPath(path.join(config.rootDir, loc));
-			result.loc = loc = result.realLoc.slice(config.rootDir.length);
-
-			result.contents = [];
-			fs.readdirSync(result.realLoc).forEach(function(fileName) {
-				if(isValidFile(fileName)) {
-					result.contents.push(getFileInfo(path.join(result.realLoc, fileName)));
-				}
-			});
-		}
-		else if(action == "rename") {
-			if(!parsedQuery.query.loc) {
-				throw "Missing location";
-			}
-
-			var newName = parsedQuery.query.newName;
-			if(!newName) {
-				result.error = "No new name supplied for rename";
-			}
-			else {
-				var oldFile = path.join(config.rootDir, loc);
-				if(fs.existsSync(oldFile)) {
-					var newFile = path.join(path.dirname(oldFile), newName);
-
-					result.oldFile = oldFile;
-					result.newFile = newFile;
-
-					fs.renameSync(oldFile, newFile);
-					result.contents = [getFileInfo(newFile)];
-				}
-				else {
-					result.error = "File doesn't exist: " + loc;
-				}
-			}
-		}
-		else if(action == "delete") {
-			if(!parsedQuery.query.locs) {
-				throw "Missing locations to delete";
-			}
-
-			var locations = JSON.parse(parsedQuery.query.locs);
-			result.locations = locations;
-
-			result.attempt = [];
-			result.failure = {};
-
-			result.contents = [];
-
-			locations.forEach(function(location) {
-				location = parseLocation(location);
-				if(location.length) {
-					var fullPath = path.join(config.rootDir, location);
-					result.attempt = fullPath;
-
-					try {
-						var fileInfo = getFileInfo(fullPath);
-
-						var stats = fs.statSync(fullPath);
-						if(stats.isFile()) {
-							fs.unlinkSync(fullPath);
-						}
-						else {
-							fs.rmdirSync(fullPath);
-						}
-
-						result.contents.push(fileInfo);
-					}
-					catch(ex) {
-						result.failure[fullPath] = ex;
-					}
-				}
-			});
-		}
-		else if(action == "makedir") {
-			if(!parsedQuery.query.name) {
-				throw "Missing new folder name";
-			}
-
-			var fullPath = path.join(config.rootDir, loc, parsedQuery.query.name);
-			result.attemp = fullPath;
-
-			fs.mkdirSync(fullPath);
-			result.contents = [getFileInfo(fullPath)];
-		}
-		else if(action == 'shortcuts') {
-    		result.contents = [];
-    		if(config.shortcuts) {
-                config.shortcuts.forEach(function(item) {
-                    result.contents.push({name: item.name, location: encodeLocation(item.location)});
-                });
-            }
-		}
-		else {
-			result.error = "Invalid action";
-			result.action = action;
-			result.loc = loc;
-		}
+    this.req = req;
+    this.res = res;
+    this.parseRequest();
+    this.routeRequest();
+  } catch(ex) {
+    this.catchException(ex);
 	}
-	catch(ex) {
+	this.res.end(JSON.stringify(this.result) + '\n');
+}
+
+FileSystemRequestHandler.prototype = {
+  browse : function() {
+    var result = this.result;
+		result.realLoc = constrainPath(path.join(config.rootDir, this.loc));
+		result.loc = this.loc = result.realLoc.slice(config.rootDir.length);
+
+		result.contents = [];
+		fs.readdirSync(result.realLoc).forEach(function(fileName) {
+			if(isValidFile(fileName)) {
+				result.contents.push(getFileInfo(path.join(result.realLoc, fileName)));
+			}
+		});
+  },
+  catchException : function(ex) {
 		console.log("Exception: " + ex);
 
-		result.error = "Error accessing " + loc;
-		result.exception = ex.toString();
-	}
-	res.end(JSON.stringify(result) + '\n');
+		this.result.error = "Error accessing " + this.loc;
+		this.result.exception = ex.toString();
+  },
+  delete : function() {
+		if(!parsedQuery.query.locs) {
+			throw "Missing locations to delete";
+		}
+
+		var locations = JSON.parse(parsedQuery.query.locs);
+		result.locations = locations;
+
+		result.attempt = [];
+		result.failure = {};
+
+		result.contents = [];
+
+		locations.forEach(function(location) {
+			location = parseLocation(location);
+			if(location.length) {
+				var fullPath = path.join(config.rootDir, location);
+				result.attempt = fullPath;
+
+				try {
+					var fileInfo = getFileInfo(fullPath);
+
+					var stats = fs.statSync(fullPath);
+					if(stats.isFile()) {
+						fs.unlinkSync(fullPath);
+					}
+					else {
+						fs.rmdirSync(fullPath);
+					}
+
+					result.contents.push(fileInfo);
+				}
+				catch(ex) {
+					result.failure[fullPath] = ex;
+				}
+			}
+		});
+  },
+  invalidAction : function() {
+		result.error = "Invalid action";
+		result.action = action;
+		result.loc = loc;
+  },
+  makedir: function() {
+		if(!parsedQuery.query.name) {
+			throw "Missing new folder name";
+		}
+
+		var fullPath = path.join(config.rootDir, loc, parsedQuery.query.name);
+		result.attemp = fullPath;
+
+		fs.mkdirSync(fullPath);
+		result.contents = [getFileInfo(fullPath)];
+  },
+  navigate : function() {
+		this.result.origLoc = this.loc;
+		var direction = this.parsedQuery.query.direction;
+		if(direction == "parent") {
+			if(this.loc != "/") {
+				this.loc = path.dirname(loc);
+			}
+		}
+		console.log(this.loc);
+     this.result.loc = encodeLocation(this.loc);
+		console.log(this.result);
+  },
+  parseRequest : function() {
+		this.result = {};
+		this.parsedQuery = require('url').parse(this.req.url, true);
+		this.action = this.parsedQuery.query.action || "browse";
+		this.loc = parseLocation(this.parsedQuery.query.loc);
+    if (this.loc == 'undefined')
+      this.loc == '"/"';
+		console.log(this.parsedQuery.query.loc, ' -> ', this.loc);
+  },
+  rename : function() {
+		if(!parsedQuery.query.loc) {
+			throw "Missing location";
+		}
+
+		var newName = parsedQuery.query.newName;
+		if(!newName) {
+			result.error = "No new name supplied for rename";
+		}
+		else {
+			var oldFile = path.join(config.rootDir, loc);
+			if(fs.existsSync(oldFile)) {
+				var newFile = path.join(path.dirname(oldFile), newName);
+
+				result.oldFile = oldFile;
+				result.newFile = newFile;
+
+				fs.renameSync(oldFile, newFile);
+				result.contents = [getFileInfo(newFile)];
+			}
+			else {
+				result.error = "File doesn't exist: " + loc;
+			}
+		}
+  },
+  routeRequest : function() {
+		if(this.action == "navigate") {
+      this.navigate();
+		} else if(this.action == "browse") {
+      this.browse();
+		} else if(this.action == "rename") {
+      this.rename();
+		} else if(this.action == "delete") {
+      this.delete();
+		}
+		else if(this.action == "makedir") {
+      this.makedir();
+		} else if(this.action == 'shortcuts') {
+      this.shortcuts();
+		} else {
+      this.invalidAction();
+		}
+  },
+  shortcuts : function() {
+  	this.result.contents = [];
+    console.log("shortcuts result after", this.result);
+    var result = this.result;
+  	if(config.shortcuts) {
+      config.shortcuts.forEach(function(item) {
+        result.contents.push({name: item.name, location: encodeLocation(item.location)});
+      });
+    }
+  }
 }
 
 
@@ -238,7 +269,7 @@ fs.readFile(configFile, 'utf8', function (err, data) {
       });
     } else {
       res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
-      handleFileRequest(req, res);
+      new FileSystemRequestHandler(req, res);
     }
   }).listen(process.env.PORT || config.serverPort);
   console.log('Server running at http://' + config.serverName + ':' + config.serverPort);
