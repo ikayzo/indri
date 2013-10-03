@@ -267,8 +267,13 @@ fs.readFile(configFile, 'utf8', function (err, data) {
 		AWS.config.update({accessKeyId: config.credentials.accessKeyId, secretAccessKey: config.credentials.secretAccessKey});
 
     http.createServer(function (req, res) {
-      res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
-      handleFileRequest(req, res);
+      if (req.url == '/favicon.ico') {
+        res.writeHead(404, {'Content-type' : 'text/plain'});
+        res.end('not found');
+      } else {
+        res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
+        handleFileRequest(req, res);
+      }
     }).listen(config.serverPort, config.serverName);
     console.log('Server running at http://' + config.serverName + ':' + config.serverPort);
     console.log('Serving files from ', config.rootDir);
