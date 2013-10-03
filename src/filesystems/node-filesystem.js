@@ -261,27 +261,32 @@ fs.readFile(configFile, 'utf8', function (err, data) {
   });
 
   http.createServer(function (req, res) {
-    var parsedQuery = require('url').parse(req.url, true);
-
-    console.log('parsed query:', parsedQuery.query);
-    // if action is undefined serve the file
-    if (parsedQuery.query.action == undefined) {
-      file.serve(req, res, function(err, result) {
-        if (err) {
-          console.error('Error serving %s - %s', req.url, err.message);
-          if (err.status === 404 || err.status === 500) {
-            file.serveFile(util.format('/%d.html', err.status), err.status, {}, req, res);
-          } else {
-            res.writeHead(err.status, err.headers);
-            res.end();
-          }
-        } else {
-          console.log('%s - %s', req.url, res.message); 
-        }
-      });
+    if (req.url == '/favicon.ico') {
+      res.writeHead(404, {'Content-type' : 'text/plain'});
+      res.end('not found');
     } else {
-      res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
-      new FileSystemRequestHandler(req, res);
+      var parsedQuery = require('url').parse(req.url, true);
+
+      console.log('parsed query:', parsedQuery.query);
+      // if action is undefined serve the file
+      if (parsedQuery.query.action == undefined) {
+        file.serve(req, res, function(err, result) {
+          if (err) {
+            console.error('Error serving %s - %s', req.url, err.message);
+            if (err.status === 404 || err.status === 500) {
+              file.serveFile(util.format('/%d.html', err.status), err.status, {}, req, res);
+            } else {
+              res.writeHead(err.status, err.headers);
+              res.end();
+            }
+          } else {
+            console.log('%s - %s', req.url, res.message); 
+          }
+        });
+      } else {
+        res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
+        new FileSystemRequestHandler(req, res);
+      }
     }
   }).listen(process.env.PORT || config.serverPort);
   console.log('Server running at http://' + config.serverName + ':' + config.serverPort);
