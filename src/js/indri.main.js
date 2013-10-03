@@ -111,9 +111,9 @@ FileBrowser.prototype = {
 	_modifyContents : function(items, isDelete, status) {
 		items.forEach(function(item) {
 			if(isDelete)
-				delete this.currentContents[item.id];
+				delete this.currentContents[item.clientId];
 			else
-				this.currentContents[item.id] = item;
+				this.currentContents[item.clientId] = item;
 
 		}, this);
 
@@ -127,9 +127,12 @@ FileBrowser.prototype = {
 	},
 
 	_updateContents : function(contents, status) {
+    var currentClientId = 0;
 		this.currentContents = {};
 		contents.forEach(function(contentItem) { 
-			this.currentContents[contentItem.id] = contentItem;
+      contentItem.clientId = currentClientId;
+      currentClientId++;
+			this.currentContents[contentItem.clientId] = contentItem;
 		}, this);
 		this.currentSelection.length = 0;
 

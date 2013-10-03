@@ -20,12 +20,12 @@ ContentRenderer.prototype = {
 		}
 
 		newSelection.forEach(function(selectedItem) {
-			this.lookup[selectedItem.id].addClass("ind-content-selected");
+			this.lookup[selectedItem.clientId].addClass("ind-content-selected");
 		}, this);
 	},
 
 	editItem : function(contentItem) {
-		var $listItem = this.lookup[contentItem.id];
+		var $listItem = this.lookup[contentItem.clientId];
 		if($listItem) {
 			this._setupEditingEvents($listItem, contentItem);
 		}
@@ -36,7 +36,7 @@ ContentRenderer.prototype = {
 	},
 
 	_initItem : function($listItem, contentItem) {
-		this.lookup[contentItem.id] = $listItem;
+		this.lookup[contentItem.clientId] = $listItem;
 		this._setupNormalEvents($listItem, contentItem);
 	},
 
