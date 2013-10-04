@@ -500,11 +500,12 @@ th.ind-col-sort-desc {
 #filename-label-control {
   font-size: 10px !important;
   line-height: 11px;
-  margin-bottom: 0; }
+  margin-bottom: 2px; }
 
 #filename-control {
   width: 50%;
-  line-height: 14px; }
+  line-height: 14px;
+  height: 20px; }
 
 #filterSelector {
   width: 30%; }
