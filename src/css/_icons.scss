@@ -14,9 +14,31 @@
 }
 
 /* --- Icons --- */
-.entypo  { font-family: "entypo"; line-height: 1.0em; color: $color-icon; }
-.icon-folder { color: #e8aa50;}
-.ind-filelist     .entypo { font-size: 2.9em; line-height: 0.8em;}
-.ind-iconlist     .entypo { font-size: 4.5em; line-height: 0.8em;}
-.ind-detaillist   .entypo { font-size: 2.2em; line-height: 1.0em;}
+.entypo  { 
+	font-family: "entypo"; 
+	line-height: 1.0em; 
+	color: $color-icon; 
+	.ind-filelist & {
+		font-size:2.9em;
+		line-height: 0.8em;
+	}
+	.ind-iconlist & {
+		font-size: 4.5em;
+		line-height: 0.8em;
+		width: 37px;
+		height: 45px;
+	}
+	.ind-detaillist & {
+		font-size: 2.2em;
+		line-height: 1.0em;
+	}
+	a:hover & {
+		text-decoration: none;
+	}
+}
+
+.icon-folder { 
+	color: #e8aa50;
+}
+
 
