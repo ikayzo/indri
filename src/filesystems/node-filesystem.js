@@ -176,8 +176,8 @@ FileSystemRequestHandler.prototype = {
 
   invalidAction : function() {
     result.error = "Invalid action";
-    result.action = action;
-    result.loc = loc;
+    result.action = this.action;
+    result.loc = this.loc;
   },
 
   makedir: function() {
@@ -198,7 +198,7 @@ FileSystemRequestHandler.prototype = {
     var direction = this.parsedQuery.query.direction;
     if(direction == "parent") {
       if(this.loc != "/") {
-        this.loc = path.dirname(loc);
+        this.loc = path.dirname(this.loc);
       }
     }
     console.log(this.loc);
@@ -217,7 +217,7 @@ FileSystemRequestHandler.prototype = {
       result.error = "No new name supplied for rename";
     }
     else {
-      var oldFile = path.join(config.rootDir, loc);
+      var oldFile = path.join(config.rootDir, this.loc);
       if(fs.existsSync(oldFile)) {
         var newFile = path.join(path.dirname(oldFile), newName);
 
@@ -228,7 +228,7 @@ FileSystemRequestHandler.prototype = {
         result.contents = [getFileInfo(newFile)];
       }
       else {
-        result.error = "File doesn't exist: " + loc;
+        result.error = "File doesn't exist: " + this.loc;
       }
     }
   },
