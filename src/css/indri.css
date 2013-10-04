@@ -130,19 +130,18 @@ a {
   text-decoration: none; }
   .ind-btn:hover {
     color: inherit;
-    background: #bddee6; }
+    background: #bddee6;
+    text-decoration: none; }
   .ind-btn.entypo {
     width: 35px;
     height: 35px;
     padding: 0;
     font-size: 35px; }
 
-.ind-btn-dis {
+.ind-btn-dis, .ind-btn-dis:hover {
   background: #ddd;
   color: #aaa;
   cursor: no-drop; }
-  .ind-btn-dis:hover {
-    background: #cce9f0; }
 
 .ind-btn-active {
   background: #55b7ce;
@@ -503,7 +502,7 @@ th.ind-col-sort-desc {
   margin-bottom: 2px; }
 
 #filename-control {
-  width: 50%;
+  width: 100%;
   line-height: 14px;
   height: 20px; }
 

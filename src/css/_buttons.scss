@@ -16,6 +16,7 @@
   &:hover {
     color: inherit;
     background: desaturate(lighten($btn-color, 25%), 10%);
+    text-decoration: none;
   }
   &.entypo {
     width: 35px;
@@ -24,13 +25,10 @@
     font-size: 35px;
   }
 }
-.ind-btn-dis 	  { 
+.ind-btn-dis, .ind-btn-dis:hover 	  { 
   background: #ddd; 
   color: #aaa; 
   cursor: no-drop;
-  &:hover { 
-    background: $highlight-color;
-  }
 }
 .ind-btn-active   { 
   background: $btn-color; 
