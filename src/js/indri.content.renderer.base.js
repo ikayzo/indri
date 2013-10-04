@@ -55,8 +55,6 @@ ContentRenderer.prototype = {
 			.keyup(this, function(evt) {
 				if(evt.which == KeyEvent.KEYCODE_ENTER) {
 		    		newText = $(this).val().replace(/"/g, "'");  
-		            
-		            $editable.html(newText);
 		    		$input.replaceWith($editable);
 		    		evt.data._setupNormalEvents($listItem, contentItem);
 
