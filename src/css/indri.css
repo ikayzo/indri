@@ -98,17 +98,20 @@ a {
   color: #444444; }
   .ind-filelist .entypo {
     font-size: 2.9em;
-    line-height: 0.8em; }
+    line-height: 0.8em;
+    height: 38px;
+    width: 23px; }
   .ind-iconlist .entypo {
     font-size: 4.5em;
-    line-height: 0.8em;
-    width: 37px;
-    height: 45px; }
+    line-height: 0.8em; }
   .ind-detaillist .entypo {
     font-size: 2.2em;
     line-height: 1.0em; }
   a:hover .entypo {
     text-decoration: none; }
+
+.icon-file, .icon-folder {
+  vertical-align: baseline !important; }
 
 .icon-folder {
   color: #e8aa50; }
@@ -502,12 +505,15 @@ th.ind-col-sort-desc {
   margin-bottom: 2px; }
 
 #filename-control {
-  width: 100%;
+  width: 50%;
   line-height: 14px;
   height: 20px; }
 
 #filterSelector {
-  width: 30%; }
+  width: 30%;
+  height: 20px;
+  font-size: 10px;
+  margin-bottom: 2px; }
 
 #action-panel {
   text-align: right; }

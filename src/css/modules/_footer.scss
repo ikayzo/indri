@@ -34,11 +34,16 @@
 
 
   #filename-control { 
-    width: 100%;
+    width: 50%;
     line-height: 14px;
     height: 20px;
   }
-  #filterSelector   { width: 30%;}
+  #filterSelector   { 
+    width: 30%;
+    height: 20px;
+    font-size: 10px;
+    margin-bottom: 2px;
+  }
 
     #action-panel  { 
     text-align: right;
