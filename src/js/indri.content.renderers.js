@@ -75,7 +75,7 @@ DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 				var $th = jQuery(document.createElement("th")).html(renderer._columnTitles[index]);
 				if(field != '') {
 					$th.click(this, function(evt){
-						if(evt.toElement == this && evt.which == MouseButtons.BUTTON_LEFT) {
+						if(evt.target == this && evt.which == MouseButtons.BUTTON_LEFT) {
 							evt.data.browser.sorter.setSortField(field);
 						}
 					});
