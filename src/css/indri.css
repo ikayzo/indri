@@ -98,9 +98,7 @@ a {
   color: #444444; }
   .ind-filelist .entypo {
     font-size: 2.9em;
-    line-height: 0.8em;
-    height: 38px;
-    width: 23px; }
+    line-height: 0.8em; }
   .ind-iconlist .entypo {
     font-size: 4.5em;
     line-height: 0.8em; }
@@ -379,7 +377,8 @@ a {
     text-overflow: ellipsis;
     width: 100%;
     padding: 4px 0;
-    letter-spacing: 0.06em; }
+    letter-spacing: 0.02em;
+    vertical-align: middle; }
   .ind-content .ind-content-selected {
     background: #55b7ce !important; }
     .ind-content .ind-content-selected td, .ind-content .ind-content-selected .ind-editable-name, .ind-content .ind-content-selected .entypo {

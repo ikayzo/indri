@@ -65,7 +65,8 @@
     text-overflow: ellipsis; 
     width: 100%; 
     padding: 4px 0; 
-    letter-spacing: 0.06em; 
+    letter-spacing: 0.02em; 
+    vertical-align: middle;
   } /* Truncates text. Width needs to be set to work properly */
   .ind-content-selected { 
     background: $list-item-selected !important; 
