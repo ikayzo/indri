@@ -35,7 +35,7 @@ function isPreviewable(fullPath) {
 }
 
 function getPreviewUrl(fullPath) {
-  return isPreviewable(fullPath) ? (fsUrl() + fullPath.slice(config.rootDir.length)) : null;
+  return isPreviewable(fullPath) ? (fsUrl() + fullPath.slice(config.rootDir.length)).replace(/\\/g, "/") : null;
 }
 
 function getFileInfo(fullPath) {
