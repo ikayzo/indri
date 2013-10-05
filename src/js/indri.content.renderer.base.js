@@ -109,10 +109,10 @@ ContentRenderer.prototype = {
 	_getIcon : function(contentItem) {
 		$icon = jQuery(document.createElement("span")).addClass("entypo");
 		if(contentItem.isDir) {
-			$icon.addClass('icon-folder').html(IndriIcons.ICON_FOLDER);
+			$icon.addClass('ind-icon-folder').html(IndriIcons.ICON_FOLDER);
 		}
 		else {
-			$icon.addClass('icon-file').html(IndriIcons.ICON_DOCUMENT);
+			$icon.addClass('ind-icon-file').html(IndriIcons.ICON_DOCUMENT);
 		}
 		
 		return $icon;

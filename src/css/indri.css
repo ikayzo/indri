@@ -108,10 +108,10 @@ a {
   a:hover .entypo {
     text-decoration: none; }
 
-.icon-file, .icon-folder {
+.ind-icon-file, .ind-icon-folder {
   vertical-align: baseline !important; }
 
-.icon-folder {
+.ind-icon-folder {
   color: #e8aa50; }
 
 /* Icon Font (Entypo) */
@@ -383,7 +383,7 @@ a {
     background: #55b7ce !important; }
     .ind-content .ind-content-selected td, .ind-content .ind-content-selected .ind-editable-name, .ind-content .ind-content-selected .entypo {
       color: white !important; }
-    .ind-content .ind-content-selected .icon-folder {
+    .ind-content .ind-content-selected .ind-icon-folder {
       color: #e8aa50 !important; }
     .ind-content .ind-content-selected:hover {
       background: #7dc8d9 !important; }
@@ -399,7 +399,7 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
     color: #1e1e1e !important; }
     .ind-listitem:hover .entypo {
       color: #1e1e1e; }
-    .ind-listitem:hover .icon-folder {
+    .ind-listitem:hover .ind-icon-folder {
       color: #e8aa50 !important; }
   .ind-listitem .ind-editable-name {
     margin: 0 0 0 5px;
@@ -417,7 +417,7 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
   color: #1e1e1e; }
   .ind-iconitem:hover .entypo {
     color: #1e1e1e; }
-  .ind-iconitem:hover .icon-folder {
+  .ind-iconitem:hover .ind-icon-folder {
     color: #e8aa50; }
 
 /* --- Detail/Table View --- */
@@ -443,9 +443,9 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
       background: #cce9f0 !important; }
       .ind-detaillist tr:hover td {
         color: #1e1e1e; }
-        .ind-detaillist tr:hover td .icon-file {
+        .ind-detaillist tr:hover td .ind-icon-file {
           color: #1e1e1e; }
-        .ind-detaillist tr:hover td .icon-folder {
+        .ind-detaillist tr:hover td .ind-icon-folder {
           color: #e8aa50; }
     .ind-detaillist tr td {
       padding: 0 10px;
