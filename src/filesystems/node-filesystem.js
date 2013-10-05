@@ -186,11 +186,20 @@ FileSystemRequestHandler.prototype = {
       throw "Missing new folder name";
     }
 
-    var fullPath = path.join(config.rootDir, this.loc, this.parsedQuery.query.name);
-    result.attemp = fullPath;
+    var fullPath = path.join(config.rootDir, this.loc, this.parsedQuery.query.name);    
+    
+    // Make sure that the folder will be unique.  If not, append a number to it.
+    var uniqueFullPath = fullPath;
+    var numAppend = 1;
+    while(fs.existsSync(uniqueFullPath)) {
+      uniqueFullPath = fullPath + ' (' + numAppend + ')';
+      numAppend++;
+    }
+    
+    result.attemp = uniqueFullPath;
 
-    fs.mkdirSync(fullPath);
-    result.contents = [getFileInfo(fullPath)];
+    fs.mkdirSync(uniqueFullPath);
+    result.contents = [getFileInfo(uniqueFullPath)];
   },
 
   navigate : function() {
