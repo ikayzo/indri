@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* --- Table of Contents --- */
 /*
 Variables
@@ -96,21 +97,23 @@ a {
   font-family: "entypo";
   line-height: 1.0em;
   color: #444444; }
+  .ind-filelist .entypo {
+    font-size: 2.9em;
+    line-height: 0.8em; }
+  .ind-iconlist .entypo {
+    font-size: 4.5em;
+    line-height: 0.8em; }
+  .ind-detaillist .entypo {
+    font-size: 2.2em;
+    line-height: 1.0em; }
+  a:hover .entypo {
+    text-decoration: none; }
 
-.icon-folder {
+.ind-icon-file, .ind-icon-folder {
+  vertical-align: baseline !important; }
+
+.ind-icon-folder {
   color: #e8aa50; }
-
-.ind-filelist .entypo {
-  font-size: 2.9em;
-  line-height: 0.8em; }
-
-.ind-iconlist .entypo {
-  font-size: 4.5em;
-  line-height: 0.8em; }
-
-.ind-detaillist .entypo {
-  font-size: 2.2em;
-  line-height: 1.0em; }
 
 /* Icon Font (Entypo) */
 /* --- Buttons --- */
@@ -129,19 +132,18 @@ a {
   text-decoration: none; }
   .ind-btn:hover {
     color: inherit;
-    background: #bddee6; }
+    background: #bddee6;
+    text-decoration: none; }
   .ind-btn.entypo {
     width: 35px;
     height: 35px;
     padding: 0;
     font-size: 35px; }
 
-.ind-btn-dis {
+.ind-btn-dis, .ind-btn-dis:hover {
   background: #ddd;
   color: #aaa;
   cursor: no-drop; }
-  .ind-btn-dis:hover {
-    background: #cce9f0; }
 
 .ind-btn-active {
   background: #55b7ce;
@@ -367,21 +369,22 @@ a {
       cursor: default;
       /* Remove text cursor - Add to mobile */ }
     .ind-content li:nth-child(6n+1), .ind-content li:nth-child(6n+2), .ind-content li:nth-child(6n+3) {
-      background: #f5f5f5; }
+      background: whitesmoke; }
   .ind-content tr:nth-child(odd) {
-    background: #f5f5f5; }
+    background: whitesmoke; }
   .ind-content .ind-editable-name {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;
     padding: 4px 0;
-    letter-spacing: 0.06em; }
+    letter-spacing: 0.02em;
+    vertical-align: middle; }
   .ind-content .ind-content-selected {
     background: #55b7ce !important; }
     .ind-content .ind-content-selected td, .ind-content .ind-content-selected .ind-editable-name, .ind-content .ind-content-selected .entypo {
       color: white !important; }
-    .ind-content .ind-content-selected .icon-folder {
+    .ind-content .ind-content-selected .ind-icon-folder {
       color: #e8aa50 !important; }
     .ind-content .ind-content-selected:hover {
       background: #7dc8d9 !important; }
@@ -397,7 +400,7 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
     color: #1e1e1e !important; }
     .ind-listitem:hover .entypo {
       color: #1e1e1e; }
-    .ind-listitem:hover .icon-folder {
+    .ind-listitem:hover .ind-icon-folder {
       color: #e8aa50 !important; }
   .ind-listitem .ind-editable-name {
     margin: 0 0 0 5px;
@@ -415,7 +418,7 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
   color: #1e1e1e; }
   .ind-iconitem:hover .entypo {
     color: #1e1e1e; }
-  .ind-iconitem:hover .icon-folder {
+  .ind-iconitem:hover .ind-icon-folder {
     color: #e8aa50; }
 
 /* --- Detail/Table View --- */
@@ -441,9 +444,9 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
       background: #cce9f0 !important; }
       .ind-detaillist tr:hover td {
         color: #1e1e1e; }
-        .ind-detaillist tr:hover td .icon-file {
+        .ind-detaillist tr:hover td .ind-icon-file {
           color: #1e1e1e; }
-        .ind-detaillist tr:hover td .icon-folder {
+        .ind-detaillist tr:hover td .ind-icon-folder {
           color: #e8aa50; }
     .ind-detaillist tr td {
       padding: 0 10px;
@@ -485,22 +488,35 @@ th.ind-col-sort-desc {
 
 /* --- Controls --- */
 #operations-panel,
-#filename-panel,
-#action-panel {
+#filename-panel {
   float: left;
   width: 33.3333333%; }
 
+#action-panel {
+  float: right;
+  width: 33.3333333%; }
+
 #filename-panel {
-  padding: 5px 0 0 0; }
+  padding: 0; }
+
+#filename-label-control {
+  font-size: 10px !important;
+  line-height: 11px;
+  margin-bottom: 2px; }
+
+#filename-control {
+  width: 50%;
+  line-height: 14px;
+  height: 20px; }
+
+#filterSelector {
+  width: 30%;
+  height: 20px;
+  font-size: 10px;
+  margin-bottom: 2px; }
 
 #action-panel {
   text-align: right; }
-
-#filename-control {
-  width: 50%; }
-
-#filterSelector {
-  width: 30%; }
 
 #status-panel {
   background: #c2c2c2;

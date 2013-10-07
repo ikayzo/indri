@@ -1,4 +1,4 @@
-/*! indri-0.5.0 2013-10-02 */
+/*! indri-0.5.0 2013-10-07 */
 
 /*
 	The FileSystemManager provides access to the remote file system.
@@ -241,10 +241,10 @@ ContentRenderer.prototype = {
 	_getIcon : function(contentItem) {
 		$icon = jQuery(document.createElement("span")).addClass("entypo");
 		if(contentItem.isDir) {
-			$icon.addClass('icon-folder').html(IndriIcons.ICON_FOLDER);
+			$icon.addClass('ind-icon-folder').html(IndriIcons.ICON_FOLDER);
 		}
 		else {
-			$icon.addClass('icon-file').html(IndriIcons.ICON_DOCUMENT);
+			$icon.addClass('ind-icon-file').html(IndriIcons.ICON_DOCUMENT);
 		}
 		
 		return $icon;
