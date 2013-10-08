@@ -144,8 +144,6 @@ FileSystemRequestHandler.prototype = {
     result.locations = locations;
 
     result.attempt = [];
-    result.failure = {};
-
     result.contents = [];
 
     locations.forEach(function(location) {
@@ -168,7 +166,12 @@ FileSystemRequestHandler.prototype = {
           result.contents.push(fileInfo);
         }
         catch(ex) {
-          result.failure[fullPath] = ex;
+          if(result.error) {
+            result.error += ", " + fullPath + " (" + ex.code + ")";
+          }
+          else {
+            result.error = "Could not delete " + fullPath + " (" + ex.code + ")";
+          }
         }
       }
     });
