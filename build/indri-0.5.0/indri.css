@@ -16,13 +16,6 @@ Buttons
 
 
 */
-/*==============================
-      BASIC CUSTOMIZATIONS          
-===============================*/
-/*==============================
-      DEFAULT STYLE RULES       
-===============================*/
-/*=========Write your variable overrides below==============*/
 /* Theme Rules and Variables */
 /* --- Universal Styles --- */
 *, *:before, *:after {
@@ -141,8 +134,8 @@ a {
     font-size: 35px; }
 
 .ind-btn-dis, .ind-btn-dis:hover {
-  background: #ddd;
-  color: #aaa;
+  background: #dddddd;
+  color: #aaaaaa;
   cursor: no-drop; }
 
 .ind-btn-active {
@@ -250,7 +243,7 @@ a {
   text-align: center;
   padding: 10px 15px;
   text-transform: uppercase;
-  color: #fff; }
+  color: white; }
 
 #header-control-panel {
   padding: 15px;
@@ -527,7 +520,8 @@ th.ind-col-sort-desc {
 /* --- Status --- */
 #status-control {
   padding: 10px;
-  text-transform: capitalize; }
+  text-transform: capitalize;
+  color: #444444; }
 
 /* Panel Styling */
 /* --- */

@@ -1,4 +1,4 @@
-/*! indri-0.5.0 2013-10-07 */
+/*! indri-0.5.0 2013-10-08 */
 
 /*
 	The FileSystemManager provides access to the remote file system.
