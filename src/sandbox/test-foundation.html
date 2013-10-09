@@ -34,6 +34,7 @@
 	<div>
 		<button id="openBtn">Open...</button>
 		<button id="saveBtn">Save...</button>
+    <button id="destBtn">Destination...</button>
 		<button id="debugBtn">Debug...</button>
 	</div>
 
@@ -83,6 +84,7 @@
 
 		jQuery("#openBtn").click(function() { showDialog(FileBrowser.prototype.OpenDialogInitializer); });
 		jQuery("#saveBtn").click(function() { showDialog(FileBrowser.prototype.SaveDialogInitializer); });
+    jQuery("#destBtn").click(function() { showDialog(FileBrowser.prototype.DestinationDialogInitializer); });
 		jQuery("#debugBtn").click(function() { showDialog(FileBrowser.prototype.DebugDialogInitializer); });
 	});
 </script>

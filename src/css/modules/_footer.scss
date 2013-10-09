@@ -12,13 +12,42 @@
   
   /* --- Controls --- */
   #operations-panel,  
-  #filename-panel,   
-  #action-panel  { float: left; width: 33.3333333%;}
-  
-  #filename-panel    { padding: 5px 0 0 0;}
-  #action-panel  { text-align: right;}
-  #filename-control { width: 50%;}
-  #filterSelector   { width: 30%;}
+  #filename-panel { 
+    float: left; 
+    width: 33.3333333%;
+  }
+
+  #action-panel {
+    float: right;
+    width: 33.3333333%;
+  }
+
+  #filename-panel    { 
+    padding: 0;
+  }
+
+  #filename-label-control {
+    font-size: 10px !important;
+    line-height:11px;
+    margin-bottom: 2px;
+  }
+
+
+  #filename-control { 
+    width: 50%;
+    line-height: 14px;
+    height: 20px;
+  }
+  #filterSelector   { 
+    width: 30%;
+    height: 20px;
+    font-size: 10px;
+    margin-bottom: 2px;
+  }
+
+    #action-panel  { 
+    text-align: right;
+  }
   
 #status-panel       { 
   background: $panel-status; 
@@ -31,4 +60,6 @@
   #status-control   { 
     padding: 10px; 
     text-transform: capitalize;
+    color: $text-status;
   }
+

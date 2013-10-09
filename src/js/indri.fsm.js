@@ -63,6 +63,9 @@ FileSystemManager.prototype = {
 
 	_doQuery : function(url, success, error) {
 		//		console.log("_doQuery: " + url);
+    
+    // Disable ajax caching for IE
+    jQuery.ajaxSetup({ cache: false });
 		jQuery.getJSON(url, function(data, textStatus, jqXHR) {
 //			console.log("callback: " + textStatus);
 			if(data.error) {

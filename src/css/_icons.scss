@@ -14,9 +14,34 @@
 }
 
 /* --- Icons --- */
-.entypo  { font-family: "entypo"; line-height: 1.0em; color: $color-icon; }
-.icon-folder { color: #e8aa50;}
-.ind-filelist     .entypo { font-size: 2.9em; line-height: 0.8em;}
-.ind-iconlist     .entypo { font-size: 4.5em; line-height: 0.8em;}
-.ind-detaillist   .entypo { font-size: 2.2em; line-height: 1.0em;}
+.entypo  { 
+	font-family: "entypo"; 
+	line-height: 1.0em; 
+	color: $color-icon; 
+	.ind-filelist & {
+		font-size:2.9em;
+		line-height: 0.8em;
+		//height: 38px;
+		//width: 23px;
+	}
+	.ind-iconlist & {
+		font-size: 4.5em;
+		line-height: 0.8em;
+	}
+	.ind-detaillist & {
+		font-size: 2.2em;
+		line-height: 1.0em;
+	}
+	a:hover & {
+		text-decoration: none;
+	}
+}
+.ind-icon-file, .ind-icon-folder {
+		vertical-align: baseline !important;
+	}
+
+.ind-icon-folder { 
+	color: #e8aa50;
+}
+
 

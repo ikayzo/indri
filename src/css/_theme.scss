@@ -1,60 +1,6 @@
-/*==============================
-      BASIC CUSTOMIZATIONS          
-===============================*/
-
-// Minimal Theme
-$color-primary: #ccc;
-$color-secondary: #aaa;
-$color-base: #f2f2f2; 
-$theme: light;
-
-// Dark & Hot Pink Theme
-$color-primary: #ee0043;
-$color-secondary: black;
-$color-base: #333; 
-$theme: dark;
-
-// Dark & Yellow Theme
-$color-primary: #f8c600;
-$color-secondary: black;
-$color-base: #333; 
-$theme: dark;
-
-// Minimal Theme
-$color-primary: #ccc;
-$color-secondary: #aaa;
-$color-base: #f2f2f2; 
-$theme: light;
-
-// Retro Theme
-$color-primary: #b90016;
-$color-secondary: #1e4952;
-$color-base: #e9e6df;
-$theme: light;
-
-// Ikayzo Theme
-$color-primary: #ea5d00;
-$color-secondary: #3d9297;
-$color-base: #f0f0f0; 
-$theme: light;
-
-// Theme - Basic
-$color-primary: #0078e7;
-$color-secondary: #333;
-$color-base: #eee;
-$theme: light;
-
-// Civil Beat Theme
-$color-primary: #639cba;
-$color-secondary: #ef9109;
-$color-base: #edece7;  
-$theme: light;
-
-// Black and White Theme
-$color-primary: #666;
-$color-secondary: black;
-$color-base: #f2f2f2;  
-$theme: light;
+//==============================
+//      BASIC CUSTOMIZATIONS          
+//==============================
 
 // Spring Theme
 $color-primary: #55b7ce;
@@ -62,9 +8,9 @@ $color-secondary: #aab25b;
 $color-base: #e8e8e8;  
 $theme: light;
 
-/*==============================
-      DEFAULT STYLE RULES       
-===============================*/
+//==============================
+//    DEFAULT STYLE RULES       
+//===============================
 
 // text colors
 $text-main: #444;
@@ -72,14 +18,16 @@ $text-dark: darken($text-main, 15%);
 $text-light: #fff;
 
 // Button, Interactivity Colors
-$btn-color:         $color-primary;
-$highlight-color:   lighten($btn-color, 30%);
-$btn-text-color: $text-main;
+$btn-color: $color-primary;
 $color-icon: $text-main;
+$btn-text-color: $text-main;
+$btn-disabled-color: #ddd;
+$btn-disabled-text-color: #aaa;
 
 // Header Section
-$text-title:       $color-secondary;
-$panel-header:    $color-base;
+$title: $color-secondary;
+$text-title: #fff;
+$panel-header: $color-base;
 $text-breadcrumb: #333;
 
 // Shortcuts Section
@@ -93,6 +41,7 @@ $text-shortcut-selected: $text-light;
 $bg-color: white;
 $list-shading: lighten($color-base, 5%);
 $list-item-selected: $color-primary;
+$highlight-color: lighten($btn-color, 30%);
 $th: darken($color-base, 15%);
 $th-selected: $color-primary;
 $text-list-item-selected: $text-light;
@@ -107,7 +56,8 @@ $panel-preview: $bg-color;
 //Footer Section
 $panel-footer: $color-base;
 $panel-status: darken($color-base, 15%); 
-$color-label: $text-main;  
+$text-label: $text-main;  
+$text-status: #444;
 
 // border colors
 $border-dark: #aaa;
@@ -138,6 +88,6 @@ body {
 
 
 
-/*=========Write your variable overrides below==============*/
+//=========Write your variable overrides below==============
 
 
