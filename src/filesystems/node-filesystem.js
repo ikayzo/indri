@@ -35,7 +35,7 @@ function isPreviewable(fullPath) {
 }
 
 function getPreviewUrl(fullPath) {
-  return isPreviewable(fullPath) ? (fsUrl() + fullPath.slice(config.rootDir.length)) : null;
+  return isPreviewable(fullPath) ? (fsUrl() + fullPath.slice(config.rootDir.length)).replace(/\\/g, "/") : null;
 }
 
 function getFileInfo(fullPath) {
@@ -144,8 +144,6 @@ FileSystemRequestHandler.prototype = {
     result.locations = locations;
 
     result.attempt = [];
-    result.failure = {};
-
     result.contents = [];
 
     locations.forEach(function(location) {
@@ -168,7 +166,14 @@ FileSystemRequestHandler.prototype = {
           result.contents.push(fileInfo);
         }
         catch(ex) {
-          result.failure[fullPath] = ex;
+          if(result.error) {
+            result.error += ', "' + fullPath + '"';
+            console.log(ex.toString())
+          }
+          else {
+            result.error = 'Could not delete: "' + fullPath + '"';
+            console.log(ex.toString());
+          }
         }
       }
     });
@@ -176,8 +181,8 @@ FileSystemRequestHandler.prototype = {
 
   invalidAction : function() {
     result.error = "Invalid action";
-    result.action = action;
-    result.loc = loc;
+    result.action = this.action;
+    result.loc = this.loc;
   },
 
   makedir: function() {
@@ -186,11 +191,20 @@ FileSystemRequestHandler.prototype = {
       throw "Missing new folder name";
     }
 
-    var fullPath = path.join(config.rootDir, this.loc, this.parsedQuery.query.name);
-    result.attemp = fullPath;
+    var fullPath = path.join(config.rootDir, this.loc, this.parsedQuery.query.name);    
+    
+    // Make sure that the folder will be unique.  If not, append a number to it.
+    var uniqueFullPath = fullPath;
+    var numAppend = 1;
+    while(fs.existsSync(uniqueFullPath)) {
+      uniqueFullPath = fullPath + ' (' + numAppend + ')';
+      numAppend++;
+    }
+    
+    result.attemp = uniqueFullPath;
 
-    fs.mkdirSync(fullPath);
-    result.contents = [getFileInfo(fullPath)];
+    fs.mkdirSync(uniqueFullPath);
+    result.contents = [getFileInfo(uniqueFullPath)];
   },
 
   navigate : function() {
@@ -198,7 +212,7 @@ FileSystemRequestHandler.prototype = {
     var direction = this.parsedQuery.query.direction;
     if(direction == "parent") {
       if(this.loc != "/") {
-        this.loc = path.dirname(loc);
+        this.loc = path.dirname(this.loc);
       }
     }
     console.log(this.loc);
@@ -217,7 +231,7 @@ FileSystemRequestHandler.prototype = {
       result.error = "No new name supplied for rename";
     }
     else {
-      var oldFile = path.join(config.rootDir, loc);
+      var oldFile = path.join(config.rootDir, this.loc);
       if(fs.existsSync(oldFile)) {
         var newFile = path.join(path.dirname(oldFile), newName);
 
@@ -228,7 +242,7 @@ FileSystemRequestHandler.prototype = {
         result.contents = [getFileInfo(newFile)];
       }
       else {
-        result.error = "File doesn't exist: " + loc;
+        result.error = "File doesn't exist: " + this.loc;
       }
     }
   },

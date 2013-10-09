@@ -52,19 +52,17 @@ ContentRenderer.prototype = {
 		};
 
 		$input = jQuery(document.createElement("input")).addClass("ind-editbox").attr("type", "text").attr("value", oldText)
-			.keyup(this, function(evt) {
-				if(evt.which == KeyEvent.KEYCODE_ENTER) {
+			.keydown(this, function(evt) {
+				if(evt.which == (KeyEvent.KEYCODE_ENTER || KeyEvent.DOM_VK_RETURN)) {
 		    		newText = $(this).val().replace(/"/g, "'");  
-		            
-		            $editable.html(newText);
 		    		$input.replaceWith($editable);
 		    		evt.data._setupNormalEvents($listItem, contentItem);
 
 		    		evt.data.callback(contentItem, "rename", newText);
-                }
-                else if(evt.which == KeyEvent.KEYCODE_ESC) {
+        }
+        else if(evt.which == (KeyEvent.KEYCODE_ESC || KeyEvent.DOM_VK_ESCAPE)) {
 		    		endEditing(evt.data);               	
-                }
+        }
 	    	}).blur(this, function(evt) {
 	    		endEditing(evt.data);               	
 	    	}).click(false).dblclick(false);
