@@ -29,17 +29,17 @@ function getDialogInitializer(defaults) {
 
 	function initLocalFileSystem(initializer) {
 		initializer.locationRenderer = new SegmentedLocationRenderer();
-		initializer.visibility.shortcutsPanel = false;
+		initializer.visibility.shortcutsWrapper = false;
 	}
 
 	function initAwsFileSystem(initializer) {
-		initializer.visibility.shortcutsPanel = true;
+		initializer.visibility.shortcutsWrapper = true;
 
 		initializer.locationRenderer = new BucketLocationRenderer();
 	}
 
 	function initCivilBeatFileSystem(initializer) {
-		initializer.visibility.shortcutsPanel = true;
+		initializer.visibility.shortcutsWrapper = true;
 
 		initializer.locationRenderer = new BucketLocationRenderer();
 	}
