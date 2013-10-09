@@ -27,7 +27,7 @@
 }
 .ind-btn-dis, .ind-btn-dis:hover 	  { 
   background: $btn-disabled-color;
-  color: $btn-disabled-text-color; 
+  color: $btn-disabled-text-color !important; 
   cursor: no-drop;
 }
 .ind-btn-active   { 
