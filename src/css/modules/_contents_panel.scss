@@ -65,14 +65,15 @@
     text-overflow: ellipsis; 
     width: 100%; 
     padding: 4px 0; 
-    letter-spacing: 0.06em; 
+    letter-spacing: 0.02em; 
+    vertical-align: middle;
   } /* Truncates text. Width needs to be set to work properly */
   .ind-content-selected { 
     background: $list-item-selected !important; 
     td, .ind-editable-name,.entypo {
       color: $text-list-item-selected !important;
     }
-    .icon-folder {
+    .ind-icon-folder {
       color: $icon-folder !important;
     }
     &:hover {
@@ -94,7 +95,7 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
       .entypo {
         color: $text-list-item-hover;
       }
-      .icon-folder {
+      .ind-icon-folder {
         color: $icon-folder !important;
       }
     }
@@ -119,7 +120,7 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
       .entypo {
         color: $text-list-item-hover;
       }
-      .icon-folder {
+      .ind-icon-folder {
         color: $icon-folder;
       }
     }
@@ -153,10 +154,10 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
         background: $highlight-color !important;
         td {
           color: $text-list-item-hover;
-          .icon-file {
+          .ind-icon-file {
             color: $text-list-item-hover;
           }
-          .icon-folder {
+          .ind-icon-folder {
             color: $icon-folder;
           }
         }

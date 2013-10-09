@@ -1,11 +1,11 @@
 /* --- Header Sections --- */
 #title-control  { 
   font-family: $font-sansserif;
-  background: $text-title; 
+  background: $title; 
   text-align: center; 
   padding: 10px 15px; 
   text-transform: uppercase; 
-  color: #fff; }
+  color: $text-title; }
 
 #header-control-panel  { 
   padding: 15px; 
@@ -21,7 +21,7 @@
   border-color: $border-dark;
   background: $panel-footer;
 }
-
+  
   
   /*==================
         controls 
@@ -39,7 +39,7 @@
   #location-control    	{ float: left; padding: 10px; font-weight: bold;}
   .ind-location-divider { margin: 0 10px;}
 
-  /* --- Right --- */
+  /* --- Right --- */ 
   #header-right-panel  { float: right;}
   #preview-wrapper {
     //background: $panel-preview;
