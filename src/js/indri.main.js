@@ -256,7 +256,7 @@ FileBrowser.prototype = {
     this._setEnabled(this.uiNames.accept, (this._getResults().length != 0) || unincludedItem);
 
     if (this.previewRenderer) {
-      this._getUiElem(this.uiNames.preview).empty().append(this.previewRenderer.render(this.currentSelection));
+      this._getUiElem(this.uiNames.previewWrapper).empty().append(this.previewRenderer.render(this.currentSelection));
     }
   },
   _filterChanged: function() {
@@ -349,8 +349,8 @@ FileBrowser.prototype = {
       console.log(jQuery(this).val());
       fileBrowser._setEnabled(fileBrowser.uiNames.accept, (fileBrowser._getResults().length != 0) || (jQuery(this).val() != ''));
     });
-    this._getUiElem(this.uiNames.detail).click(function() {
-      fileBrowser._toggleVisible(fileBrowser.uiNames.preview);
+    this._getUiElem(this.uiNames.preview).click(function() {
+      fileBrowser._toggleVisible(fileBrowser.uiNames.previewWrapper);
     });
     this._getUiElem(this.uiNames.shortcuts).click(function() {
       fileBrowser._toggleVisible(fileBrowser.uiNames.shortcutsPanel);
@@ -397,33 +397,37 @@ FileBrowser.prototype = {
   _initializeViews: function(viewFactory) {
     viewFactory.render(this._makeCallback(function(view) {
       this._setRenderer(view);
-    }), this._getUiElem(this.uiNames.viewControls));
+    }), this._getUiElem(this.uiNames.viewsPanel));
   },
-  // UI Accessors
-  uiNames: {
-    title: '#title-control',
-    accept: '#accept-control',
-    cancel: '#cancel-control',
-    parent: '#parent-control',
-    refresh: '#refresh-control',
-    newFolder: '#newfolder-control',
-    delete: '#delete-control',
-    rename: '#rename-control',
-    location: '#location-control',
-    viewControls: '#views-panel',
-    detail: '#detail-control',
-    contentsPanel: '#contents-panel',
-    contentsWrapper: '#contents-wrapper',
-    status: '#status-control',
-    filter: '#filters-panel',
-    filename: "#filename-control",
-    filenameLabel: "#filename-label-control",
-    previewControls: "#preview-panel",
-    preview: "#preview-wrapper",
-    shortcuts: '#shortcuts-control',
-    shortcutsList: '#ind-shortcut-list',
-    shortcutsPanel: "#shortcuts-wrapper",
-  },
+  
+	// UI Accessors
+	uiNames : {
+		title 					: '#title-control',
+
+		shortcuts 			: '#shortcuts-control',
+		parent 					: '#parent-control',
+		refresh 				: '#refresh-control',
+		location 				: '#location-control',
+		viewsPanel 			: '#views-panel',		
+		preview 				: '#preview-control',
+		
+		shortcutsPanel 	: "#shortcuts-wrapper",
+		contentsWrapper	: '#contents-wrapper',
+		contentsPanel		: '#contents-panel',
+		previewWrapper 	: "#preview-wrapper",
+
+		newFolder 			: '#newfolder-control',
+		delete 					: '#delete-control',
+		rename 					: '#rename-control',
+		status 					: '#status-control',
+		filter 					: '#filters-panel',
+		filename 				: "#filename-control",
+		filenameLabel 	: "#filename-label-control",
+
+		accept 					: '#accept-control',
+		cancel 					: '#cancel-control',
+	},
+
   _getUiElem: function(name) {
     return this.rootElem.find(name);
   },
@@ -433,9 +437,9 @@ FileBrowser.prototype = {
 
     // Some special cases for the shortcuts and preview panels
     // TODO There should be a more systematic way to do this
-    if (name == this.uiNames.preview || name == this.uiNames.shortcutsPanel) {
-      var controlName = name == this.uiNames.preview ? this.uiNames.detail : this.uiNames.shortcuts;
-      var className = name == this.uiNames.preview ? "ind-show-preview" : "ind-show-shortcuts";
+		if(name == this.uiNames.previewWrapper || name == this.uiNames.shortcutsPanel) {
+			var controlName = name == this.uiNames.previewWrapper ? this.uiNames.preview : this.uiNames.shortcuts;
+			var className = name == this.uiNames.previewWrapper ? "ind-show-preview" : "ind-show-shortcuts";
 
       if (isVisible) {
         this._getUiElem(this.uiNames.contentsWrapper).addClass(className);
@@ -481,7 +485,7 @@ FileBrowser.prototype.DefaultInitializer = {
     cancel: "Cancel",
   },
   visibility: {
-    preview: false,
+    previewWrapper: false,
     shortcutsPanel: false,
     newFolder: false,
     delete: false,
@@ -669,7 +673,7 @@ FileBrowser.prototype.DebugDialogInitializer = jQuery.extend(true, {}, FileBrows
     title: "Test Dialog",
   },
   visibility: {
-    preview: true,
+    previewWrapper: true,
     shortcutsPanel: true,
     newFolder: true,
     delete: true,
@@ -692,7 +696,7 @@ FileBrowser.prototype.SaveDialogInitializer = jQuery.extend(true, {}, FileBrowse
     cancel: "Cancel",
   },
   visibility: {
-    preview: false,
+    previewWrapper: false,
     shortcutsPanel: false,
     newFolder: true,
     delete: true,
@@ -713,7 +717,7 @@ FileBrowser.prototype.OpenDialogInitializer = jQuery.extend(true, {}, FileBrowse
     cancel: "Cancel",
   },
   visibility: {
-    preview: true,
+    previewWrapper: true,
     shortcutsPanel: false,
     filter: true,
   },
@@ -731,7 +735,7 @@ FileBrowser.prototype.DestinationDialogInitializer = jQuery.extend(true, {}, Fil
     cancel: "Cancel",
   },
   visibility: {
-    preview: false,
+    previewWrapper: false,
     shortcutsPanel: true,
     filter: false,
     delete: true,
