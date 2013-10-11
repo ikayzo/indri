@@ -416,7 +416,7 @@ FileBrowser.prototype = {
     }
 
     // Bind key handler
-    jQuery(jQuery("#indriui").parent()).on("keydown", this, initializer.viewFactory.views[0].keyHandler);
+    jQuery("#indriui").on("keydown", this, initializer.viewFactory.views[0].keyHandler);
     
     jQuery(this.uiNames.focusTextbox).focus();
 
@@ -760,7 +760,7 @@ FileBrowser.prototype.OpenDialogInitializer = jQuery.extend(true, {}, FileBrowse
 
 // TODO hide the filename, and add a filter to only show folders
 FileBrowser.prototype.DestinationDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
-  // Let the user select one director
+  // Let the user select one directory
   allowItemSelection: false,
   allowMultipleSelection: false,
   allowDirsInResults: true,
