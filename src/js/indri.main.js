@@ -162,6 +162,30 @@ FileBrowser.prototype = {
       this._applySelectionToItem(contentItem, evt.metaKey);
     }
   },
+  _handleKeyEvent: function(evt) {
+    // TODO 2
+
+    // catch "delete" evt
+    if (evt == "delete") {
+
+      // fire deleteSelected
+      this.deleteSelected();
+    }
+
+    // catch "enter" evt
+    else if (evt == "enter") {
+      var contentItem = this.currentSelection[0];
+      if (contentItem) {
+        if (contentItem.isDir) {
+          this.navigateToLocation(contentItem.location);
+        }
+        else {
+          this._applySelectionToItem(contentItem, evt.metaKey);
+          this._returnResults(true);
+        }
+      }
+    }
+  },
   _beginEditingContentItem: function(contentItem) {
     if (!contentItem && this.currentSelection.length) {
       contentItem = this.currentSelection[0];
@@ -298,6 +322,7 @@ FileBrowser.prototype = {
   },
   // Initialization methods
   _initialize: function(initializer) {
+    var indriMain = this;
     if (!initializer) {
       initializer = new this.DefaultInitializer();
     }
@@ -349,6 +374,11 @@ FileBrowser.prototype = {
       console.log(jQuery(this).val());
       fileBrowser._setEnabled(fileBrowser.uiNames.accept, (fileBrowser._getResults().length != 0) || (jQuery(this).val() != ''));
     });
+    
+    this._getUiElem(this.uiNames.filename).blur(function() {
+      jQuery(indriMain._getUiElem(indriMain.uiNames.focusTextbox)).focus();
+    });
+    
     this._getUiElem(this.uiNames.preview).click(function() {
       fileBrowser._toggleVisible(fileBrowser.uiNames.previewWrapper);
     });
@@ -371,7 +401,6 @@ FileBrowser.prototype = {
       fileBrowser._returnResults(false);
     });
 
-
     if (initializer.visibility['shortcutsPanel']) {
       this._updateShortcuts(this._makeCallback(function(shortcuts) {
         this._populateShortcuts(shortcuts);
@@ -386,6 +415,16 @@ FileBrowser.prototype = {
       this.navigateToRoot();
     }
 
+    // Bind key handler
+    jQuery(jQuery("#indriui").parent()).on("keydown", this, initializer.viewFactory.views[0].keyHandler);
+    
+    jQuery(this.uiNames.focusTextbox).focus();
+
+    jQuery(indriMain.uiNames.contentsPanel + ', ' + indriMain.uiNames.headerWrapper).click(function() {
+      jQuery(indriMain.uiNames.focusTextbox).focus();
+    });
+
+
   },
   _initializeFiltering: function(filter) {
     // set the data member
@@ -399,35 +438,31 @@ FileBrowser.prototype = {
       this._setRenderer(view);
     }), this._getUiElem(this.uiNames.viewsPanel));
   },
-  
-	// UI Accessors
-	uiNames : {
-		title 					: '#title-control',
-
-		shortcuts 			: '#shortcuts-control',
-		parent 					: '#parent-control',
-		refresh 				: '#refresh-control',
-		location 				: '#location-control',
-		viewsPanel 			: '#views-panel',		
-		preview 				: '#preview-control',
-		
-		shortcutsPanel 	: "#shortcuts-wrapper",
-		contentsWrapper	: '#contents-wrapper',
-		contentsPanel		: '#contents-panel',
-		previewWrapper 	: "#preview-wrapper",
-
-		newFolder 			: '#newfolder-control',
-		delete 					: '#delete-control',
-		rename 					: '#rename-control',
-		status 					: '#status-control',
-		filter 					: '#filters-panel',
-		filename 				: "#filename-control",
-		filenameLabel 	: "#filename-label-control",
-
-		accept 					: '#accept-control',
-		cancel 					: '#cancel-control',
-	},
-
+  // UI Accessors
+  uiNames: {
+    title: '#title-control',
+    shortcuts: '#shortcuts-control',
+    parent: '#parent-control',
+    refresh: '#refresh-control',
+    location: '#location-control',
+    viewsPanel: '#views-panel',
+    preview: '#preview-control',
+    shortcutsPanel: "#shortcuts-wrapper",
+    headerWrapper: "#header-wrapper",
+    contentsWrapper: '#contents-wrapper',
+    contentsPanel: '#contents-panel',
+    previewWrapper: "#preview-wrapper",
+    newFolder: '#newfolder-control',
+    delete: '#delete-control',
+    rename: '#rename-control',
+    status: '#status-control',
+    filter: '#filters-panel',
+    filename: "#filename-control",
+    filenameLabel: "#filename-label-control",
+    accept: '#accept-control',
+    cancel: '#cancel-control',
+    focusTextbox: '#ind-focus-textbox'
+  },
   _getUiElem: function(name) {
     return this.rootElem.find(name);
   },
@@ -437,9 +472,9 @@ FileBrowser.prototype = {
 
     // Some special cases for the shortcuts and preview panels
     // TODO There should be a more systematic way to do this
-		if(name == this.uiNames.previewWrapper || name == this.uiNames.shortcutsPanel) {
-			var controlName = name == this.uiNames.previewWrapper ? this.uiNames.preview : this.uiNames.shortcuts;
-			var className = name == this.uiNames.previewWrapper ? "ind-show-preview" : "ind-show-shortcuts";
+    if (name == this.uiNames.previewWrapper || name == this.uiNames.shortcutsPanel) {
+      var controlName = name == this.uiNames.previewWrapper ? this.uiNames.preview : this.uiNames.shortcuts;
+      var className = name == this.uiNames.previewWrapper ? "ind-show-preview" : "ind-show-shortcuts";
 
       if (isVisible) {
         this._getUiElem(this.uiNames.contentsWrapper).addClass(className);
@@ -662,7 +697,7 @@ FileBrowser.prototype.DefaultInitializer = {
   },
   resultCallback: function(results) {
     console.log(results);
-  },
+  }
 };
 
 FileBrowser.prototype.DebugDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {

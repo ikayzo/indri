@@ -6,6 +6,7 @@ if (typeof KeyEvent == "undefined") {
     var KeyEvent = {
     	KEYCODE_ENTER : 13,
 		KEYCODE_ESC : 27,
+    KEYCODE_DELETE : 46
     };
 }
 
