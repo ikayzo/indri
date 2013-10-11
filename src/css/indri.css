@@ -134,7 +134,7 @@ a {
 
 .ind-btn-dis, .ind-btn-dis:hover {
   background: #dddddd;
-  color: #aaaaaa;
+  color: #aaaaaa !important;
   cursor: no-drop; }
 
 .ind-btn-active {
@@ -494,7 +494,8 @@ th.ind-col-sort-desc {
 #filename-label-control {
   font-size: 10px !important;
   line-height: 11px;
-  margin-bottom: 2px; }
+  margin-bottom: 2px;
+  color: #444444; }
 
 #filename-control {
   width: 50%;

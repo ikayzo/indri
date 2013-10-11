@@ -19,7 +19,6 @@ $text-light: #fff;
 
 // Button, Interactivity Colors
 $btn-color: $color-primary;
-$color-icon: $text-main;
 $btn-text-color: $text-main;
 $btn-disabled-color: #ddd;
 $btn-disabled-text-color: #aaa;
@@ -48,6 +47,7 @@ $text-list-item-selected: $text-light;
 $text-list-item-hover: $text-dark;
 $text-th: $text-dark;
 $text-th-hover: $text-dark;
+$icon-color: $text-main;
 $icon-folder: #e8aa50; 
 
 //Preview Section
@@ -72,9 +72,9 @@ body {
     $text-dark: #fff;
     $text-light: #333;
     $bg-color: #444 !important;
-	  $border-dark: black !important;
-	  $border-light: #333 !important;
-	  $color-breadcrumb: $color-primary;
+	$border-dark: black !important;
+	$border-light: #333 !important;
+	$text-breadcrumb: $color-primary;
     $icon-folder: $color-secondary;
     $text-shortcut: $text-dark !important;
     $text-shortcut-selected: $color-primary;
@@ -83,6 +83,9 @@ body {
     $text-list-item-hover: $text-light;
     $text-th: $text-main;
     $text-th-hover: $text-light;
+    $text-label: $text-dark; 
+    $text-status: #fff;
+    $icon-color: $text-dark;
   }
 }
 
