@@ -154,12 +154,16 @@ FileBrowser.prototype = {
         this.navigateToLocation(contentItem.location);
       }
       else {
-        this._applySelectionToItem(contentItem, evt.metaKey);
+        // Using both meta (Mac command key) and ctrl key (Windows) as a temporary solution.
+        // How do you get the meta key to fire on Windows?
+        this._applySelectionToItem(contentItem, evt.metaKey || evt.ctrlKey);
         this._returnResults(true);
       }
     }
     else if (evt.type == "click") {
-      this._applySelectionToItem(contentItem, evt.metaKey);
+      // Using both meta (Mac command key) and ctrl key (Windows) as a temporary solution.
+      // How do you get the meta key to fire on Windows?
+      this._applySelectionToItem(contentItem, evt.metaKey || evt.ctrlKey);
     }
   },
   _handleKeyEvent: function(evt) {
@@ -180,7 +184,9 @@ FileBrowser.prototype = {
           this.navigateToLocation(contentItem.location);
         }
         else {
-          this._applySelectionToItem(contentItem, evt.metaKey);
+          // Using both meta (Mac command key) and ctrl key (Windows) as a temporary solution.
+          // How do you get the meta key to fire on Windows?
+          this._applySelectionToItem(contentItem, evt.metaKey || evt.ctrlKey);
           this._returnResults(true);
         }
       }
@@ -374,11 +380,11 @@ FileBrowser.prototype = {
       console.log(jQuery(this).val());
       fileBrowser._setEnabled(fileBrowser.uiNames.accept, (fileBrowser._getResults().length != 0) || (jQuery(this).val() != ''));
     });
-    
+
     this._getUiElem(this.uiNames.filename).blur(function() {
       jQuery(indriMain._getUiElem(indriMain.uiNames.focusTextbox)).focus();
     });
-    
+
     this._getUiElem(this.uiNames.preview).click(function() {
       fileBrowser._toggleVisible(fileBrowser.uiNames.previewWrapper);
     });
@@ -417,7 +423,7 @@ FileBrowser.prototype = {
 
     // Bind key handler
     jQuery("#indriui").on("keydown", this, initializer.viewFactory.views[0].keyHandler);
-    
+
     jQuery(this.uiNames.focusTextbox).focus();
 
     jQuery(indriMain.uiNames.contentsPanel + ', ' + indriMain.uiNames.headerWrapper).click(function() {
