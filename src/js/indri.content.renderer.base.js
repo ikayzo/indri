@@ -32,6 +32,7 @@ ContentRenderer.prototype = {
     // check for Enter -> send evt = "enter"
     if (evt.which == (KeyEvent.KEYCODE_ENTER || KeyEvent.DOM_VK_RETURN)) {
       evt.data._handleKeyEvent("enter");
+      return false;
     }
 
     // check for delete -> send evt = "delete"
@@ -65,6 +66,7 @@ ContentRenderer.prototype = {
         evt.data._setupNormalEvents($listItem, contentItem);
 
         evt.data.callback(contentItem, "rename", newText);
+        return false;
       }
       else if (evt.which == (KeyEvent.KEYCODE_ESC || KeyEvent.DOM_VK_ESCAPE)) {
         endEditing(evt.data);
