@@ -1,4 +1,4 @@
-/*! indri-0.5.0 2013-10-08 */
+/*! indri-0.5.0 2013-10-11 */
 
 /*
 	The FileSystemManager provides access to the remote file system.
@@ -110,6 +110,7 @@ if (typeof KeyEvent == "undefined") {
     var KeyEvent = {
     	KEYCODE_ENTER : 13,
 		KEYCODE_ESC : 27,
+    KEYCODE_DELETE : 46
     };
 }
 
@@ -137,119 +138,121 @@ var IndriText = {
 }
 
 ContentRenderer.prototype = {
+  render: function(contents) {
+    this._beginRender();
 
-	render : function(contents) {
-		this._beginRender();
+    $list = this._renderContainer();
+    contents.forEach(function(contentItem) {
+      $list.append(this._renderItem(contentItem));
+    }, this);
 
-		$list = this._renderContainer();
-		contents.forEach(function(contentItem) { 
-			$list.append(this._renderItem(contentItem));
-		}, this);
+    return $list;
+  },
+  updateSelection: function(newSelection) {
+    for (id in this.lookup) {
+      this.lookup[id].removeClass("ind-content-selected");
+    }
 
-		return $list;
-	},
-	
-	updateSelection : function(newSelection) {
-		for(id in this.lookup) {
-			this.lookup[id].removeClass("ind-content-selected");
-		}
+    newSelection.forEach(function(selectedItem) {
+      this.lookup[selectedItem.clientId].addClass("ind-content-selected");
+    }, this);
+  },
+  editItem: function(contentItem) {
+    var $listItem = this.lookup[contentItem.clientId];
+    if ($listItem) {
+      this._setupEditingEvents($listItem, contentItem);
+    }
+  },
+  keyHandler: function(evt) {
 
-		newSelection.forEach(function(selectedItem) {
-			this.lookup[selectedItem.clientId].addClass("ind-content-selected");
-		}, this);
-	},
+    // check for Enter -> send evt = "enter"
+    if (evt.which == (KeyEvent.KEYCODE_ENTER || KeyEvent.DOM_VK_RETURN)) {
+      evt.data._handleKeyEvent("enter");
+    }
 
-	editItem : function(contentItem) {
-		var $listItem = this.lookup[contentItem.clientId];
-		if($listItem) {
-			this._setupEditingEvents($listItem, contentItem);
-		}
-	},
+    // check for delete -> send evt = "delete"
+    else if (evt.which == (KeyEvent.KEYCODE_DELETE || KeyEvent.DOM_VK_DELETE)) {
+      evt.data._handleKeyEvent("delete");
+    }
+  },
+  _beginRender: function() {
+    this.lookup = {};
+  },
+  _initItem: function($listItem, contentItem) {
+    this.lookup[contentItem.clientId] = $listItem;
+    this._setupNormalEvents($listItem, contentItem);
+  },
+  _setupEditingEvents: function($listItem, contentItem) {
+    var oldText, newText;
 
-	_beginRender : function() {
-		this.lookup = {};
-	},
+    var $editable = $listItem.find(".ind-editable-name");
+    oldText = $editable.html().replace(/"/g, "'");
 
-	_initItem : function($listItem, contentItem) {
-		this.lookup[contentItem.clientId] = $listItem;
-		this._setupNormalEvents($listItem, contentItem);
-	},
+    var endEditing = function(renderer) {
+      $input.replaceWith($editable);
+      renderer._setupNormalEvents($listItem, contentItem);
+    };
 
-	_setupEditingEvents : function($listItem, contentItem) {
-		var oldText, newText;
-		
-		var $editable = $listItem.find(".ind-editable-name");
-		oldText = $editable.html().replace(/"/g, "'");  
+    $input = jQuery(document.createElement("input")).addClass("ind-editbox").attr("type", "text").attr("value", oldText)
+            .keydown(this, function(evt) {
+      if (evt.which == (KeyEvent.KEYCODE_ENTER || KeyEvent.DOM_VK_RETURN)) {
+        newText = $(this).val().replace(/"/g, "'");
+        $input.replaceWith($editable);
+        evt.data._setupNormalEvents($listItem, contentItem);
 
-		var endEditing = function(renderer) {
-    		$input.replaceWith($editable);  
-    		renderer._setupNormalEvents($listItem, contentItem);                	
-		};
+        evt.data.callback(contentItem, "rename", newText);
+      }
+      else if (evt.which == (KeyEvent.KEYCODE_ESC || KeyEvent.DOM_VK_ESCAPE)) {
+        endEditing(evt.data);
+      }
+    }).blur(this, function(evt) {
+      endEditing(evt.data);
+    }).click(false).dblclick(false);
 
-		$input = jQuery(document.createElement("input")).addClass("ind-editbox").attr("type", "text").attr("value", oldText)
-			.keydown(this, function(evt) {
-				if(evt.which == (KeyEvent.KEYCODE_ENTER || KeyEvent.DOM_VK_RETURN)) {
-		    		newText = $(this).val().replace(/"/g, "'");  
-		    		$input.replaceWith($editable);
-		    		evt.data._setupNormalEvents($listItem, contentItem);
+    $editable.replaceWith($input);
+    $input.focus();
+  },
+  _setupNormalEvents: function($listItem, contentItem) {
+    $listItem.off("click").on("click", this, function(evt) {
+      if (evt.which == MouseButtons.BUTTON_LEFT) {
+        evt.data.callback(contentItem, evt);
+      }
+    });
 
-		    		evt.data.callback(contentItem, "rename", newText);
-        }
-        else if(evt.which == (KeyEvent.KEYCODE_ESC || KeyEvent.DOM_VK_ESCAPE)) {
-		    		endEditing(evt.data);               	
-        }
-	    	}).blur(this, function(evt) {
-	    		endEditing(evt.data);               	
-	    	}).click(false).dblclick(false);
+    $listItem.off("dblclick").on("dblclick", this, function(evt) {
+      if (evt.which == MouseButtons.BUTTON_LEFT) {
+        evt.data.callback(contentItem, evt);
+      }
+    });
 
-		$editable.replaceWith($input);
-		$input.focus();
-	},
+    /*
+     var pressTimer;
+     $listItem.find(".ind-editable-name")
+     .mouseup(function(){
+     clearTimeout(pressTimer);
+     }).mousedown(this, function(evt){
+     if(evt.which == 1) {
+     var renderer = evt.data;
+     var editable = this;
+     pressTimer = window.setTimeout(function() { 
+     renderer.callback(contentItem, "longpress"); 
+     renderer._setupEditingEvents($listItem, contentItem); 
+     }, 1000);
+     }
+     });
+     */
+  },
+  _getIcon: function(contentItem) {
+    $icon = jQuery(document.createElement("span")).addClass("entypo");
+    if (contentItem.isDir) {
+      $icon.addClass('ind-icon-folder').html(IndriIcons.ICON_FOLDER);
+    }
+    else {
+      $icon.addClass('ind-icon-file').html(IndriIcons.ICON_DOCUMENT);
+    }
 
-	_setupNormalEvents : function($listItem, contentItem) {
-		$listItem.off("click").on("click", this, function(evt) {
-			if(evt.which == MouseButtons.BUTTON_LEFT) {
-				evt.data.callback(contentItem, evt);
-			}
-		});
-
-//		if(!contentItem.isDir) {
-			$listItem.off("dblclick").on("dblclick", this, function(evt) {
-				if(evt.which == MouseButtons.BUTTON_LEFT) {
-					evt.data.callback(contentItem, evt);
-				}
-			});
-//		}
-
-/*
-		var pressTimer;
-		$listItem.find(".ind-editable-name")
-		.mouseup(function(){
-			clearTimeout(pressTimer);
-		}).mousedown(this, function(evt){
-			if(evt.which == 1) {
-				var renderer = evt.data;
-				var editable = this;
-				pressTimer = window.setTimeout(function() { 
-					renderer.callback(contentItem, "longpress"); 
-					renderer._setupEditingEvents($listItem, contentItem); 
-				}, 1000);
-			}
-		});
-*/		
-	},
-
-	_getIcon : function(contentItem) {
-		$icon = jQuery(document.createElement("span")).addClass("entypo");
-		if(contentItem.isDir) {
-			$icon.addClass('ind-icon-folder').html(IndriIcons.ICON_FOLDER);
-		}
-		else {
-			$icon.addClass('ind-icon-file').html(IndriIcons.ICON_DOCUMENT);
-		}
-		
-		return $icon;
-	}	
+    return $icon;
+  }
 }
 ;/*
 	Standard content renderers
@@ -687,6 +690,30 @@ FileBrowser.prototype = {
       this._applySelectionToItem(contentItem, evt.metaKey);
     }
   },
+  _handleKeyEvent: function(evt) {
+    // TODO 2
+
+    // catch "delete" evt
+    if (evt == "delete") {
+
+      // fire deleteSelected
+      this.deleteSelected();
+    }
+
+    // catch "enter" evt
+    else if (evt == "enter") {
+      var contentItem = this.currentSelection[0];
+      if (contentItem) {
+        if (contentItem.isDir) {
+          this.navigateToLocation(contentItem.location);
+        }
+        else {
+          this._applySelectionToItem(contentItem, evt.metaKey);
+          this._returnResults(true);
+        }
+      }
+    }
+  },
   _beginEditingContentItem: function(contentItem) {
     if (!contentItem && this.currentSelection.length) {
       contentItem = this.currentSelection[0];
@@ -823,6 +850,7 @@ FileBrowser.prototype = {
   },
   // Initialization methods
   _initialize: function(initializer) {
+    var indriMain = this;
     if (!initializer) {
       initializer = new this.DefaultInitializer();
     }
@@ -874,6 +902,11 @@ FileBrowser.prototype = {
       console.log(jQuery(this).val());
       fileBrowser._setEnabled(fileBrowser.uiNames.accept, (fileBrowser._getResults().length != 0) || (jQuery(this).val() != ''));
     });
+    
+    this._getUiElem(this.uiNames.filename).blur(function() {
+      jQuery(indriMain._getUiElem(indriMain.uiNames.focusTextbox)).focus();
+    });
+    
     this._getUiElem(this.uiNames.preview).click(function() {
       fileBrowser._toggleVisible(fileBrowser.uiNames.previewWrapper);
     });
@@ -896,7 +929,6 @@ FileBrowser.prototype = {
       fileBrowser._returnResults(false);
     });
 
-
     if (initializer.visibility['shortcutsPanel']) {
       this._updateShortcuts(this._makeCallback(function(shortcuts) {
         this._populateShortcuts(shortcuts);
@@ -910,6 +942,16 @@ FileBrowser.prototype = {
     else {
       this.navigateToRoot();
     }
+
+    // Bind key handler
+    jQuery(jQuery("#indriui").parent()).on("keydown", this, initializer.viewFactory.views[0].keyHandler);
+    
+    jQuery(this.uiNames.focusTextbox).focus();
+
+    jQuery(indriMain.uiNames.contentsPanel + ', ' + indriMain.uiNames.headerWrapper).click(function() {
+      jQuery(indriMain.uiNames.focusTextbox).focus();
+    });
+
 
   },
   _initializeFiltering: function(filter) {
@@ -926,31 +968,29 @@ FileBrowser.prototype = {
   },
   // UI Accessors
   uiNames: {
-    title 					: '#title-control',
-
-		parent 					: '#parent-control',
-		refresh 				: '#refresh-control',
-		location 				: '#location-control',
-		viewsPanel 			: '#views-panel',		
-		preview 				: '#preview-control',
-		
-		shortcutsPanel 	: "#shortcuts-wrapper",
-		contentsWrapper	: '#contents-wrapper',
-		contentsPanel		: '#contents-panel',
-		previewWrapper 	: "#preview-wrapper",
- 
-		newFolder 			: '#newfolder-control',
-		delete 					: '#delete-control',
-		rename 					: '#rename-control',
-		status 					: '#status-control',
-		filter 					: '#filters-panel',
-		filename 				: "#filename-control",
-		filenameLabel 	: "#filename-label-control",
- 
-		accept 					: '#accept-control',
-		cancel 					: '#cancel-control',
+    title: '#title-control',
+    shortcuts: '#shortcuts-control',
+    parent: '#parent-control',
+    refresh: '#refresh-control',
+    location: '#location-control',
+    viewsPanel: '#views-panel',
+    preview: '#preview-control',
+    shortcutsPanel: "#shortcuts-wrapper",
+    headerWrapper: "#header-wrapper",
+    contentsWrapper: '#contents-wrapper',
+    contentsPanel: '#contents-panel',
+    previewWrapper: "#preview-wrapper",
+    newFolder: '#newfolder-control',
+    delete: '#delete-control',
+    rename: '#rename-control',
+    status: '#status-control',
+    filter: '#filters-panel',
+    filename: "#filename-control",
+    filenameLabel: "#filename-label-control",
+    accept: '#accept-control',
+    cancel: '#cancel-control',
+    focusTextbox: '#ind-focus-textbox'
   },
-
   _getUiElem: function(name) {
     return this.rootElem.find(name);
   },
@@ -960,9 +1000,9 @@ FileBrowser.prototype = {
 
     // Some special cases for the shortcuts and preview panels
     // TODO There should be a more systematic way to do this
-		if(name == this.uiNames.previewWrapper || name == this.uiNames.shortcutsPanel) {
-			var controlName = name == this.uiNames.previewWrapper ? this.uiNames.preview : this.uiNames.shortcuts;
-			var className = name == this.uiNames.previewWrapper ? "ind-show-preview" : "ind-show-shortcuts";
+    if (name == this.uiNames.previewWrapper || name == this.uiNames.shortcutsPanel) {
+      var controlName = name == this.uiNames.previewWrapper ? this.uiNames.preview : this.uiNames.shortcuts;
+      var className = name == this.uiNames.previewWrapper ? "ind-show-preview" : "ind-show-shortcuts";
 
       if (isVisible) {
         this._getUiElem(this.uiNames.contentsWrapper).addClass(className);
@@ -1185,7 +1225,7 @@ FileBrowser.prototype.DefaultInitializer = {
   },
   resultCallback: function(results) {
     console.log(results);
-  },
+  }
 };
 
 FileBrowser.prototype.DebugDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
