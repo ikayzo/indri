@@ -39,12 +39,14 @@ FileBrowser.prototype = {
   shortcutsRenderer: null,
   resultCallback: null,
   nextClientId: 0,
+  
   /*
-   Primary API
+   * Primary API
    */
   navigateToRoot: function() {
     this.fsm.getRootLocation(this._makeCallback(this.navigateToLocation), this._makeCallback(this._updateStatus));
   },
+  
   navigateToLocation: function(location) {
     var success = this._makeCallback(function(contents, status) {
       this._updateLocation(location);
@@ -52,13 +54,16 @@ FileBrowser.prototype = {
     });
     this.fsm.getContents(location, success, this._makeCallback(this._updateStatus));
   },
+  
   navigateRelative: function(direction) {
     this.fsm.getRelativeLocation(this.currentLocation, direction, this._makeCallback(this.navigateToLocation));
   },
+  
   clearSelection: function() {
     this.currentSelection.length = 0;
     this._selectionChanged();
   },
+  
   createFolder: function() {
     var success = this._makeCallback(function(newContents, status) {
       this._modifyContents(newContents, false, status);
@@ -67,6 +72,7 @@ FileBrowser.prototype = {
 
     this.fsm.createFolder(this.currentLocation, IndriText.NEW_FOLDER_TEXT, success, this._makeCallback(this._updateStatus));
   },
+  
   renameItem: function(contentItem, newName) {
     var success = this._makeCallback(function(renamedContent, status) {
       // Remove the file with the old name from the currentContents
@@ -76,6 +82,7 @@ FileBrowser.prototype = {
 
     this.fsm.renameItem(contentItem, newName, success, this._makeCallback(this._updateStatus));
   },
+  
   deleteSelected: function() {
     var targets = this.currentSelection;
     var success = this._makeCallback(function(deletedContents, status) {
@@ -83,8 +90,9 @@ FileBrowser.prototype = {
     });
     this.fsm.deleteItems(this.currentSelection, success, this._makeCallback(this._updateStatus));
   },
+  
   /*
-   Internal methods
+   * Internal methods
    */
   _updateLocation: function(location) {
     this.currentLocation = location;
@@ -96,6 +104,7 @@ FileBrowser.prototype = {
       this._getUiElem(this.uiNames.location).html(this.currentLocation);
     }
   },
+  
   _modifyContents: function(items, isDelete, status) {
     items.forEach(function(item) {
       if (isDelete)
@@ -107,17 +116,16 @@ FileBrowser.prototype = {
         }
         this.currentContents[item.clientId] = item;
       }
-
     }, this);
 
     this.currentSelection.length = 0;
     if (!isDelete)
       this.currentSelection.push(items[0]);
 
-
     this._populateContentUI();
     this._updateStatus(status);
   },
+  
   _updateContents: function(contents, status) {
     this.currentContents = {};
     this.nextClientId = 0;
@@ -130,6 +138,7 @@ FileBrowser.prototype = {
     this._populateContentUI();
     this._updateStatus(status);
   },
+  
   _populateContentUI: function() {
     // apply filter and sorter
     var contents = [];
@@ -142,9 +151,11 @@ FileBrowser.prototype = {
     this._getUiElem(this.uiNames.contentsPanel).empty().append(this.contentRenderer.render(contents, this._makeCallback(this._handleContentEvent)));
     this._selectionChanged();
   },
+  
   _handleContentEvent: function(contentItem, evt, newName) {
 
-    // Using both meta (Mac command key) and ctrl key (Windows) as a temporary solution.
+    // Using both meta (Mac command key) and ctrl key (Windows) as a temporary
+    // solution.
     // How do you get the meta key to fire on Windows?
     var multipleSelectKey = evt.metaKey || evt.ctrlKey;
 
@@ -168,6 +179,7 @@ FileBrowser.prototype = {
       this._applySelectionToItem(contentItem, multipleSelectKey);
     }
   },
+  
   _handleKeyEvent: function(evt) {
     // catch "delete" evt
     if (evt == "delete") {
@@ -194,6 +206,7 @@ FileBrowser.prototype = {
       }
     }
   },
+  
   _beginEditingContentItem: function(contentItem) {
     if (!contentItem && this.currentSelection.length) {
       contentItem = this.currentSelection[0];
@@ -203,6 +216,7 @@ FileBrowser.prototype = {
       this.contentRenderer.editItem(contentItem);
     }
   },
+  
   _updateShortcuts: function(callback) {
     if (!callback) {
       callback = this._makeCallback(this._populateShortcuts);
@@ -211,12 +225,14 @@ FileBrowser.prototype = {
     this.shortcuts = [];
     this.fsm.getShortcuts(callback, this._makeCallback(this._updateStatus));
   },
+  
   _populateShortcuts: function(shortcuts) {
     if (this.shortcutsRenderer) {
       this._getUiElem(this.uiNames.shortcutsPanel).empty().append(
               this.shortcutsRenderer.render(shortcuts, this._makeCallback(this.navigateToLocation)));
     }
   },
+  
   _updateStatus: function(status) {
     if (this.statusRenderer) {
       this.statusRenderer.render(this._getUiElem(this.uiNames.status), status);
@@ -225,6 +241,7 @@ FileBrowser.prototype = {
       this._getUiElem(this.uiNames.status).html(status);
     }
   },
+  
   // Component callbacks/support
   _setRenderer: function(renderer) {
     this.contentRenderer = renderer;
@@ -234,6 +251,7 @@ FileBrowser.prototype = {
 
     this._populateContentUI();
   },
+  
   _applySelectionToItem: function(contentItem, metaKey) {
     var includeInSelection = this.allowItemSelection || contentItem.isDir;
 
@@ -263,6 +281,7 @@ FileBrowser.prototype = {
     // Pass the contentItem if we didn't add it to the selection list
     this._selectionChanged(includeInSelection ? null : contentItem);
   },
+  
   // Take a parameter and include it in the text field content
   _selectionChanged: function(unincludedItem) {
     // Have the content renderer update the content area
@@ -293,25 +312,31 @@ FileBrowser.prototype = {
       this._getUiElem(this.uiNames.previewWrapper).empty().append(this.previewRenderer.render(this.currentSelection));
     }
   },
+  
   _filterChanged: function() {
     this.currentSelection.length = 0;
     this._populateContentUI();
   },
+  
   _applyFilter: function(items) {
     return this.filter ? this.filter.apply(items) : items;
   },
+  
   _sortChanged: function() {
     this._populateContentUI();
   },
+  
   _applySorter: function(items) {
     return this.sorter ? this.sorter.apply(items) : items;
   },
+  
   _makeCallback: function(callback) {
     var fileBrowser = this;
     return function() {
       return callback.apply(fileBrowser, arguments);
     }
   },
+  
   // Get results set from current selection
   _getResults: function() {
     var results = [];
@@ -322,10 +347,31 @@ FileBrowser.prototype = {
     }, this);
     return results;
   },
-  _getDirResults: function(returnValue) {
+  
+  _returnCurrentDir: function(returnValue) {
+    var indriMain = this;
+    var currentDir = this.currentLocation.replace(/\//g, "\\\\");
+    var results = [];
+    var pushCurrentDir = this._makeCallback(function(contents, status) {
+        results.push(contents);
+        indriMain.resultCallback({
+          success: returnValue,
+          location: indriMain.currentLocation,
+          selection: results,
+          filename: indriMain._getUiElem(this.uiNames.filename).val()
+        });
+      });
+    this.fsm.getItem(this.currentLocation, this._makeCallback(pushCurrentDir), null);
+    return results;
+  },
+  
+  _returnResults: function(returnValue) {
     var results = this._getResults();
-    if (results.length == 0) {
-      this._getCurrentDir(returnValue);
+    
+    // If the current directory can be selected, we need to use the special
+    // callback based version of the getResults method.
+    if (results.length == 0 && this.selectCurrentDir) {
+      this._returnCurrentDir(returnValue);
     }
     else {
       this.resultCallback({
@@ -336,47 +382,7 @@ FileBrowser.prototype = {
       });
     }
   },
-  _getCurrentDir: function(returnValue) {
-    var indriMain = this;
-    var currentDir = this.currentLocation.replace(/\//g, "\\\\");
-    var results = [];
-    var pushCurrentDir = function(location) {
-      var success = indriMain._makeCallback(function(contents, status) {
-        contents.forEach(function(element) {
-          if (element.location == currentDir) {
-            results.push(element);
-          }
-        });
-
-        indriMain.resultCallback({
-          success: returnValue,
-          location: indriMain.currentLocation,
-          selection: results,
-          filename: indriMain._getUiElem(this.uiNames.filename).val()
-        });
-      });
-
-      indriMain.fsm.getContents(location, success, null);
-    };
-    this.fsm.getRelativeLocation(this.currentLocation, "parent", this._makeCallback(pushCurrentDir));
-    return results;
-  },
-  _returnResults: function(returnValue) {
-    
-    // If the current directory can be selected, we need to use the special callback
-    // based version of the getResults method.
-    if (this.selectCurrentDir) {
-      this._getDirResults(returnValue);
-    }
-    else {
-      this.resultCallback({
-        success: returnValue,
-        location: this.currentLocation,
-        selection: this._getResults(),
-        filename: this._getUiElem(this.uiNames.filename).val()
-      });
-    }
-  },
+  
   // Initialization methods
   _initialize: function(initializer) {
     var indriMain = this;
@@ -433,7 +439,8 @@ FileBrowser.prototype = {
       fileBrowser._setEnabled(fileBrowser.uiNames.accept, true);
     }
     else {
-      // Update the accept button enabled state when the user types in the filename field
+      // Update the accept button enabled state when the user types in the
+      // filename field
       this._getUiElem(this.uiNames.filename).keyup(function() {
         console.log(jQuery(this).val());
         fileBrowser._setEnabled(fileBrowser.uiNames.accept, (fileBrowser._getResults().length != 0) || (jQuery(this).val() != ''));
@@ -491,6 +498,7 @@ FileBrowser.prototype = {
 
 
   },
+  
   _initializeFiltering: function(filter) {
     // set the data member
     this.filter = filter;
@@ -498,11 +506,13 @@ FileBrowser.prototype = {
     // add selector to the dom
     this._getUiElem(this.uiNames.filter).empty().append(this.filter.render(this._makeCallback(this._filterChanged)));
   },
+  
   _initializeViews: function(viewFactory) {
     viewFactory.render(this._makeCallback(function(view) {
       this._setRenderer(view);
     }), this._getUiElem(this.uiNames.viewsPanel));
   },
+  
   // UI Accessors
   uiNames: {
     title: '#title-control',
@@ -528,9 +538,11 @@ FileBrowser.prototype = {
     cancel: '#cancel-control',
     focusTextbox: '#ind-focus-textbox'
   },
+  
   _getUiElem: function(name) {
     return this.rootElem.find(name);
   },
+  
   _setVisible: function(name, isVisible) {
     var displayMode = isVisible ? '' : 'none';
     this._getUiElem(name).css('display', displayMode);
@@ -560,9 +572,11 @@ FileBrowser.prototype = {
       this._getUiElem(this.uiNames.filenameLabel).css('display', displayMode);
     }
   },
+  
   _toggleVisible: function(name) {
     this._setVisible(name, this._getUiElem(name).css('display') == 'none');
   },
+  
   _setEnabled: function(name, isEnabled) {
     var $uiElem = this._getUiElem(name);
 
@@ -579,11 +593,13 @@ FileBrowser.prototype = {
 
 
 FileBrowser.prototype.DefaultInitializer = {
+    
   texts: {
     title: "FileChooser",
     accept: "OK",
     cancel: "Cancel",
   },
+  
   visibility: {
     previewWrapper: false,
     shortcutsPanel: false,
@@ -593,17 +609,22 @@ FileBrowser.prototype.DefaultInitializer = {
     filename: false,
     filter: false,
   },
+  
   directoriesOnly: false,
   
   // If the file browser will allow the user to select
   // the current directory as the default (nothing selected).
   selectCurrentDir: false,
+  
   allowMultipleSelection: false,
   // fileMustExist : false,
 
   sorter: {
+    
     fieldName: "name",
+    
     ascending: true,
+    
     apply: function(items) {
       if (this.fieldName) {
         var fieldName = this.fieldName;
@@ -632,6 +653,7 @@ FileBrowser.prototype.DefaultInitializer = {
 
       return items;
     },
+    
     setSortField: function(fieldName) {
       if (this.fieldName == fieldName) {
         this.ascending = !this.ascending;
@@ -641,10 +663,11 @@ FileBrowser.prototype.DefaultInitializer = {
         this.ascending = true;
       }
 
-      // TODO  Hmmm...not pleased with this
+      // TODO Hmmm...not pleased with this
       this.browser._sortChanged();
     }
   },
+  
   filter: {
     options: [
       {value: ".*", text: "All files (*.*)"},
@@ -658,6 +681,7 @@ FileBrowser.prototype.DefaultInitializer = {
 
       return filteredItems;
     },
+    
     render: function(callback) {
       // create selector
       var $select = jQuery(document.createElement("select")).attr("id", "filterSelector")
@@ -678,10 +702,13 @@ FileBrowser.prototype.DefaultInitializer = {
       return $select;
     }
   },
+  
   viewFactory: {
+    
     views: [
       new ListContentRenderer(),
     ],
+    
     render: function(callback, container) {
       if (container) {
         container.empty();
@@ -723,14 +750,18 @@ FileBrowser.prototype.DefaultInitializer = {
       return container;
     }
   },
+  
   locationRenderer: new StringLocationRenderer(),
+  
   statusRenderer: {
     render: function(elem, status) {
       elem.html("<strong>" + status + "</strong>");
     }
   },
+  
   previewRenderer: {
     render: function(selection) {
+      
       if (selection.length == 0) {
         return jQuery(document.createElement("span")).html("No items selected");
       }
@@ -744,8 +775,11 @@ FileBrowser.prototype.DefaultInitializer = {
         return jQuery(document.createElement("img")).attr("src", selection[0].previewUrl);
       }
     },
+    
   },
+  
   shortcutsRenderer: {
+    
     render: function(shortcuts, callback) {
       var $listContainer = jQuery(document.createElement("ul")).addClass("ind-shortcut-list");
       shortcuts.forEach(function(shortcut) {
@@ -764,18 +798,23 @@ FileBrowser.prototype.DefaultInitializer = {
       return $listContainer;
     }
   },
+  
   resultCallback: function(results) {
     console.log(results);
   }
+  
 };
 
 FileBrowser.prototype.DebugDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
+  
   allowItemSelection: true,
   allowMultipleSelection: true,
   allowDirsInResults: false,
+  
   texts: {
     title: "Test Dialog",
   },
+  
   visibility: {
     previewWrapper: true,
     shortcutsPanel: true,
@@ -788,17 +827,22 @@ FileBrowser.prototype.DebugDialogInitializer = jQuery.extend(true, {}, FileBrows
 });
 
 FileBrowser.prototype.SaveDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
-  // This combination copies item names to the text field on selection, but doesn't
-  // maintain the selection in the ui. Whatever text ends up in the text field is what 
+  
+  // This combination copies item names to the text field on selection, but
+  // doesn't
+  // maintain the selection in the ui. Whatever text ends up in the text field
+  // is what
   // we use to build the result
   allowItemSelection: false,
   allowMultipleSelection: false,
   allowDirsInResults: false,
+  
   texts: {
     title: "Save File",
     accept: "Save",
     cancel: "Cancel",
   },
+  
   visibility: {
     previewWrapper: false,
     shortcutsPanel: false,
@@ -811,10 +855,12 @@ FileBrowser.prototype.SaveDialogInitializer = jQuery.extend(true, {}, FileBrowse
 
 
 FileBrowser.prototype.OpenDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
+  
   // Let the user select any number of existing items
   allowItemSelection: true,
   allowMultipleSelection: true,
   allowDirsInResults: false,
+  
   texts: {
     title: "Open File(s)",
     accept: "Open",
@@ -829,16 +875,19 @@ FileBrowser.prototype.OpenDialogInitializer = jQuery.extend(true, {}, FileBrowse
 
 // TODO hide the filename, and add a filter to only show folders
 FileBrowser.prototype.DestinationDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
+  
   // Let the user select one directory
   allowItemSelection: false,
   allowMultipleSelection: false,
   allowDirsInResults: true,
   selectCurrentDir: true,
+  
   texts: {
     title: "Select Target Folder",
     accept: "Select",
     cancel: "Cancel",
   },
+  
   visibility: {
     previewWrapper: false,
     shortcutsPanel: true,
@@ -848,9 +897,11 @@ FileBrowser.prototype.DestinationDialogInitializer = jQuery.extend(true, {}, Fil
     filename: false,
     newFolder: true
   },
-  // Put custom filter object here.  Must have apply & render methods.
-  //   - render would be empty (don't need to show since we are only showing directories, no options there...)
-  //   - apply -> if isDir, then keep, otherwise discard
+  
+  // Put custom filter object here. Must have apply & render methods.
+  // - render would be empty (don't need to show since we are only showing
+  // directories, no options there...)
+  // - apply -> if isDir, then keep, otherwise discard
 
   filter: {
     apply: function(items) {
@@ -860,6 +911,7 @@ FileBrowser.prototype.DestinationDialogInitializer = jQuery.extend(true, {}, Fil
 
       return filteredItems;
     },
+    
     render: function() {
       // Do not need to render anything.
     }
