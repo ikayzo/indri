@@ -143,6 +143,11 @@ FileBrowser.prototype = {
     this._selectionChanged();
   },
   _handleContentEvent: function(contentItem, evt, newName) {
+
+    // Using both meta (Mac command key) and ctrl key (Windows) as a temporary solution.
+    // How do you get the meta key to fire on Windows?
+    var multipleSelectKey = evt.metaKey || evt.ctrlKey;
+
     if (evt == "clear") {
       this.clearSelection();
     }
@@ -154,16 +159,13 @@ FileBrowser.prototype = {
         this.navigateToLocation(contentItem.location);
       }
       else {
-        // Using both meta (Mac command key) and ctrl key (Windows) as a temporary solution.
-        // How do you get the meta key to fire on Windows?
-        this._applySelectionToItem(contentItem, evt.metaKey || evt.ctrlKey);
+        this._applySelectionToItem(contentItem, multipleSelectKey);
         this._returnResults(true);
       }
     }
     else if (evt.type == "click") {
-      // Using both meta (Mac command key) and ctrl key (Windows) as a temporary solution.
-      // How do you get the meta key to fire on Windows?
-      this._applySelectionToItem(contentItem, evt.metaKey || evt.ctrlKey);
+
+      this._applySelectionToItem(contentItem, multipleSelectKey);
     }
   },
   _handleKeyEvent: function(evt) {
@@ -184,9 +186,6 @@ FileBrowser.prototype = {
           this.navigateToLocation(contentItem.location);
         }
         else {
-          // Using both meta (Mac command key) and ctrl key (Windows) as a temporary solution.
-          // How do you get the meta key to fire on Windows?
-          this._applySelectionToItem(contentItem, evt.metaKey || evt.ctrlKey);
           this._returnResults(true);
         }
       }
