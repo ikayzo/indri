@@ -110,8 +110,8 @@ FileSystemRequestHandler.prototype = {
     } else if(this.action == 'shortcuts') {
       this.shortcuts();
     }
-    else if(this.action == "get") {
-      this.get();
+    else if(this.action == "getinfo") {
+      this.getinfo();
     } else {
       this.invalidAction();
     }
@@ -261,7 +261,7 @@ FileSystemRequestHandler.prototype = {
     }
   },
   
-  get : function() {
+  getinfo : function() {
     var fullPath = path.join(config.rootDir, this.loc);
     var result = this.result;
     if(fs.existsSync(fullPath)) {

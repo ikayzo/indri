@@ -67,8 +67,8 @@ FileSystemManager.prototype = {
     this._doQuery(url, success, error);
   },
 
-  getItem : function(location, success, error) {
-    var url = this.rootUrl + "?action=get";
+  getItemInfo : function(location, success, error) {
+    var url = this.rootUrl + "?action=getinfo";
     if (location != "" && location != '.')
       url += "&loc=" + this._encodeLocation(location);
 

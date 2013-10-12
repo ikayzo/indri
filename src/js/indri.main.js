@@ -352,7 +352,7 @@ FileBrowser.prototype = {
     var indriMain = this;
     var currentDir = this.currentLocation.replace(/\//g, "\\\\");
     var results = [];
-    var pushCurrentDir = this._makeCallback(function(contents, status) {
+    var success = this._makeCallback(function(contents, status) {
         results.push(contents);
         indriMain.resultCallback({
           success: returnValue,
@@ -361,7 +361,7 @@ FileBrowser.prototype = {
           filename: indriMain._getUiElem(this.uiNames.filename).val()
         });
       });
-    this.fsm.getItem(this.currentLocation, this._makeCallback(pushCurrentDir), null);
+    this.fsm.getItemInfo(this.currentLocation, this._makeCallback(success), this._makeCallback(this._updateStatus));
     return results;
   },
   
