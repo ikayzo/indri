@@ -167,11 +167,11 @@ FileSystemRequestHandler.prototype = {
         }
         catch(ex) {
           if(result.error) {
-            result.error += ', "' + fullPath + '"';
+            result.error += ', "' + location + '"';
             console.log(ex.toString())
           }
           else {
-            result.error = 'Could not delete: "' + fullPath + '"';
+            result.error = 'Could not delete: "' + location + '"';
             console.log(ex.toString());
           }
         }
