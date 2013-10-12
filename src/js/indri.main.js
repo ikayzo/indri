@@ -169,8 +169,6 @@ FileBrowser.prototype = {
     }
   },
   _handleKeyEvent: function(evt) {
-    // TODO 2
-
     // catch "delete" evt
     if (evt == "delete") {
 
@@ -182,12 +180,17 @@ FileBrowser.prototype = {
     else if (evt == "enter") {
       var contentItem = this.currentSelection[0];
       if (contentItem) {
-        if (contentItem.isDir) {
+        
+        // Navigate to the directory if directories cannot be in the results
+        if (!this.allowDirsInResults && contentItem.isDir) {
           this.navigateToLocation(contentItem.location);
         }
         else {
           this._returnResults(true);
         }
+      }
+      else if(this.selectCurrentDir) {
+        this._returnResults(true);
       }
     }
   },
@@ -282,7 +285,9 @@ FileBrowser.prototype = {
     // Enabled/disable the buttons
     this._setEnabled(this.uiNames.delete, this.currentSelection.length != 0);
     this._setEnabled(this.uiNames.rename, this.currentSelection.length == 1);
-    this._setEnabled(this.uiNames.accept, (this._getResults().length != 0) || unincludedItem);
+    if (!this.selectCurrentDir) {
+      this._setEnabled(this.uiNames.accept, (this._getResults().length != 0) || unincludedItem);
+    }
 
     if (this.previewRenderer) {
       this._getUiElem(this.uiNames.previewWrapper).empty().append(this.previewRenderer.render(this.currentSelection));
@@ -317,13 +322,60 @@ FileBrowser.prototype = {
     }, this);
     return results;
   },
+  _getDirResults: function(returnValue) {
+    var results = this._getResults();
+    if (results.length == 0) {
+      this._getCurrentDir(returnValue);
+    }
+    else {
+      this.resultCallback({
+        success: returnValue,
+        location: this.currentLocation,
+        selection: results,
+        filename: this._getUiElem(this.uiNames.filename).val()
+      });
+    }
+  },
+  _getCurrentDir: function(returnValue) {
+    var indriMain = this;
+    var currentDir = this.currentLocation.replace(/\//g, "\\\\");
+    var results = [];
+    var pushCurrentDir = function(location) {
+      var success = indriMain._makeCallback(function(contents, status) {
+        contents.forEach(function(element) {
+          if (element.location == currentDir) {
+            results.push(element);
+          }
+        });
+
+        indriMain.resultCallback({
+          success: returnValue,
+          location: indriMain.currentLocation,
+          selection: results,
+          filename: indriMain._getUiElem(this.uiNames.filename).val()
+        });
+      });
+
+      indriMain.fsm.getContents(location, success, null);
+    };
+    this.fsm.getRelativeLocation(this.currentLocation, "parent", this._makeCallback(pushCurrentDir));
+    return results;
+  },
   _returnResults: function(returnValue) {
-    this.resultCallback({
-      success: returnValue,
-      location: this.currentLocation,
-      selection: this._getResults(),
-      filename: this._getUiElem(this.uiNames.filename).val()
-    });
+    
+    // If the current directory can be selected, we need to use the special callback
+    // based version of the getResults method.
+    if (this.selectCurrentDir) {
+      this._getDirResults(returnValue);
+    }
+    else {
+      this.resultCallback({
+        success: returnValue,
+        location: this.currentLocation,
+        selection: this._getResults(),
+        filename: this._getUiElem(this.uiNames.filename).val()
+      });
+    }
   },
   // Initialization methods
   _initialize: function(initializer) {
@@ -347,6 +399,7 @@ FileBrowser.prototype = {
     this.allowItemSelection = initializer.allowItemSelection;
     this.allowMultipleSelection = initializer.allowMultipleSelection;
     this.allowDirsInResults = initializer.allowDirsInResults;
+    this.selectCurrentDir = initializer.selectCurrentDir;
 
     this.sorter = initializer.sorter;
     this.sorter.browser = this;
@@ -374,11 +427,18 @@ FileBrowser.prototype = {
         fileBrowser.clearSelection();
       }
     });
-    // Update the accept button enabled state when the user types in the filename field
-    this._getUiElem(this.uiNames.filename).keyup(function() {
-      console.log(jQuery(this).val());
-      fileBrowser._setEnabled(fileBrowser.uiNames.accept, (fileBrowser._getResults().length != 0) || (jQuery(this).val() != ''));
-    });
+
+    // Leave the accept button active if the user can select directories
+    if (this.allowDirsInResults) {
+      fileBrowser._setEnabled(fileBrowser.uiNames.accept, true);
+    }
+    else {
+      // Update the accept button enabled state when the user types in the filename field
+      this._getUiElem(this.uiNames.filename).keyup(function() {
+        console.log(jQuery(this).val());
+        fileBrowser._setEnabled(fileBrowser.uiNames.accept, (fileBrowser._getResults().length != 0) || (jQuery(this).val() != ''));
+      });
+    }
 
     this._getUiElem(this.uiNames.filename).blur(function() {
       jQuery(indriMain._getUiElem(indriMain.uiNames.focusTextbox)).focus();
@@ -534,6 +594,10 @@ FileBrowser.prototype.DefaultInitializer = {
     filter: false,
   },
   directoriesOnly: false,
+  
+  // If the file browser will allow the user to select
+  // the current directory as the default (nothing selected).
+  selectCurrentDir: false,
   allowMultipleSelection: false,
   // fileMustExist : false,
 
@@ -769,6 +833,7 @@ FileBrowser.prototype.DestinationDialogInitializer = jQuery.extend(true, {}, Fil
   allowItemSelection: false,
   allowMultipleSelection: false,
   allowDirsInResults: true,
+  selectCurrentDir: true,
   texts: {
     title: "Select Target Folder",
     accept: "Select",
