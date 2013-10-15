@@ -292,13 +292,19 @@ FileBrowser.prototype = {
     // Fill in the selected names
     var filenameText = '';
     var prefix = '';
+    
+    var indriMain = this;
 
     this.currentSelection.forEach(function(selectedItem) {
-      filenameText += prefix + selectedItem.name;
-      prefix = ';';
+      if(indriMain.allowDirsInResults || !selectedItem.isDir) {
+        filenameText += prefix + selectedItem.name;
+        prefix = ';';
+      }
     });
     if (unincludedItem) {
-      filenameText += prefix + unincludedItem.name;
+      if(indriMain.allowDirsInResults || !unincludedItem.isDir) {
+        filenameText += prefix + unincludedItem.name;
+      }
     }
 
     this._getUiElem(this.uiNames.filename).val(filenameText);
