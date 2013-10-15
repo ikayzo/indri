@@ -475,7 +475,9 @@ FileBrowser.prototype = {
       fileBrowser._beginEditingContentItem();
     });
     this._getUiElem(this.uiNames.accept).click(function() {
-      fileBrowser._returnResults(true);
+      if(jQuery(this).attr('disabled') != 'disabled') {
+        fileBrowser._returnResults(true);
+      }
     });
     this._getUiElem(this.uiNames.cancel).click(function() {
       fileBrowser._returnResults(false);
