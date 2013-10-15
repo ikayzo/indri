@@ -1,93 +1,101 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-	<link rel="stylesheet" type="text/css" href="css/reset.css">
-	<script type="text/javascript" src="js/3rdparty/jquery-1.10.2.js"></script>
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/reset.css">
+    <script type="text/javascript" src="js/3rdparty/jquery-1.10.2.js"></script>
 
-	<!-- Foundation -->
-	<script type="text/javascript" src="js/3rdparty/foundation.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/foundation.min.css">
+    <!-- Foundation -->
+    <script type="text/javascript" src="js/3rdparty/foundation.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/foundation.min.css">
 
-	<style type="text/css">
-		/* Foundation specific styles */
+    <style type="text/css">
+      /* Foundation specific styles */
 
-		/* Override Foundation Styling for pop up */
-		.reveal-modal 		{ height: 80%; padding: 0px;}
+      /* Override Foundation Styling for pop up */
+      .reveal-modal 		{ height: 80%; padding: 0px;}
 
-	</style>
+    </style>
 
-	<link rel="stylesheet" type="text/css" href="../css/indri.css">
-</head>
+    <link rel="stylesheet" type="text/css" href="../css/indri.css">
+  </head>
 
-<body>
-	<h2>Indri with Foundation test page</h2>
-	<div>
-		File system:
-		<select id="fileSystem">
-			<option value="local">Local file system</option>
-			<option value="ikayzo">Ikayzo S3</option>
-			<option value="civilbeat">Civil Beat S3</option>
-		</select>
-	</div>
+  <body>
+    <h2>Indri with Foundation test page</h2>
+    <div>
+      File system:
+      <select id="fileSystem">
+        <option value="local">Local file system</option>
+        <option value="ikayzo">Ikayzo S3</option>
+        <option value="civilbeat">Civil Beat S3</option>
+      </select>
+    </div>
 
-	<div>
-		<button id="openBtn">Open...</button>
-		<button id="saveBtn">Save...</button>
-    <button id="destBtn">Destination...</button>
-		<button id="debugBtn">Debug...</button>
-	</div>
+    <div>
+      <button id="openBtn">Open...</button>
+      <button id="saveBtn">Save...</button>
+      <button id="destBtn">Destination...</button>
+      <button id="debugBtn">Debug...</button>
+    </div>
 
-	<h3>Results:</h3>
+    <h3>Results:</h3>
     <div id="results">Dialog not opened yet.</div>
 
-	<hr>
+    <hr>
 
-	<div id="indriDialog" class="reveal-modal"></div>
- 
+    <div id="indriDialog" class="reveal-modal"></div>
 
-<script type="text/javascript" src="../js/indri.fsm.js"></script>
-<script type="text/javascript" src="../js/indri.base.js"></script>
-<script type="text/javascript" src="../js/indri.content.renderer.base.js"></script>
-<script type="text/javascript" src="../js/indri.content.renderers.js"></script>
-<script type="text/javascript" src="../js/indri.location.renderers.js"></script>
-<script type="text/javascript" src="../js/indri.main.js"></script>
 
-<script type="text/javascript" src="js/test-common.js"></script>
+    <script type="text/javascript" src="../js/indri.fsm.js"></script>
+    <script type="text/javascript" src="../js/indri.base.js"></script>
+    <script type="text/javascript" src="../js/indri.content.renderer.base.js"></script>
+    <script type="text/javascript" src="../js/indri.content.renderers.js"></script>
+    <script type="text/javascript" src="../js/indri.location.renderers.js"></script>
+    <script type="text/javascript" src="../js/indri.main.js"></script>
 
-<script type="text/javascript">
+    <script type="text/javascript" src="js/test-common.js"></script>
 
-	jQuery(document).ready(function() {
-		jQuery(document).foundation();
+    <script type="text/javascript">
 
-		function showDialog(defaults) {
-			jQuery('#indriDialog').load('../templates/indri.html', function() {
-				var $dlg = jQuery(this);
-				var initializer = getDialogInitializer(defaults);
+      jQuery(document).ready(function() {
+        jQuery(document).foundation();
 
-				initializer.resultCallback = function(result) {
-					$dlg.foundation('reveal', 'close'); 
-					
-					console.log(result); 
-					if(result.success){
-						jQuery("#results").html("User selection:<br>" + JSON.stringify(result));						
-					}
-					else {
-						jQuery("#results").html("Operation cancelled:<br>" + JSON.stringify(result));
-					}
-				};
+        function showDialog(defaults) {
+          jQuery('#indriDialog').load('../templates/indri.html', function() {
+            var $dlg = jQuery(this);
+            var initializer = getDialogInitializer(defaults);
 
-				FileBrowser.attach($dlg, new FileSystemManager("http://localhost:1337/"), initializer);
-				$dlg.foundation('reveal', 'open'); 
-			});
-		}
+            initializer.resultCallback = function(result) {
+              $dlg.foundation('reveal', 'close');
 
-		jQuery("#openBtn").click(function() { showDialog(FileBrowser.prototype.OpenDialogInitializer); });
-		jQuery("#saveBtn").click(function() { showDialog(FileBrowser.prototype.SaveDialogInitializer); });
-    jQuery("#destBtn").click(function() { showDialog(FileBrowser.prototype.DestinationDialogInitializer); });
-		jQuery("#debugBtn").click(function() { showDialog(FileBrowser.prototype.DebugDialogInitializer); });
-	});
-</script>
+              console.log(result);
+              if (result.success) {
+                jQuery("#results").html("User selection:<br>" + JSON.stringify(result));
+              }
+              else {
+                jQuery("#results").html("Operation cancelled:<br>" + JSON.stringify(result));
+              }
+            };
 
-</body>
+            FileBrowser.attach($dlg, new FileSystemManager("http://localhost:1337/"), initializer);
+            $dlg.foundation('reveal', 'open');
+          });
+        }
+
+        jQuery("#openBtn").click(function() {
+          showDialog(FileBrowser.prototype.OpenDialogInitializer);
+        });
+        jQuery("#saveBtn").click(function() {
+          showDialog(FileBrowser.prototype.SaveDialogInitializer);
+        });
+        jQuery("#destBtn").click(function() {
+          showDialog(FileBrowser.prototype.DestinationDialogInitializer);
+        });
+        jQuery("#debugBtn").click(function() {
+          showDialog(FileBrowser.prototype.DebugDialogInitializer);
+        });
+      });
+    </script>
+
+  </body>
 </html>

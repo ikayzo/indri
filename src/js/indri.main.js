@@ -492,6 +492,7 @@ FileBrowser.prototype = {
     // Bind key handler
     jQuery("#indriui").on("keydown", this, initializer.viewFactory.views[0].keyHandler);
 
+    jQuery( document.activeElement ).blur();
     jQuery(this.uiNames.focusTextbox).focus();
 
     jQuery(this.uiNames.contentsPanel + ', ' 
