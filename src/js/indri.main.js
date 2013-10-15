@@ -175,9 +175,11 @@ FileBrowser.prototype = {
       }
     }
     else if (evt.type == "click") {
-
       this._applySelectionToItem(contentItem, multipleSelectKey);
     }
+    
+    // Re-focus the focusTextbox so that key presses can be detected
+    jQuery(this.uiNames.focusTextbox).focus();
   },
   
   _handleKeyEvent: function(evt) {
@@ -434,8 +436,8 @@ FileBrowser.prototype = {
       }
     });
 
-    // Leave the accept button active if the user can select directories
-    if (this.allowDirsInResults) {
+    // Leave the accept button active if the user can select the current directory
+    if (this.selectCurrentDir) {
       fileBrowser._setEnabled(fileBrowser.uiNames.accept, true);
     }
     else {
@@ -492,11 +494,12 @@ FileBrowser.prototype = {
 
     jQuery(this.uiNames.focusTextbox).focus();
 
-    jQuery(indriMain.uiNames.contentsPanel + ', ' + indriMain.uiNames.headerWrapper).click(function() {
+    jQuery(this.uiNames.contentsPanel + ', ' 
+           + this.uiNames.headerWrapper + ', ' 
+           + this.uiNames.shortcutsPanel + ', ' 
+           + this.uiNames.previewWrapper).click(function() {
       jQuery(indriMain.uiNames.focusTextbox).focus();
     });
-
-
   },
   
   _initializeFiltering: function(filter) {
