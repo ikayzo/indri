@@ -731,7 +731,7 @@ FileBrowser.prototype.DefaultInitializer = {
 
       var btnId = 0;
       this.views.forEach(function(view) {
-        var $anchor = jQuery(document.createElement("a")).addClass('ind-viewbutton entypo ind-btn').attr('id', 'ind-viewbutton-' + btnId);
+        var $anchor = jQuery(document.createElement("a")).addClass('ind-viewbutton entypo ind-btn').attr('id', 'ind-viewbutton-' + btnId).attr('title', view.name);
         $anchor.click($anchor, function(evt) {
           jQuery('.ind-viewbutton').removeClass('ind-btn-active');
           jQuery(evt.data).addClass('ind-btn-active');
