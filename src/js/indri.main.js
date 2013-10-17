@@ -295,13 +295,19 @@ FileBrowser.prototype = {
     // Fill in the selected names
     var filenameText = '';
     var prefix = '';
+    
+    var indriMain = this;
 
     this.currentSelection.forEach(function(selectedItem) {
-      filenameText += prefix + selectedItem.name;
-      prefix = ';';
+      if(indriMain.allowDirsInResults || !selectedItem.isDir) {
+        filenameText += prefix + selectedItem.name;
+        prefix = ';';
+      }
     });
     if (unincludedItem) {
-      filenameText += prefix + unincludedItem.name;
+      if(indriMain.allowDirsInResults || !unincludedItem.isDir) {
+        filenameText += prefix + unincludedItem.name;
+      }
     }
 
     this._getUiElem(this.uiNames.filename).val(filenameText);
@@ -468,7 +474,9 @@ FileBrowser.prototype = {
       fileBrowser._beginEditingContentItem();
     });
     this._getUiElem(this.uiNames.accept).click(function() {
-      fileBrowser._returnResults(true);
+      if(jQuery(this).attr('disabled') != 'disabled') {
+        fileBrowser._returnResults(true);
+      }
     });
     this._getUiElem(this.uiNames.cancel).click(function() {
       fileBrowser._returnResults(false);
@@ -718,7 +726,7 @@ FileBrowser.prototype.DefaultInitializer = {
 
       var btnId = 0;
       this.views.forEach(function(view) {
-        var $anchor = jQuery(document.createElement("a")).addClass('ind-viewbutton entypo ind-btn').attr('id', 'ind-viewbutton-' + btnId);
+        var $anchor = jQuery(document.createElement("a")).addClass('ind-viewbutton entypo ind-btn').attr('id', 'ind-viewbutton-' + btnId).attr('title', view.name);
         $anchor.click($anchor, function(evt) {
           jQuery('.ind-viewbutton').removeClass('ind-btn-active');
           jQuery(evt.data).addClass('ind-btn-active');
