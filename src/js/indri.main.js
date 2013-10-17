@@ -310,11 +310,15 @@ FileBrowser.prototype = {
     this._setEnabled(this.uiNames.delete, this.currentSelection.length != 0);
     this._setEnabled(this.uiNames.rename, this.currentSelection.length == 1);
     
-    this._setEnabled(this.uiNames.accept, (this._getResults().length != 0) || unincludedItem || this.allowDirsInResults);
+    this._changeAcceptState(unincludedItem);
 
     if (this.previewRenderer) {
       this._getUiElem(this.uiNames.previewWrapper).empty().append(this.previewRenderer.render(this.currentSelection));
     }
+  },
+  
+  _changeAcceptState: function(unincludedItem) {
+    this._setEnabled(this.uiNames.accept, (this._getResults().length != 0) || (unincludedItem && !unincludedItem.isDir) || jQuery(this.uiNames.filename).val() != '' || this.allowDirsInResults);
   },
   
   _filterChanged: function() {
@@ -371,9 +375,9 @@ FileBrowser.prototype = {
   _returnResults: function(returnValue) {
     var results = this._getResults();
     
-    // If the current directory can be selected, we need to use the special
-    // callback based version of the getResults method.
+    // If the current directory can be selected and nothing has been selected by the user
     if (results.length == 0 && this.allowDirsInResults) {
+      // Return the current directory
       this._returnCurrentDir(returnValue);
     }
     else {
@@ -436,18 +440,13 @@ FileBrowser.prototype = {
       }
     });
 
-    // Leave the accept button active if the user can select the current directory
-    if (this.allowDirsInResults) {
-      fileBrowser._setEnabled(fileBrowser.uiNames.accept, true);
-    }
-    else {
-      // Update the accept button enabled state when the user types in the
-      // filename field
-      this._getUiElem(this.uiNames.filename).keyup(function() {
-        console.log(jQuery(this).val());
-        fileBrowser._setEnabled(fileBrowser.uiNames.accept, (fileBrowser._getResults().length != 0) || (jQuery(this).val() != ''));
-      });
-    }
+    // Update the accept button enabled state when the user types in the
+    // filename field
+    this._getUiElem(this.uiNames.filename).keyup(function() {
+      console.log(jQuery(this).val());
+      fileBrowser._changeAcceptState();
+    });
+    
 
     this._getUiElem(this.uiNames.filename).blur(function() {
       jQuery(indriMain._getUiElem(indriMain.uiNames.focusTextbox)).focus();
