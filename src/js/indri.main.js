@@ -179,7 +179,7 @@ FileBrowser.prototype = {
     }
     
     // Re-focus the focusTextbox so that key presses can be detected
-    jQuery(this.uiNames.focusTextbox).focus();
+    this._getUiElem(this.uiNames.focusTextbox).focus();
   },
   
   _handleKeyEvent: function(evt) {
@@ -324,7 +324,7 @@ FileBrowser.prototype = {
   },
   
   _changeAcceptState: function(unincludedItem) {
-    this._setEnabled(this.uiNames.accept, (this._getResults().length != 0) || (unincludedItem && !unincludedItem.isDir) || jQuery(this.uiNames.filename).val() != '' || this.allowDirsInResults);
+    this._setEnabled(this.uiNames.accept, (this._getResults().length != 0) || (unincludedItem && !unincludedItem.isDir) || this._getUiElem(this.uiNames.filename).val() != '' || this.allowDirsInResults);
   },
   
   _filterChanged: function() {
@@ -398,7 +398,6 @@ FileBrowser.prototype = {
   
   // Initialization methods
   _initialize: function(initializer) {
-    var indriMain = this;
     if (!initializer) {
       initializer = new this.DefaultInitializer();
     }
@@ -451,11 +450,11 @@ FileBrowser.prototype = {
     this._getUiElem(this.uiNames.filename).keyup(function() {
       console.log(jQuery(this).val());
       fileBrowser._changeAcceptState();
-    });
-    
+    });    
 
+    var focusTextbox = this._getUiElem(this.uiNames.focusTextbox);
     this._getUiElem(this.uiNames.filename).blur(function() {
-      jQuery(indriMain._getUiElem(indriMain.uiNames.focusTextbox)).focus();
+      focusTextbox.focus();
     });
 
     this._getUiElem(this.uiNames.preview).click(function() {
@@ -497,16 +496,16 @@ FileBrowser.prototype = {
     }
 
     // Bind key handler
-    jQuery("#indriui").on("keydown", this, initializer.viewFactory.views[0].keyHandler);
+    this.rootElem.on("keydown", this, initializer.viewFactory.views[0].keyHandler);
 
     jQuery( document.activeElement ).blur();
-    jQuery(this.uiNames.focusTextbox).focus();
+    this._getUiElem(this.uiNames.focusTextbox).focus();
 
-    jQuery(this.uiNames.contentsPanel + ', ' 
+    this._getUiElem(this.uiNames.contentsPanel + ', ' 
            + this.uiNames.headerWrapper + ', ' 
            + this.uiNames.shortcutsPanel + ', ' 
            + this.uiNames.previewWrapper).click(function() {
-      jQuery(indriMain.uiNames.focusTextbox).focus();
+      focusTextbox.focus();
     });
   },
   
