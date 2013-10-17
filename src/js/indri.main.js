@@ -203,7 +203,10 @@ FileBrowser.prototype = {
           this._returnResults(true);
         }
       }
-      else if(this.selectCurrentDir) {
+      
+      // If not item is selected and you can select directories
+      else if(this.allowDirsInResults) {
+        // Return the current directory by default
         this._returnResults(true);
       }
     }
@@ -306,9 +309,8 @@ FileBrowser.prototype = {
     // Enabled/disable the buttons
     this._setEnabled(this.uiNames.delete, this.currentSelection.length != 0);
     this._setEnabled(this.uiNames.rename, this.currentSelection.length == 1);
-    if (!this.selectCurrentDir) {
-      this._setEnabled(this.uiNames.accept, (this._getResults().length != 0) || unincludedItem);
-    }
+    
+    this._setEnabled(this.uiNames.accept, (this._getResults().length != 0) || unincludedItem || this.allowDirsInResults);
 
     if (this.previewRenderer) {
       this._getUiElem(this.uiNames.previewWrapper).empty().append(this.previewRenderer.render(this.currentSelection));
@@ -352,7 +354,6 @@ FileBrowser.prototype = {
   
   _returnCurrentDir: function(returnValue) {
     var indriMain = this;
-    var currentDir = this.currentLocation.replace(/\//g, "\\\\");
     var results = [];
     var success = this._makeCallback(function(contents, status) {
         results.push(contents);
@@ -372,7 +373,7 @@ FileBrowser.prototype = {
     
     // If the current directory can be selected, we need to use the special
     // callback based version of the getResults method.
-    if (results.length == 0 && this.selectCurrentDir) {
+    if (results.length == 0 && this.allowDirsInResults) {
       this._returnCurrentDir(returnValue);
     }
     else {
@@ -407,7 +408,6 @@ FileBrowser.prototype = {
     this.allowItemSelection = initializer.allowItemSelection;
     this.allowMultipleSelection = initializer.allowMultipleSelection;
     this.allowDirsInResults = initializer.allowDirsInResults;
-    this.selectCurrentDir = initializer.selectCurrentDir;
 
     this.sorter = initializer.sorter;
     this.sorter.browser = this;
@@ -437,7 +437,7 @@ FileBrowser.prototype = {
     });
 
     // Leave the accept button active if the user can select the current directory
-    if (this.selectCurrentDir) {
+    if (this.allowDirsInResults) {
       fileBrowser._setEnabled(fileBrowser.uiNames.accept, true);
     }
     else {
@@ -615,10 +615,6 @@ FileBrowser.prototype.DefaultInitializer = {
   },
   
   directoriesOnly: false,
-  
-  // If the file browser will allow the user to select
-  // the current directory as the default (nothing selected).
-  selectCurrentDir: false,
   
   allowMultipleSelection: false,
   // fileMustExist : false,
@@ -884,7 +880,6 @@ FileBrowser.prototype.DestinationDialogInitializer = jQuery.extend(true, {}, Fil
   allowItemSelection: false,
   allowMultipleSelection: false,
   allowDirsInResults: true,
-  selectCurrentDir: true,
   
   texts: {
     title: "Select Target Folder",
