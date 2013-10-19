@@ -39,12 +39,14 @@ FileBrowser.prototype = {
   shortcutsRenderer: null,
   resultCallback: null,
   nextClientId: 0,
+  
   /*
-   Primary API
+   * Primary API
    */
   navigateToRoot: function() {
     this.fsm.getRootLocation(this._makeCallback(this.navigateToLocation), this._makeCallback(this._updateStatus));
   },
+  
   navigateToLocation: function(location) {
     var success = this._makeCallback(function(contents, status) {
       this._updateLocation(location);
@@ -52,13 +54,16 @@ FileBrowser.prototype = {
     });
     this.fsm.getContents(location, success, this._makeCallback(this._updateStatus));
   },
+  
   navigateRelative: function(direction) {
     this.fsm.getRelativeLocation(this.currentLocation, direction, this._makeCallback(this.navigateToLocation));
   },
+  
   clearSelection: function() {
     this.currentSelection.length = 0;
     this._selectionChanged();
   },
+  
   createFolder: function() {
     var success = this._makeCallback(function(newContents, status) {
       this._modifyContents(newContents, false, status);
@@ -67,6 +72,7 @@ FileBrowser.prototype = {
 
     this.fsm.createFolder(this.currentLocation, IndriText.NEW_FOLDER_TEXT, success, this._makeCallback(this._updateStatus));
   },
+  
   renameItem: function(contentItem, newName) {
     var success = this._makeCallback(function(renamedContent, status) {
       // Remove the file with the old name from the currentContents
@@ -76,6 +82,7 @@ FileBrowser.prototype = {
 
     this.fsm.renameItem(contentItem, newName, success, this._makeCallback(this._updateStatus));
   },
+  
   deleteSelected: function() {
     var targets = this.currentSelection;
     var success = this._makeCallback(function(deletedContents, status) {
@@ -83,8 +90,9 @@ FileBrowser.prototype = {
     });
     this.fsm.deleteItems(this.currentSelection, success, this._makeCallback(this._updateStatus));
   },
+  
   /*
-   Internal methods
+   * Internal methods
    */
   _updateLocation: function(location) {
     this.currentLocation = location;
@@ -96,6 +104,7 @@ FileBrowser.prototype = {
       this._getUiElem(this.uiNames.location).html(this.currentLocation);
     }
   },
+  
   _modifyContents: function(items, isDelete, status) {
     items.forEach(function(item) {
       if (isDelete)
@@ -107,17 +116,16 @@ FileBrowser.prototype = {
         }
         this.currentContents[item.clientId] = item;
       }
-
     }, this);
 
     this.currentSelection.length = 0;
     if (!isDelete)
       this.currentSelection.push(items[0]);
 
-
     this._populateContentUI();
     this._updateStatus(status);
   },
+  
   _updateContents: function(contents, status) {
     this.currentContents = {};
     this.nextClientId = 0;
@@ -130,6 +138,7 @@ FileBrowser.prototype = {
     this._populateContentUI();
     this._updateStatus(status);
   },
+  
   _populateContentUI: function() {
     // apply filter and sorter
     var contents = [];
@@ -142,7 +151,14 @@ FileBrowser.prototype = {
     this._getUiElem(this.uiNames.contentsPanel).empty().append(this.contentRenderer.render(contents, this._makeCallback(this._handleContentEvent)));
     this._selectionChanged();
   },
+  
   _handleContentEvent: function(contentItem, evt, newName) {
+
+    // Using both meta (Mac command key) and ctrl key (Windows) as a temporary
+    // solution.
+    // How do you get the meta key to fire on Windows?
+    var multipleSelectKey = evt.metaKey || evt.ctrlKey;
+
     if (evt == "clear") {
       this.clearSelection();
     }
@@ -154,14 +170,48 @@ FileBrowser.prototype = {
         this.navigateToLocation(contentItem.location);
       }
       else {
-        this._applySelectionToItem(contentItem, evt.metaKey);
+        this._applySelectionToItem(contentItem, multipleSelectKey);
         this._returnResults(true);
       }
     }
     else if (evt.type == "click") {
-      this._applySelectionToItem(contentItem, evt.metaKey);
+      this._applySelectionToItem(contentItem, multipleSelectKey);
+    }
+    
+    // Re-focus the focusTextbox so that key presses can be detected
+    this._getUiElem(this.uiNames.focusTextbox).focus();
+  },
+  
+  _handleKeyEvent: function(evt) {
+    // catch "delete" evt
+    if (evt == "delete") {
+
+      // fire deleteSelected
+      this.deleteSelected();
+    }
+
+    // catch "enter" evt
+    else if (evt == "enter") {
+      var contentItem = this.currentSelection[0];
+      if (contentItem) {
+        
+        // Navigate to the directory if directories cannot be in the results
+        if (!this.allowDirsInResults && contentItem.isDir) {
+          this.navigateToLocation(contentItem.location);
+        }
+        else {
+          this._returnResults(true);
+        }
+      }
+      
+      // If not item is selected and you can select directories
+      else if(this.allowDirsInResults) {
+        // Return the current directory by default
+        this._returnResults(true);
+      }
     }
   },
+  
   _beginEditingContentItem: function(contentItem) {
     if (!contentItem && this.currentSelection.length) {
       contentItem = this.currentSelection[0];
@@ -171,6 +221,7 @@ FileBrowser.prototype = {
       this.contentRenderer.editItem(contentItem);
     }
   },
+  
   _updateShortcuts: function(callback) {
     if (!callback) {
       callback = this._makeCallback(this._populateShortcuts);
@@ -179,12 +230,14 @@ FileBrowser.prototype = {
     this.shortcuts = [];
     this.fsm.getShortcuts(callback, this._makeCallback(this._updateStatus));
   },
+  
   _populateShortcuts: function(shortcuts) {
     if (this.shortcutsRenderer) {
       this._getUiElem(this.uiNames.shortcutsPanel).empty().append(
               this.shortcutsRenderer.render(shortcuts, this._makeCallback(this.navigateToLocation)));
     }
   },
+  
   _updateStatus: function(status) {
     if (this.statusRenderer) {
       this.statusRenderer.render(this._getUiElem(this.uiNames.status), status);
@@ -193,6 +246,7 @@ FileBrowser.prototype = {
       this._getUiElem(this.uiNames.status).html(status);
     }
   },
+  
   // Component callbacks/support
   _setRenderer: function(renderer) {
     this.contentRenderer = renderer;
@@ -202,6 +256,7 @@ FileBrowser.prototype = {
 
     this._populateContentUI();
   },
+  
   _applySelectionToItem: function(contentItem, metaKey) {
     var includeInSelection = this.allowItemSelection || contentItem.isDir;
 
@@ -231,6 +286,7 @@ FileBrowser.prototype = {
     // Pass the contentItem if we didn't add it to the selection list
     this._selectionChanged(includeInSelection ? null : contentItem);
   },
+  
   // Take a parameter and include it in the text field content
   _selectionChanged: function(unincludedItem) {
     // Have the content renderer update the content area
@@ -239,13 +295,19 @@ FileBrowser.prototype = {
     // Fill in the selected names
     var filenameText = '';
     var prefix = '';
+    
+    var indriMain = this;
 
     this.currentSelection.forEach(function(selectedItem) {
-      filenameText += prefix + selectedItem.name;
-      prefix = ';';
+      if(indriMain.allowDirsInResults || !selectedItem.isDir) {
+        filenameText += prefix + selectedItem.name;
+        prefix = ';';
+      }
     });
     if (unincludedItem) {
-      filenameText += prefix + unincludedItem.name;
+      if(indriMain.allowDirsInResults || !unincludedItem.isDir) {
+        filenameText += prefix + unincludedItem.name;
+      }
     }
 
     this._getUiElem(this.uiNames.filename).val(filenameText);
@@ -253,31 +315,42 @@ FileBrowser.prototype = {
     // Enabled/disable the buttons
     this._setEnabled(this.uiNames.delete, this.currentSelection.length != 0);
     this._setEnabled(this.uiNames.rename, this.currentSelection.length == 1);
-    this._setEnabled(this.uiNames.accept, (this._getResults().length != 0) || unincludedItem);
+    
+    this._changeAcceptState(unincludedItem);
 
     if (this.previewRenderer) {
       this._getUiElem(this.uiNames.previewWrapper).empty().append(this.previewRenderer.render(this.currentSelection));
     }
   },
+  
+  _changeAcceptState: function(unincludedItem) {
+    this._setEnabled(this.uiNames.accept, (this._getResults().length != 0) || (unincludedItem && !unincludedItem.isDir) || this._getUiElem(this.uiNames.filename).val() != '' || this.allowDirsInResults);
+  },
+  
   _filterChanged: function() {
     this.currentSelection.length = 0;
     this._populateContentUI();
   },
+  
   _applyFilter: function(items) {
     return this.filter ? this.filter.apply(items) : items;
   },
+  
   _sortChanged: function() {
     this._populateContentUI();
   },
+  
   _applySorter: function(items) {
     return this.sorter ? this.sorter.apply(items) : items;
   },
+  
   _makeCallback: function(callback) {
     var fileBrowser = this;
     return function() {
       return callback.apply(fileBrowser, arguments);
     }
   },
+  
   // Get results set from current selection
   _getResults: function() {
     var results = [];
@@ -288,14 +361,41 @@ FileBrowser.prototype = {
     }, this);
     return results;
   },
-  _returnResults: function(returnValue) {
-    this.resultCallback({
-      success: returnValue,
-      location: this.currentLocation,
-      selection: this._getResults(),
-      filename: this._getUiElem(this.uiNames.filename).val()
-    });
+  
+  _returnCurrentDir: function(returnValue) {
+    var indriMain = this;
+    var results = [];
+    var success = this._makeCallback(function(contents, status) {
+        results.push(contents);
+        indriMain.resultCallback({
+          success: returnValue,
+          location: indriMain.currentLocation,
+          selection: results,
+          filename: indriMain._getUiElem(this.uiNames.filename).val()
+        });
+      });
+    this.fsm.getItemInfo(this.currentLocation, this._makeCallback(success), this._makeCallback(this._updateStatus));
+    return results;
   },
+  
+  _returnResults: function(returnValue) {
+    var results = this._getResults();
+    
+    // If the current directory can be selected and nothing has been selected by the user
+    if (results.length == 0 && this.allowDirsInResults) {
+      // Return the current directory
+      this._returnCurrentDir(returnValue);
+    }
+    else {
+      this.resultCallback({
+        success: returnValue,
+        location: this.currentLocation,
+        selection: results,
+        filename: this._getUiElem(this.uiNames.filename).val()
+      });
+    }
+  },
+  
   // Initialization methods
   _initialize: function(initializer) {
     if (!initializer) {
@@ -344,11 +444,19 @@ FileBrowser.prototype = {
         fileBrowser.clearSelection();
       }
     });
-    // Update the accept button enabled state when the user types in the filename field
+
+    // Update the accept button enabled state when the user types in the
+    // filename field
     this._getUiElem(this.uiNames.filename).keyup(function() {
       console.log(jQuery(this).val());
-      fileBrowser._setEnabled(fileBrowser.uiNames.accept, (fileBrowser._getResults().length != 0) || (jQuery(this).val() != ''));
+      fileBrowser._changeAcceptState();
+    });    
+
+    var focusTextbox = this._getUiElem(this.uiNames.focusTextbox);
+    this._getUiElem(this.uiNames.filename).blur(function() {
+      focusTextbox.focus();
     });
+
     this._getUiElem(this.uiNames.preview).click(function() {
       fileBrowser._toggleVisible(fileBrowser.uiNames.previewWrapper);
     });
@@ -365,12 +473,13 @@ FileBrowser.prototype = {
       fileBrowser._beginEditingContentItem();
     });
     this._getUiElem(this.uiNames.accept).click(function() {
-      fileBrowser._returnResults(true);
+      if(jQuery(this).attr('disabled') != 'disabled') {
+        fileBrowser._returnResults(true);
+      }
     });
     this._getUiElem(this.uiNames.cancel).click(function() {
       fileBrowser._returnResults(false);
     });
-
 
     if (initializer.visibility['shortcutsPanel']) {
       this._updateShortcuts(this._makeCallback(function(shortcuts) {
@@ -386,7 +495,20 @@ FileBrowser.prototype = {
       this.navigateToRoot();
     }
 
+    // Bind key handler
+    this.rootElem.on("keydown", this, initializer.viewFactory.views[0].keyHandler);
+
+    jQuery( document.activeElement ).blur();
+    this._getUiElem(this.uiNames.focusTextbox).focus();
+
+    this._getUiElem(this.uiNames.contentsPanel + ', ' 
+           + this.uiNames.headerWrapper + ', ' 
+           + this.uiNames.shortcutsPanel + ', ' 
+           + this.uiNames.previewWrapper).click(function() {
+      focusTextbox.focus();
+    });
   },
+  
   _initializeFiltering: function(filter) {
     // set the data member
     this.filter = filter;
@@ -394,52 +516,52 @@ FileBrowser.prototype = {
     // add selector to the dom
     this._getUiElem(this.uiNames.filter).empty().append(this.filter.render(this._makeCallback(this._filterChanged)));
   },
+  
   _initializeViews: function(viewFactory) {
     viewFactory.render(this._makeCallback(function(view) {
       this._setRenderer(view);
     }), this._getUiElem(this.uiNames.viewsPanel));
   },
   
-	// UI Accessors
-	uiNames : {
-		title 					: '#title-control',
-
-		shortcuts 			: '#shortcuts-control',
-		parent 					: '#parent-control',
-		refresh 				: '#refresh-control',
-		location 				: '#location-control',
-		viewsPanel 			: '#views-panel',		
-		preview 				: '#preview-control',
-		
-		shortcutsPanel 	: "#shortcuts-wrapper",
-		contentsWrapper	: '#contents-wrapper',
-		contentsPanel		: '#contents-panel',
-		previewWrapper 	: "#preview-wrapper",
-
-		newFolder 			: '#newfolder-control',
-		delete 					: '#delete-control',
-		rename 					: '#rename-control',
-		status 					: '#status-control',
-		filter 					: '#filters-panel',
-		filename 				: "#filename-control",
-		filenameLabel 	: "#filename-label-control",
-
-		accept 					: '#accept-control',
-		cancel 					: '#cancel-control',
-	},
-
+  // UI Accessors
+  uiNames: {
+    title: '#title-control',
+    shortcuts: '#shortcuts-control',
+    parent: '#parent-control',
+    refresh: '#refresh-control',
+    location: '#location-control',
+    viewsPanel: '#views-panel',
+    preview: '#preview-control',
+    shortcutsPanel: "#shortcuts-wrapper",
+    headerWrapper: "#header-wrapper",
+    contentsWrapper: '#contents-wrapper',
+    contentsPanel: '#contents-panel',
+    previewWrapper: "#preview-wrapper",
+    newFolder: '#newfolder-control',
+    delete: '#delete-control',
+    rename: '#rename-control',
+    status: '#status-control',
+    filter: '#filters-panel',
+    filename: "#filename-control",
+    filenameLabel: "#filename-label-control",
+    accept: '#accept-control',
+    cancel: '#cancel-control',
+    focusTextbox: '#ind-focus-textbox'
+  },
+  
   _getUiElem: function(name) {
     return this.rootElem.find(name);
   },
+  
   _setVisible: function(name, isVisible) {
     var displayMode = isVisible ? '' : 'none';
     this._getUiElem(name).css('display', displayMode);
 
     // Some special cases for the shortcuts and preview panels
     // TODO There should be a more systematic way to do this
-		if(name == this.uiNames.previewWrapper || name == this.uiNames.shortcutsPanel) {
-			var controlName = name == this.uiNames.previewWrapper ? this.uiNames.preview : this.uiNames.shortcuts;
-			var className = name == this.uiNames.previewWrapper ? "ind-show-preview" : "ind-show-shortcuts";
+    if (name == this.uiNames.previewWrapper || name == this.uiNames.shortcutsPanel) {
+      var controlName = name == this.uiNames.previewWrapper ? this.uiNames.preview : this.uiNames.shortcuts;
+      var className = name == this.uiNames.previewWrapper ? "ind-show-preview" : "ind-show-shortcuts";
 
       if (isVisible) {
         this._getUiElem(this.uiNames.contentsWrapper).addClass(className);
@@ -460,9 +582,11 @@ FileBrowser.prototype = {
       this._getUiElem(this.uiNames.filenameLabel).css('display', displayMode);
     }
   },
+  
   _toggleVisible: function(name) {
     this._setVisible(name, this._getUiElem(name).css('display') == 'none');
   },
+  
   _setEnabled: function(name, isEnabled) {
     var $uiElem = this._getUiElem(name);
 
@@ -479,11 +603,13 @@ FileBrowser.prototype = {
 
 
 FileBrowser.prototype.DefaultInitializer = {
+    
   texts: {
     title: "FileChooser",
     accept: "OK",
     cancel: "Cancel",
   },
+  
   visibility: {
     previewWrapper: false,
     shortcutsPanel: false,
@@ -493,13 +619,18 @@ FileBrowser.prototype.DefaultInitializer = {
     filename: false,
     filter: false,
   },
+  
   directoriesOnly: false,
+  
   allowMultipleSelection: false,
   // fileMustExist : false,
 
   sorter: {
+    
     fieldName: "name",
+    
     ascending: true,
+    
     apply: function(items) {
       if (this.fieldName) {
         var fieldName = this.fieldName;
@@ -528,6 +659,7 @@ FileBrowser.prototype.DefaultInitializer = {
 
       return items;
     },
+    
     setSortField: function(fieldName) {
       if (this.fieldName == fieldName) {
         this.ascending = !this.ascending;
@@ -537,10 +669,11 @@ FileBrowser.prototype.DefaultInitializer = {
         this.ascending = true;
       }
 
-      // TODO  Hmmm...not pleased with this
+      // TODO Hmmm...not pleased with this
       this.browser._sortChanged();
     }
   },
+  
   filter: {
     options: [
       {value: ".*", text: "All files (*.*)"},
@@ -554,6 +687,7 @@ FileBrowser.prototype.DefaultInitializer = {
 
       return filteredItems;
     },
+    
     render: function(callback) {
       // create selector
       var $select = jQuery(document.createElement("select")).attr("id", "filterSelector")
@@ -574,10 +708,13 @@ FileBrowser.prototype.DefaultInitializer = {
       return $select;
     }
   },
+  
   viewFactory: {
+    
     views: [
       new ListContentRenderer(),
     ],
+    
     render: function(callback, container) {
       if (container) {
         container.empty();
@@ -588,7 +725,7 @@ FileBrowser.prototype.DefaultInitializer = {
 
       var btnId = 0;
       this.views.forEach(function(view) {
-        var $anchor = jQuery(document.createElement("a")).addClass('ind-viewbutton entypo ind-btn').attr('id', 'ind-viewbutton-' + btnId);
+        var $anchor = jQuery(document.createElement("a")).addClass('ind-viewbutton entypo ind-btn').attr('id', 'ind-viewbutton-' + btnId).attr('title', view.name);
         $anchor.click($anchor, function(evt) {
           jQuery('.ind-viewbutton').removeClass('ind-btn-active');
           jQuery(evt.data).addClass('ind-btn-active');
@@ -619,14 +756,18 @@ FileBrowser.prototype.DefaultInitializer = {
       return container;
     }
   },
+  
   locationRenderer: new StringLocationRenderer(),
+  
   statusRenderer: {
     render: function(elem, status) {
       elem.html("<strong>" + status + "</strong>");
     }
   },
+  
   previewRenderer: {
     render: function(selection) {
+      
       if (selection.length == 0) {
         return jQuery(document.createElement("span")).html("No items selected");
       }
@@ -640,8 +781,11 @@ FileBrowser.prototype.DefaultInitializer = {
         return jQuery(document.createElement("img")).attr("src", selection[0].previewUrl);
       }
     },
+    
   },
+  
   shortcutsRenderer: {
+    
     render: function(shortcuts, callback) {
       var $listContainer = jQuery(document.createElement("ul")).addClass("ind-shortcut-list");
       shortcuts.forEach(function(shortcut) {
@@ -660,18 +804,23 @@ FileBrowser.prototype.DefaultInitializer = {
       return $listContainer;
     }
   },
+  
   resultCallback: function(results) {
     console.log(results);
-  },
+  }
+  
 };
 
 FileBrowser.prototype.DebugDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
+  
   allowItemSelection: true,
   allowMultipleSelection: true,
   allowDirsInResults: false,
+  
   texts: {
     title: "Test Dialog",
   },
+  
   visibility: {
     previewWrapper: true,
     shortcutsPanel: true,
@@ -684,17 +833,22 @@ FileBrowser.prototype.DebugDialogInitializer = jQuery.extend(true, {}, FileBrows
 });
 
 FileBrowser.prototype.SaveDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
-  // This combination copies item names to the text field on selection, but doesn't
-  // maintain the selection in the ui. Whatever text ends up in the text field is what 
+  
+  // This combination copies item names to the text field on selection, but
+  // doesn't
+  // maintain the selection in the ui. Whatever text ends up in the text field
+  // is what
   // we use to build the result
   allowItemSelection: false,
   allowMultipleSelection: false,
   allowDirsInResults: false,
+  
   texts: {
     title: "Save File",
     accept: "Save",
     cancel: "Cancel",
   },
+  
   visibility: {
     previewWrapper: false,
     shortcutsPanel: false,
@@ -707,10 +861,12 @@ FileBrowser.prototype.SaveDialogInitializer = jQuery.extend(true, {}, FileBrowse
 
 
 FileBrowser.prototype.OpenDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
+  
   // Let the user select any number of existing items
   allowItemSelection: true,
   allowMultipleSelection: true,
   allowDirsInResults: false,
+  
   texts: {
     title: "Open File(s)",
     accept: "Open",
@@ -725,15 +881,18 @@ FileBrowser.prototype.OpenDialogInitializer = jQuery.extend(true, {}, FileBrowse
 
 // TODO hide the filename, and add a filter to only show folders
 FileBrowser.prototype.DestinationDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
-  // Let the user select one director
+  
+  // Let the user select one directory
   allowItemSelection: false,
   allowMultipleSelection: false,
   allowDirsInResults: true,
+  
   texts: {
     title: "Select Target Folder",
     accept: "Select",
     cancel: "Cancel",
   },
+  
   visibility: {
     previewWrapper: false,
     shortcutsPanel: true,
@@ -743,9 +902,11 @@ FileBrowser.prototype.DestinationDialogInitializer = jQuery.extend(true, {}, Fil
     filename: false,
     newFolder: true
   },
-  // Put custom filter object here.  Must have apply & render methods.
-  //   - render would be empty (don't need to show since we are only showing directories, no options there...)
-  //   - apply -> if isDir, then keep, otherwise discard
+  
+  // Put custom filter object here. Must have apply & render methods.
+  // - render would be empty (don't need to show since we are only showing
+  // directories, no options there...)
+  // - apply -> if isDir, then keep, otherwise discard
 
   filter: {
     apply: function(items) {
@@ -755,6 +916,7 @@ FileBrowser.prototype.DestinationDialogInitializer = jQuery.extend(true, {}, Fil
 
       return filteredItems;
     },
+    
     render: function() {
       // Do not need to render anything.
     }

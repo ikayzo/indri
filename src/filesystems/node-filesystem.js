@@ -59,7 +59,7 @@ function getFileInfo(fullPath) {
 
 function constrainPath(path) {
   // TODO Apply constraints
-  //return (path.indexOf(config.rootDir) != 0) ? config.rootDir : path;
+  // return (path.indexOf(config.rootDir) != 0) ? config.rootDir : path;
   return path;
 }
 
@@ -109,6 +109,9 @@ FileSystemRequestHandler.prototype = {
       this.makedir();
     } else if(this.action == 'shortcuts') {
       this.shortcuts();
+    }
+    else if(this.action == "getinfo") {
+      this.getinfo();
     } else {
       this.invalidAction();
     }
@@ -167,11 +170,11 @@ FileSystemRequestHandler.prototype = {
         }
         catch(ex) {
           if(result.error) {
-            result.error += ', "' + fullPath + '"';
+            result.error += ', "' + location + '"';
             console.log(ex.toString())
           }
           else {
-            result.error = 'Could not delete: "' + fullPath + '"';
+            result.error = 'Could not delete: "' + location + '"';
             console.log(ex.toString());
           }
         }
@@ -193,7 +196,7 @@ FileSystemRequestHandler.prototype = {
 
     var fullPath = path.join(config.rootDir, this.loc, this.parsedQuery.query.name);    
     
-    // Make sure that the folder will be unique.  If not, append a number to it.
+    // Make sure that the folder will be unique. If not, append a number to it.
     var uniqueFullPath = fullPath;
     var numAppend = 1;
     while(fs.existsSync(uniqueFullPath)) {
@@ -255,6 +258,17 @@ FileSystemRequestHandler.prototype = {
       config.shortcuts.forEach(function(item) {
         result.contents.push({name: item.name, location: encodeLocation(item.location)});
       });
+    }
+  },
+  
+  getinfo : function() {
+    var fullPath = path.join(config.rootDir, this.loc);
+    var result = this.result;
+    if(fs.existsSync(fullPath)) {
+      result.contents = getFileInfo(fullPath);
+    }
+    else {
+      result.error = "File doesn't exist: " + this.loc;
     }
   }
 }
