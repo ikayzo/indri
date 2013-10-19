@@ -38,21 +38,25 @@ function getPreviewUrl(fullPath) {
   return isPreviewable(fullPath) ? (fsUrl() + fullPath.slice(config.rootDir.length)).replace(/\\/g, "/") : null;
 }
 
-function getFileInfo(fullPath) {
+function getFileInfo(fullPath, original) {
 
   var previewUrl = getPreviewUrl(fullPath);
+  
+  // Initialize original if it does not exist
+  original = original || {};
 
   var stats = fs.statSync(fullPath);
-  return { 
-    name: path.basename(fullPath),
-    location: encodeLocation(fullPath.slice(config.rootDir.length)),
-    isDir: stats.isDirectory(),
-    size: (stats.isFile() ? stats.size : undefined),
-    created: stats.ctime.getTime(),
-    modified: stats.mtime.getTime(),
-    id: stats.ino,
-    previewUrl : previewUrl,
-  };
+
+  // Write extend method?
+  original.name = path.basename(fullPath);
+  original.location = encodeLocation(fullPath.slice(config.rootDir.length));
+  original.isCollection = stats.isDirectory();
+  original.size = (stats.isFile() ? stats.size : undefined);
+  original.created = stats.ctime.getTime();
+  original.modified = stats.mtime.getTime();
+  original.id = stats.ino;
+  original.previewUrl = previewUrl;
+  return  original;
 }
 
 
@@ -63,8 +67,8 @@ function constrainPath(path) {
   return path;
 }
 
-function parseLocation(location) {
-  return location ? JSON.parse(location) : "/";
+function parseFsItem(fsItem) {
+  return fsItem ? JSON.parse(fsItem) : '"/"';
 }
 
 function encodeLocation(location) {
@@ -89,10 +93,19 @@ FileSystemRequestHandler.prototype = {
     this.result = {};
     this.parsedQuery = require('url').parse(this.req.url, true);
     this.action = this.parsedQuery.query.action || "browse";
-    this.loc = parseLocation(this.parsedQuery.query.loc);
-    if (this.loc == 'undefined')
-      this.loc == '"/"';
-    console.log(this.parsedQuery.query.loc, ' -> ', this.loc);
+    
+    // Grab the fsItem
+    this.fsItem = parseFsItem(this.parsedQuery.query.fsItem);
+    
+    this.loc = this.fsItem.location;
+    
+    // Set default loc if it is missing
+    if (typeof(this.loc) == 'undefined') {
+      this.loc = '"/"';
+    }
+    
+    // Parse the loc
+    this.loc = JSON.parse(this.loc);
   },
 
   routeRequest : function() {
@@ -127,7 +140,7 @@ FileSystemRequestHandler.prototype = {
   browse : function() {
     var result = this.result;
     result.realLoc = constrainPath(path.join(config.rootDir, this.loc));
-    result.loc = this.loc = result.realLoc.slice(config.rootDir.length);
+    result.loc = getFileInfo(result.realLoc, this.fsItem);
 
     result.contents = [];
     fs.readdirSync(result.realLoc).forEach(function(fileName) {
@@ -139,24 +152,25 @@ FileSystemRequestHandler.prototype = {
 
   delete : function() {
     var result = this.result;
-    if(!this.parsedQuery.query.locs) {
+    if(!this.parsedQuery.query.fsItems) {
       throw "Missing locations to delete";
     }
 
-    var locations = JSON.parse(this.parsedQuery.query.locs);
-    result.locations = locations;
+    var fsItems = JSON.parse(this.parsedQuery.query.fsItems);
+    result.fsItems = fsItems;
 
     result.attempt = [];
     result.contents = [];
 
-    locations.forEach(function(location) {
-      location = parseLocation(location);
-      if(location.length) {
-        var fullPath = path.join(config.rootDir, location);
+    fsItems.forEach(function(fsItem) {
+      fsItem = parseFsItem(fsItem);
+      var loc = JSON.parse(fsItem.location);
+      if(loc.length) {
+        var fullPath = path.join(config.rootDir, loc);
         result.attempt = fullPath;
 
         try {
-          var fileInfo = getFileInfo(fullPath);
+          var fileInfo = getFileInfo(fullPath, fsItem);
 
           var stats = fs.statSync(fullPath);
           if(stats.isFile()) {
@@ -170,11 +184,11 @@ FileSystemRequestHandler.prototype = {
         }
         catch(ex) {
           if(result.error) {
-            result.error += ', "' + location + '"';
+            result.error += ', "' + loc + '"';
             console.log(ex.toString())
           }
           else {
-            result.error = 'Could not delete: "' + location + '"';
+            result.error = 'Could not delete: "' + loc + '"';
             console.log(ex.toString());
           }
         }
@@ -212,20 +226,22 @@ FileSystemRequestHandler.prototype = {
 
   navigate : function() {
     this.result.origLoc = this.loc;
+
     var direction = this.parsedQuery.query.direction;
     if(direction == "parent") {
       if(this.loc != "/") {
         this.loc = path.dirname(this.loc);
       }
     }
-    console.log(this.loc);
-    this.result.loc = encodeLocation(this.loc);
+
+    var fullPath = path.join(config.rootDir, this.loc);
+    this.result.loc = getFileInfo(fullPath);
     console.log(this.result);
   },
 
   rename : function() {
     var result = this.result;
-    if(!this.parsedQuery.query.loc) {
+    if(!this.parsedQuery.query.fsItem) {
       throw "Missing location";
     }
 
@@ -242,7 +258,7 @@ FileSystemRequestHandler.prototype = {
         result.newFile = newFile;
 
         fs.renameSync(oldFile, newFile);
-        result.contents = [getFileInfo(newFile)];
+        result.contents = [getFileInfo(newFile, this.fsItem)];
       }
       else {
         result.error = "File doesn't exist: " + this.loc;
@@ -252,23 +268,12 @@ FileSystemRequestHandler.prototype = {
 
   shortcuts : function() {
     this.result.contents = [];
-    console.log("shortcuts result after", this.result);
     var result = this.result;
     if(config.shortcuts) {
       config.shortcuts.forEach(function(item) {
-        result.contents.push({name: item.name, location: encodeLocation(item.location)});
+        var fullPath = path.join(config.rootDir, item.location);
+        result.contents.push({name: item.name, location: getFileInfo(fullPath)});
       });
-    }
-  },
-  
-  getinfo : function() {
-    var fullPath = path.join(config.rootDir, this.loc);
-    var result = this.result;
-    if(fs.existsSync(fullPath)) {
-      result.contents = getFileInfo(fullPath);
-    }
-    else {
-      result.error = "File doesn't exist: " + this.loc;
     }
   }
 }

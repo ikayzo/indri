@@ -16,8 +16,8 @@ function splitPath(path, delimiter) {
 function StringLocationRenderer() {}
 StringLocationRenderer.prototype = jQuery.extend({}, {
 		render : function(elem, location) {
-			if(location) {
-				location = JSON.parse(location);
+			if(location.serverData) {
+				location = JSON.parse(location.serverData);
 			}
 
 			elem.html(location.toString());
@@ -28,15 +28,15 @@ StringLocationRenderer.prototype = jQuery.extend({}, {
 function SegmentedLocationRenderer() {}
 SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 		render : function($elem, location, callback) {
-			if(location) {
-				location = JSON.parse(location);
+			if(location.location) {
+				location = JSON.parse(location.location).replace(/\\/g, "/");
 			}
 			else {
 				location = '/';
 			}
 
 			var parts = splitPath(location, '/');
-
+      
 			$elem.empty();
 
 			// Handle the root path case
@@ -44,7 +44,7 @@ SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 			var $rootAnchor = jQuery(document.createElement(isEmptyPath ? "span" : "a")).html("(root)").addClass('ind-location-segment');
 			// Only add the click handler to the root path if there weren't any other segments
 			if(!isEmptyPath) {
-				$rootAnchor.click(JSON.stringify('/'), function(evt) {
+				$rootAnchor.click({ location: JSON.stringify('/')}, function(evt) {
 					callback(evt.data);
 				});
 			}
@@ -61,7 +61,7 @@ SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 
 				// Only add a click handler if this isn't the last segment
 				if(!isLastSegment) {
-					$anchor.click(JSON.stringify(fullPath), function(evt) {
+					$anchor.click({ location : JSON.stringify(fullPath) }, function(evt) {
 						callback(evt.data);
 					});
 				}

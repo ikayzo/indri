@@ -110,7 +110,7 @@ ContentRenderer.prototype = {
   },
   _getIcon: function(contentItem) {
     $icon = jQuery(document.createElement("span")).addClass("entypo");
-    if (contentItem.isDir) {
+    if (contentItem.isCollection) {
       $icon.addClass('ind-icon-folder').html(IndriIcons.ICON_FOLDER);
     }
     else {
