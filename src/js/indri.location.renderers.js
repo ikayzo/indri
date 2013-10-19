@@ -16,8 +16,8 @@ function splitPath(path, delimiter) {
 function StringLocationRenderer() {}
 StringLocationRenderer.prototype = jQuery.extend({}, {
 		render : function(elem, location) {
-			if(location.serverData) {
-				location = JSON.parse(location.serverData);
+			if(location.location) {
+				location = JSON.parse(location.location);
 			}
 
 			elem.html(location.toString());

@@ -49,7 +49,7 @@ FileBrowser.prototype = {
   
   navigateToLocation: function(location) {
     var success = this._makeCallback(function(result, status) {
-      this._updateLocation(result.loc);
+      this._updateCurentLocation(result.loc);
       this._updateContents(result.contents, status);
     });
 
@@ -95,15 +95,12 @@ FileBrowser.prototype = {
   /*
    * Internal methods
    */
-  _updateLocation: function(location) {
-    this.currentLocation = location;
+  _updateCurentLocation: function(newLocation) {
+    this.currentLocation = newLocation;
 
     if (this.locationRenderer) {
       this.locationRenderer.render(this._getUiElem(this.uiNames.location), this.currentLocation, this._makeCallback(this.navigateToLocation));
     }
-//    else {
-//      this._getUiElem(this.uiNames.location).html(this.currentLocation.location);
-//    }
   },
   
   _modifyContents: function(items, isDelete, status) {
