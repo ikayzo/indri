@@ -58,3 +58,6 @@ You can attach the function to a button or other HTML element:
 This uses the default settings for an Open File dialog, and provides a callback that closes the dialog and logs the result to the javascript console.
 
 The full documentation (https://github.com/ikayzo/indri/wiki) explains the parameters to FileBrowser.attach() in detail, and covers how to customize Indri's functionality and appearance.
+
+
+Indri is released under the [LGPL License](http://opensource.org/licenses/LGPL-3.0).
