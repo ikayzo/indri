@@ -71,6 +71,7 @@ function parseFsItem(fsItem) {
   return fsItem ? JSON.parse(fsItem) : '"/"';
 }
 
+// Encodes the location field of the fsItem
 function encodeLocation(location) {
   return JSON.stringify(location);
 }
@@ -97,12 +98,7 @@ FileSystemRequestHandler.prototype = {
     // Grab the fsItem
     this.fsItem = parseFsItem(this.parsedQuery.query.fsItem);
     
-    this.loc = this.fsItem.location;
-    
-    // Set default loc if it is missing
-    if (typeof(this.loc) == 'undefined') {
-      this.loc = '"/"';
-    }
+    this.loc = this.fsItem.location || '"/"';
     
     // Parse the loc
     this.loc = JSON.parse(this.loc);
@@ -156,6 +152,7 @@ FileSystemRequestHandler.prototype = {
       throw "Missing locations to delete";
     }
 
+    // Parse the array of fsItems
     var fsItems = JSON.parse(this.parsedQuery.query.fsItems);
     result.fsItems = fsItems;
 
@@ -163,7 +160,10 @@ FileSystemRequestHandler.prototype = {
     result.contents = [];
 
     fsItems.forEach(function(fsItem) {
+      // Create an object from the fsItem json
       fsItem = parseFsItem(fsItem);
+      
+      // Parse the nested string-encoded json location
       var loc = JSON.parse(fsItem.location);
       if(loc.length) {
         var fullPath = path.join(config.rootDir, loc);

@@ -93,11 +93,7 @@ FileBrowser.prototype = {
       this._modifyContents(results.contents, true, status);
     });
     this.fsm.deleteItems(this.currentSelection, success, this._makeCallback(this._updateStatus));
-  },
-          
-  focus: function() {
-    this._getUiElem(this.uiNames.focusTextbox).focus();
-  },
+  },      
   
   /*
    * Internal methods
@@ -187,9 +183,10 @@ FileBrowser.prototype = {
     }
     
     // Re-focus the focusTextbox so that key presses can be detected
-    this.focus();
+    this._setDialogFocus();
   },
   
+  // Handle dialog-level key events
   _handleKeyEvent: function(evt) {
     // catch "delete" evt
     if (evt == "delete") {
@@ -330,6 +327,10 @@ FileBrowser.prototype = {
       this._getUiElem(this.uiNames.previewWrapper).empty().append(this.previewRenderer.render(this.currentSelection));
     }
   },
+          
+  _setDialogFocus: function() {
+    this._getUiElem(this.uiNames.focusTextbox).focus();
+  },
   
   _changeAcceptState: function(unincludedItem) {
     this._setEnabled(this.uiNames.accept, (this._getResults().length != 0) || (unincludedItem && !unincludedItem.isCollection) || this._getUiElem(this.uiNames.filename).val() != '' || this.allowDirsInResults);
@@ -374,7 +375,7 @@ FileBrowser.prototype = {
     var results = this._getResults();
     
     // If the current directory can be selected and nothing has been selected by the user
-    if (returnValue && results.length == 0 && this.allowDirsInResults) {
+    if (results.length == 0 && this.allowDirsInResults) {
       results.push(this.currentLocation);
     }
 
@@ -442,7 +443,7 @@ FileBrowser.prototype = {
     });    
 
     this._getUiElem(this.uiNames.filename).blur(function() {
-      fileBrowser.focus();
+      fileBrowser._setDialogFocus();
     });
 
     this._getUiElem(this.uiNames.preview).click(function() {
@@ -489,14 +490,14 @@ FileBrowser.prototype = {
 
     // Set up focus on the file browser
     jQuery( document.activeElement ).blur();
-    this.focus();
+    this._setDialogFocus();
 
     // Focus the file browser if it is clicked anywhere besides the bottom panel
     this._getUiElem(this.uiNames.contentsPanel + ', ' 
            + this.uiNames.headerWrapper + ', ' 
            + this.uiNames.shortcutsPanel + ', ' 
            + this.uiNames.previewWrapper).click(function() {
-      fileBrowser.focus();
+      fileBrowser._setDialogFocus();
     });
   },
   

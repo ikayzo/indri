@@ -15,27 +15,31 @@ function splitPath(path, delimiter) {
 
 function StringLocationRenderer() {}
 StringLocationRenderer.prototype = jQuery.extend({}, {
-		render : function(elem, location) {
-			if(location.location) {
-				location = JSON.parse(location.location);
+		render : function(elem, fsItem) {
+      
+      // TODO Remove?  Is this redundant?
+			if(fsItem.location) {
+				fsItem = JSON.parse(fsItem.location);
 			}
 
-			elem.html(location.toString());
+			elem.html(fsItem.toString());
 		},
 	});
 
 
 function SegmentedLocationRenderer() {}
 SegmentedLocationRenderer.prototype = jQuery.extend({}, {
-		render : function($elem, location, callback) {
-			if(location.location) {
-				location = JSON.parse(location.location).replace(/\\/g, "/");
+		render : function($elem, fsItem, callback) {
+			if(fsItem.location) {
+        // Replace the \ in Windows paths for the split
+        // TODO: Handle this on the server
+				fsItem = JSON.parse(fsItem.location).replace(/\\/g, "/");
 			}
 			else {
-				location = '/';
+				fsItem = '/';
 			}
 
-			var parts = splitPath(location, '/');
+			var parts = splitPath(fsItem, '/');
       
 			$elem.empty();
 
@@ -44,6 +48,8 @@ SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 			var $rootAnchor = jQuery(document.createElement(isEmptyPath ? "span" : "a")).html("(root)").addClass('ind-location-segment');
 			// Only add the click handler to the root path if there weren't any other segments
 			if(!isEmptyPath) {
+        
+        // TODO: Move '/' to Indri.base
 				$rootAnchor.click({ location: JSON.stringify('/')}, function(evt) {
 					callback(evt.data);
 				});
@@ -76,12 +82,12 @@ SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 
 function BucketLocationRenderer() {}
 BucketLocationRenderer.prototype = jQuery.extend({}, {
-		render : function($elem, location, callback) {
-			if(!location) {
+		render : function($elem, fsItem, callback) {
+			if(!fsItem) {
 				return;
 			}
 
-			var bucketData = JSON.parse(location);
+			var bucketData = JSON.parse(fsItem);
 
 			var parts = splitPath(bucketData.key, '/');
 			var targetLocation = { bucket: bucketData.bucket, key : '' };
