@@ -170,6 +170,9 @@ FileBrowser.prototype = {
     else if (evt == "rename") {
       this.renameItem(contentItem, newName);
     }
+    else if (evt == "refocus") {
+      // Do nothing, it will automatically be refocused below
+    }
     else if (evt.type == "dblclick") {
       if (contentItem.isCollection) {
         this.navigateToLocation(contentItem);

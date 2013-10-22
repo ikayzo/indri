@@ -58,7 +58,7 @@ ContentRenderer.prototype = {
       renderer._setupNormalEvents($listItem, contentItem);
       
       // Reset focus on the file browser so that key press events are detected
-      renderer.browser.focus();
+      renderer.callback(contentItem, "refocus");
     };
 
     $input = jQuery(document.createElement("input")).addClass("ind-editbox").attr("type", "text").attr("value", oldText)
