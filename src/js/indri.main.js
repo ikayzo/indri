@@ -91,6 +91,10 @@ FileBrowser.prototype = {
     });
     this.fsm.deleteItems(this.currentSelection, success, this._makeCallback(this._updateStatus));
   },
+          
+  focus: function() {
+    this._getUiElem(this.uiNames.focusTextbox).focus();
+  },
   
   /*
    * Internal methods
@@ -177,7 +181,7 @@ FileBrowser.prototype = {
     }
     
     // Re-focus the focusTextbox so that key presses can be detected
-    this._getUiElem(this.uiNames.focusTextbox).focus();
+    this.focus();
   },
   
   _handleKeyEvent: function(evt) {
@@ -231,7 +235,6 @@ FileBrowser.prototype = {
   
   _populateShortcuts: function(results) {
     if (this.shortcutsRenderer) {
-      console.log("results ", results);
       this._getUiElem(this.uiNames.shortcutsPanel).empty().append(
               this.shortcutsRenderer.render(results.contents, this._makeCallback(this.navigateToLocation)));
     }
@@ -325,7 +328,7 @@ FileBrowser.prototype = {
   _changeAcceptState: function(unincludedItem) {
     this._setEnabled(this.uiNames.accept, (this._getResults().length != 0) || (unincludedItem && !unincludedItem.isCollection) || this._getUiElem(this.uiNames.filename).val() != '' || this.allowDirsInResults);
   },
-  
+            
   _filterChanged: function() {
     this.currentSelection.length = 0;
     this._populateContentUI();
@@ -429,13 +432,11 @@ FileBrowser.prototype = {
     // Update the accept button enabled state when the user types in the
     // filename field
     this._getUiElem(this.uiNames.filename).keyup(function() {
-      console.log(jQuery(this).val());
       fileBrowser._changeAcceptState();
     });    
 
-    var focusTextbox = this._getUiElem(this.uiNames.focusTextbox);
     this._getUiElem(this.uiNames.filename).blur(function() {
-      focusTextbox.focus();
+      fileBrowser.focus();
     });
 
     this._getUiElem(this.uiNames.preview).click(function() {
@@ -480,14 +481,16 @@ FileBrowser.prototype = {
     // Bind key handler
     this.rootElem.on("keydown", this, initializer.viewFactory.views[0].keyHandler);
 
+    // Set up focus on the file browser
     jQuery( document.activeElement ).blur();
-    this._getUiElem(this.uiNames.focusTextbox).focus();
+    this.focus();
 
+    // Focus the file browser if it is clicked anywhere besides the bottom panel
     this._getUiElem(this.uiNames.contentsPanel + ', ' 
            + this.uiNames.headerWrapper + ', ' 
            + this.uiNames.shortcutsPanel + ', ' 
            + this.uiNames.previewWrapper).click(function() {
-      focusTextbox.focus();
+      fileBrowser.focus();
     });
   },
   
@@ -861,7 +864,6 @@ FileBrowser.prototype.OpenDialogInitializer = jQuery.extend(true, {}, FileBrowse
   },
 });
 
-// TODO hide the filename, and add a filter to only show folders
 FileBrowser.prototype.DestinationDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
   
   // Let the user select one directory

@@ -236,7 +236,6 @@ FileSystemRequestHandler.prototype = {
 
     var fullPath = path.join(config.rootDir, this.loc);
     this.result.loc = getFileInfo(fullPath);
-    console.log(this.result);
   },
 
   rename : function() {
