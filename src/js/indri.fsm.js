@@ -10,84 +10,56 @@ function FileSystemManager(rootUrl) {
 
 FileSystemManager.prototype = {
   getShortcuts : function(success, error) {
-    // NOTE: needs trailing '&' or something between here and the server fails
-    // silently
-    var url = this.rootUrl + "?action=shortcuts&";
-    this._doQuery(url, success, error);
+    var data = { action: "shortcuts" };
+    this._doQuery(data, success, error);
   },
 
   getRootLocation : function(success, error) {
-    // NOTE: needs trailing '&' or something between here and the server fails
-    // silently
-    var url = this.rootUrl + "?action=navigate&direction=home&";
-    jQuery.getJSON(url, function(data, textStatus, jqXHR) {
-      success(data.loc);
-    }).fail(function(jqXHR, textStatus, errorThrown) {
-      console.log("FSM Error:", textStatus);
-      error("FSM Error: " + textStatus);
-    });
+    var data = { action: "navigate", direction: "home" };    
+    this._doQuery(data, success, error);
   },
 
-  getRelativeLocation : function(location, direction, callback) {
-    var url = this.rootUrl + "?action=navigate&direction=" + direction
-        + "&loc=" + this._encodeLocation(location);
-    jQuery.getJSON(url, function(data, textStatus, jqXHR) {
-      callback(data.loc);
-    });
+  getRelativeLocation : function(fsItem, direction, success, error) {
+    var data = { action: "navigate", direction: direction, fsItem: this._encodeFsItem(fsItem) };
+    this._doQuery(data, success, error);
   },
 
-  getContents : function(location, success, error) {
-    var url = this.rootUrl + "?action=browse";
-    if (location != "" && location != '.')
-      url += "&loc=" + this._encodeLocation(location);
-
-    this._doQuery(url, success, error);
+  getContents : function(fsItem, success, error) {
+    var data = { action: "browse", fsItem: this._encodeFsItem(fsItem) };
+    this._doQuery(data, success, error);
   },
 
-  deleteItems : function(items, success, error) {
-    var locations = [];
-    items.forEach(function(item) {
-      locations.push(item.location);
-    });
-    var url = this.rootUrl + "?action=delete&locs="
-        + encodeURIComponent(JSON.stringify(locations));
-
-    this._doQuery(url, success, error);
+  deleteItems : function(fsItems, success, error) {
+    var encodedFsItems = [];
+    fsItems.forEach(function(fsItem) {
+      encodedFsItems.push(this._encodeFsItem(fsItem));
+    }, this);
+    var data = { action: "delete", fsItems: JSON.stringify(encodedFsItems) };
+    this._doQuery(data, success, error);
   },
 
-  renameItem : function(item, newName, success, error) {
-    var url = this.rootUrl + "?action=rename&loc="
-        + this._encodeLocation(item.location) + "&newName=" + newName;
-    this._doQuery(url, success, error);
+  renameItem : function(fsItem, newName, success, error) {
+    var data = { action: "rename", newName: newName, fsItem: this._encodeFsItem(fsItem) };
+    this._doQuery(data, success, error);
   },
 
-  createFolder : function(location, name, success, error) {
-    var url = this.rootUrl + "?action=makedir&loc="
-        + this._encodeLocation(location) + "&name=" + name;
-    this._doQuery(url, success, error);
+  createFolder : function(fsItem, name, success, error) {
+    var data = { action: "makedir", name: name, fsItem: this._encodeFsItem(fsItem) };
+    this._doQuery(data, success, error);
   },
 
-  getItemInfo : function(location, success, error) {
-    var url = this.rootUrl + "?action=getinfo";
-    if (location != "" && location != '.')
-      url += "&loc=" + this._encodeLocation(location);
-
-    this._doQuery(url, success, error);
-  },
-
-  _doQuery : function(url, success, error) {
-    // console.log("_doQuery: " + url);
+  _doQuery : function(data, success, error) {
 
     // Disable ajax caching for IE
     jQuery.ajaxSetup({
       cache : false
     });
-    jQuery.getJSON(url, function(data, textStatus, jqXHR) {
-      // console.log("callback: " + textStatus);
-      if (data.error) {
-        error(data.error);
+
+    jQuery.getJSON(this.rootUrl, data, function(result, textStatus, jqXHR) {
+      if (result.error) {
+        error(result.error);
       } else {
-        success(data.contents, textStatus);
+        success(result, textStatus);
       }
     }).fail(function(jqXHR, textStatus, errorThrown) {
       console.log("FSM Error:", textStatus);
@@ -97,21 +69,8 @@ FileSystemManager.prototype = {
     });
   },
 
-  _doQuery2 : function(url, success, error) {
-    // console.log("_doQuery: " + url);
-    jQuery.ajax({
-      url : url,
-      dataType : 'json'
-    }).done(function(jqXHR, textStatus, errorThrown) {
-      console.log(textStatus);
-    }).fail(function(jqXHR, textStatus, errorThrown) {
-      console.log(textStatus);
-    }).always(function(jqXHR, textStatus, errorThrown) {
-      console.log(textStatus);
-    });
-  },
-
-  _encodeLocation : function(location) {
-    return encodeURIComponent(location);
+  _encodeFsItem : function(fsItem) {
+    fsItem = fsItem || {};
+    return JSON.stringify(fsItem);
   }
 }

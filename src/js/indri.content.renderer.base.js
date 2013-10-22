@@ -35,7 +35,7 @@ ContentRenderer.prototype = {
       return false;
     }
 
-    // check for delete -> send evt = "delete"
+    // check for Delete -> send evt = "delete"
     else if (evt.which == (KeyEvent.KEYCODE_DELETE || KeyEvent.DOM_VK_DELETE)) {
       evt.data._handleKeyEvent("delete");
     }
@@ -56,6 +56,9 @@ ContentRenderer.prototype = {
     var endEditing = function(renderer) {
       $input.replaceWith($editable);
       renderer._setupNormalEvents($listItem, contentItem);
+      
+      // Reset focus on the file browser so that key press events are detected
+      renderer.callback(contentItem, "refocus");
     };
 
     $input = jQuery(document.createElement("input")).addClass("ind-editbox").attr("type", "text").attr("value", oldText)
@@ -110,7 +113,7 @@ ContentRenderer.prototype = {
   },
   _getIcon: function(contentItem) {
     $icon = jQuery(document.createElement("span")).addClass("entypo");
-    if (contentItem.isDir) {
+    if (contentItem.isCollection) {
       $icon.addClass('ind-icon-folder').html(IndriIcons.ICON_FOLDER);
     }
     else {
