@@ -49,7 +49,7 @@ FileBrowser.prototype = {
   
   navigateToLocation: function(location) {
     var success = this._makeCallback(function(result, status) {
-      this._updateCurentLocation(result.loc);
+      this._updateCurrentLocation(result.loc);
       this._updateContents(result.contents, status);
     });
 
@@ -99,7 +99,7 @@ FileBrowser.prototype = {
   /*
    * Internal methods
    */
-  _updateCurentLocation: function(newLocation) {
+  _updateCurrentLocation: function(newLocation) {
     this.currentLocation = newLocation;
 
     if (this.locationRenderer) {
