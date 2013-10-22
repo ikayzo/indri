@@ -3,6 +3,8 @@ Indri
 
 Indri is a client-side web file dialog for selecting file or specifying a destination in a remote file repository. It can be styled to integrate with web applications, and provides full configuration through rendering and file system plugins.
 
+![screenshot](https://f.cloud.github.com/assets/1164168/1378332/2ac466f6-3ac6-11e3-965a-79c3cc14f0fa.png)
+
 ### Getting Started
 
 The Indri distribution comes with example files that show how Indri may be used with various popular frameworks. To view the files, make the `indri/examples` available via an HTTP server and browse to any of the `test-*.html` files. 
