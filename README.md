@@ -60,4 +60,7 @@ This uses the default settings for an Open File dialog, and provides a callback 
 The full documentation (https://github.com/ikayzo/indri/wiki) explains the parameters to FileBrowser.attach() in detail, and covers how to customize Indri's functionality and appearance.
 
 
+License
+=====
+
 Indri is released under the [LGPL License](http://opensource.org/licenses/LGPL-3.0).
