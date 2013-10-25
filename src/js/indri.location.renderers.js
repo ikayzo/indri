@@ -15,13 +15,8 @@ function splitPath(path, delimiter) {
 
 function StringLocationRenderer() {}
 StringLocationRenderer.prototype = jQuery.extend({}, {
-		render : function(elem, fsItem) {
-      
-      // TODO Remove?  Is this redundant?
-			if(fsItem.location) {
-				fsItem = JSON.parse(fsItem.location);
-			}
-
+		render : function(elem, fsItem) {      
+      fsItem = JSON.parse(fsItem.location);
 			elem.html(fsItem.toString());
 		},
 	});
@@ -31,9 +26,7 @@ function SegmentedLocationRenderer() {}
 SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 		render : function($elem, fsItem, callback) {
 			if(fsItem.location) {
-        // Replace the \ in Windows paths for the split
-        // TODO: Handle this on the server
-				fsItem = JSON.parse(fsItem.location).replace(/\\/g, "/");
+				fsItem = JSON.parse(fsItem.location);
 			}
 			else {
 				fsItem = '/';
@@ -83,11 +76,11 @@ SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 function BucketLocationRenderer() {}
 BucketLocationRenderer.prototype = jQuery.extend({}, {
 		render : function($elem, fsItem, callback) {
-			if(!fsItem) {
+			if(!fsItem || !fsItem.location) {
 				return;
 			}
 
-			var bucketData = JSON.parse(fsItem);
+			var bucketData = JSON.parse(fsItem.location);
 
 			var parts = splitPath(bucketData.key, '/');
 			var targetLocation = { bucket: bucketData.bucket, key : '' };
@@ -123,6 +116,5 @@ BucketLocationRenderer.prototype = jQuery.extend({}, {
 				$elem.append($anchor);
 				$elem.append(' / ');
 			});
-
 		},
 	});

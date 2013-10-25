@@ -35,7 +35,7 @@ function isPreviewable(fullPath) {
 }
 
 function getPreviewUrl(fullPath) {
-  return isPreviewable(fullPath) ? (fsUrl() + fullPath.slice(config.rootDir.length)).replace(/\\/g, "/") : null;
+  return isPreviewable(fullPath) ? (fsUrl() + normalizePath(fullPath.slice(config.rootDir.length))) : null;
 }
 
 function getFileInfo(fullPath, original) {
@@ -59,12 +59,10 @@ function getFileInfo(fullPath, original) {
   return  original;
 }
 
-
-
 function constrainPath(path) {
-  // TODO Apply constraints
-  // return (path.indexOf(config.rootDir) != 0) ? config.rootDir : path;
-  return path;
+  path = normalizePath(path);
+  var rootDir = normalizePath(config.rootDir);
+  return (path.indexOf(rootDir) != 0) ? rootDir : path;
 }
 
 function parseFsItem(fsItem) {
@@ -72,12 +70,16 @@ function parseFsItem(fsItem) {
 }
 
 function parseLocation(fsItem) {
-  return JSON.parse(fsItem.location || '"/"' ); 
+  return JSON.parse(fsItem.location || '"/"'); 
 }
 
 // Encodes the location field of the fsItem
 function encodeLocation(location) {
-  return JSON.stringify(location);
+  return JSON.stringify(normalizePath(location));
+}
+
+function normalizePath(path) {
+  return path.replace(/\\/g, "/")
 }
 
 function FileSystemRequestHandler(req, res) {
