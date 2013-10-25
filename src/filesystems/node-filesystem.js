@@ -68,7 +68,11 @@ function constrainPath(path) {
 }
 
 function parseFsItem(fsItem) {
-  return fsItem ? JSON.parse(fsItem) : '"/"';
+  return fsItem ? JSON.parse(fsItem) : {};
+}
+
+function parseLocation(fsItem) {
+  return JSON.parse(fsItem.location || '"/"' ); 
 }
 
 // Encodes the location field of the fsItem
@@ -98,10 +102,8 @@ FileSystemRequestHandler.prototype = {
     // Grab the fsItem
     this.fsItem = parseFsItem(this.parsedQuery.query.fsItem);
     
-    this.loc = this.fsItem.location || '"/"';
-    
-    // Parse the loc
-    this.loc = JSON.parse(this.loc);
+    // Parse the location from the fsItem
+    this.loc = parseLocation(this.fsItem);
   },
 
   routeRequest : function() {

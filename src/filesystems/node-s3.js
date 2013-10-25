@@ -12,13 +12,16 @@ var delimiter = '/';
 
 var defaultLocation = { bucket: "civilbeat_dev", key : ""};
 
+function parseFsItem(fsItem) {
+  return fsItem ? JSON.parse(fsItem) : {};
+}
 
-function parseLocation(location) {
-	if(!location && !defaultLocation) {
+function parseLocation(fsItem) {
+	if(!fsItem.location && !defaultLocation) {
 		throw "Missing location parameter";
 	}
 
-	return location ? JSON.parse(location) : defaultLocation;
+	return fsItem.location ? JSON.parse(fsItem.location) : defaultLocation;
 }
 
 function encodeLocation(bucket, key) {
@@ -41,30 +44,35 @@ function getPreviewUrl(key) {
 	return isPreviewable(key) ? (config.previewBase + key) : null;
 }
 
-function getFileInfo(bucket, bucketObject) {
-	return { 
-		name: path.basename(bucketObject.Key),
-		location: encodeLocation(bucket, bucketObject.Key),
-		isDir: false,
-		size: bucketObject.Size,
-//		created: stats.ctime.getTime(),
-		modified: bucketObject.LastModified,
-		id: bucketObject.ETag,
-		previewUrl : getPreviewUrl(bucketObject.Key),
-	};
+function getFileInfo(bucket, bucketObject, original) {
+  
+  original = original || {};
+  
+  original.name = path.basename(bucketObject.Key);
+	original.location = encodeLocation(bucket, bucketObject.Key);
+  original.isCollection = false;
+  original.size = bucketObject.Size;
+//  original.created = stats.ctime.getTime();
+  original.modified = bucketObject.LastModified;
+  original.id = bucketObject.ETag;
+  original.previewUrl = getPreviewUrl(bucketObject.Key);
+
+  return original;
 }
 
-function getDirInfo(bucket, commonPrefix) {
-	return { 
-		name: path.basename(commonPrefix.Prefix),
-		location: encodeLocation(bucket, commonPrefix.Prefix),
-		isDir: true,
-		size: null,
-//		created: stats.ctime.getTime(),
-		modified: null,
-		id: commonPrefix.Prefix,
-		previewUrl : null,
-	};	
+function getDirInfo(bucket, commonPrefix, original) {
+  original = original || {};
+  
+  original.name = path.basename(commonPrefix.Prefix);
+  original.location = encodeLocation(bucket, commonPrefix.Prefix);
+  original.isCollection = true;
+  original.size = null;
+//  original.created = stats.ctime.getTime();
+  original.modified = null;
+  original.id = commonPrefix.Prefix;
+  original.previewUrl = null;
+  
+	return original;
 }
 
 
@@ -78,9 +86,10 @@ function handleFileRequest(req, res) {
 		//console.log(parsedQuery);
 
 		var action = parsedQuery.query.action;
+    var fsItem = parseFsItem(parsedQuery.query.fsItem);
+    var loc = parseLocation(fsItem);
 
 		if(action == "navigate") {
-			var loc = parseLocation(parsedQuery.query.loc);
 			var direction = parsedQuery.query.direction;
 			console.log("Navigate: ", loc, ": ", direction);
 
@@ -94,12 +103,13 @@ function handleFileRequest(req, res) {
 				}
 			}
 
-			result.loc = encodeLocation(loc.bucket, loc.key);
+      // TODO: Some how make this into a fsItem, not sure which function to use
+			//result.loc = encodeLocation(loc.bucket, loc.key);
+      result.loc = getDirInfo(loc.bucket, loc.key);
 
 			res.end(JSON.stringify(result) + '\n');			
 		}
 		else if(action == "browse") {
-			var loc = parseLocation(parsedQuery.query.loc);
 			console.log("Browse: ", loc);
 			console.log("Params: ", { Bucket : loc.bucket, Prefix : loc.key, Delimiter : delimiter });
 
@@ -121,7 +131,9 @@ function handleFileRequest(req, res) {
 						result.contents.push(getDirInfo(loc.bucket, commonPrefix));
 					});
 				}
-
+        // TODO: Add loc field to result which is an fsItem of the current directory
+        result.loc = getDirInfo(loc.bucket, loc.key, fsItem);
+        
 				res.end(JSON.stringify(result) + '\n');
 			});
 		}
@@ -212,7 +224,9 @@ function handleFileRequest(req, res) {
 					console.log("success");
 					result.contents = [];
 					data.Buckets.forEach(function(bucket) {
-						result.contents.push({ name : bucket.Name, location: encodeLocation(bucket.Name, '')});
+            
+            // TODO: Make location into a fsItem
+						result.contents.push({ name : bucket.Name, location: getDirInfo(bucket.Name, '')});
 					});
 				}
 
