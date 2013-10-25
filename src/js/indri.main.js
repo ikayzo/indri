@@ -112,7 +112,7 @@ FileBrowser.prototype = {
         delete this.currentContents[item.clientId];
       else {
         // Set the clientId of the item if it is new
-        if (typeof item.clientId == 'undefined') {
+        if (!item.clientId) {
           item.clientId = this.nextClientId++;
         }
         this.currentContents[item.clientId] = item;
