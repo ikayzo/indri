@@ -103,13 +103,7 @@ module.exports = function(grunt) {
     clean: ['build', 'examples/<%= pkg.name %>-*/']
   });
 
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-cssmin');
-  grunt.loadNpmTasks('grunt-contrib-sass');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-
+  require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
 
   grunt.registerTask('default', ['sass']);
   grunt.registerTask('release', ['clean', 'sass', 'cssmin', 'uglify', 'concat', 'copy:main', 'copy:main']);
