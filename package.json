@@ -4,7 +4,7 @@
   "description": "File browser web control",
   "repository": "https://github.com/ikayzo/indri",
   "dependencies": {
-    "matchdep": "~0.1.2"
+    "load-grunt-tasks": "~0.2.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
