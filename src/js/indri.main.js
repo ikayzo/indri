@@ -209,8 +209,9 @@ FileBrowser.prototype = {
         }
       }
       
-      // If not item is selected and you can select directories
-      else if(this.allowDirsInResults) {
+      // If not item is selected and you can select directories or the user
+      // entered a custom file name
+      else if(this.allowDirsInResults || this.customFilename) {
         // Return the current directory by default
         this._returnResults(true);
       }
@@ -315,11 +316,10 @@ FileBrowser.prototype = {
       }
     }
     
-    // Only set / clear the filename if there is a new filename string (i.e. the
-    // user selected something) or there is no custom file name.
-    // In other words, if there is a custom file name and the filename would be cleared, leave the
-    // custom filename intact.
+    // If there is a new filename string (i.e. the
+    // user selected something) or there is no custom file name
     if(filenameText.length > 0 || !this.customFilename) {
+      // Set / clear the filename
       this._getUiElem(this.uiNames.filename).val(filenameText);
       this.customFilename = false;
     }
@@ -447,7 +447,7 @@ FileBrowser.prototype = {
 
     // Update the accept button enabled state when the user types in the
     // filename field
-    this._getUiElem(this.uiNames.filename).keyup(function() {
+    this._getUiElem(this.uiNames.filename).keyup(function(evt) {
       
       var filenameLength = fileBrowser._getUiElem(this).val().length;
       
@@ -461,6 +461,13 @@ FileBrowser.prototype = {
         fileBrowser.customFilename = false;
       }
       fileBrowser._changeAcceptState();
+      
+      // If the user presses Enter and there is a file name
+      if(filenameLength > 0 && evt.which == (KeyEvent.KEYCODE_ENTER || KeyEvent.DOM_VK_RETURN)) {
+        
+        // Return the results
+        fileBrowser._returnResults(true);
+      }
     });    
 
     this._getUiElem(this.uiNames.filename).blur(function() {
