@@ -1,4 +1,5 @@
 module.exports = function(grunt) {
+  require('load-grunt-tasks')(grunt);
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     uglify: {
@@ -102,14 +103,6 @@ module.exports = function(grunt) {
     },
     clean: ['build', 'examples/<%= pkg.name %>-*/']
   });
-
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-cssmin');
-  grunt.loadNpmTasks('grunt-contrib-sass');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-
 
   grunt.registerTask('default', ['sass']);
   grunt.registerTask('release', ['clean', 'sass', 'cssmin', 'uglify', 'concat', 'copy:main', 'copy:main']);
