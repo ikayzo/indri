@@ -60,16 +60,16 @@ function getFileInfo(bucket, bucketObject, original) {
   return original;
 }
 
-function getDirInfo(bucket, commonPrefix, original) {
+function getDirInfo(bucket, prefix, original) {
   original = original || {};
   
-  original.name = path.basename(commonPrefix.Prefix);
-  original.location = encodeLocation(bucket, commonPrefix.Prefix);
+  original.name = path.basename(prefix);
+  original.location = encodeLocation(bucket, prefix);
   original.isCollection = true;
   original.size = null;
 //  original.created = stats.ctime.getTime();
   original.modified = null;
-  original.id = commonPrefix.Prefix;
+  original.id = prefix;
   original.previewUrl = null;
   
 	return original;
@@ -103,11 +103,9 @@ function handleFileRequest(req, res) {
 				}
 			}
 
-      // TODO: Some how make this into a fsItem, not sure which function to use
-			//result.loc = encodeLocation(loc.bucket, loc.key);
       result.loc = getDirInfo(loc.bucket, loc.key);
 
-			res.end(JSON.stringify(result) + '\n');			
+      res.end(JSON.stringify(result) + '\n');			
 		}
 		else if(action == "browse") {
 			console.log("Browse: ", loc);
@@ -128,10 +126,9 @@ function handleFileRequest(req, res) {
 						}
 					});
 					data.CommonPrefixes.forEach(function(commonPrefix) {
-						result.contents.push(getDirInfo(loc.bucket, commonPrefix));
+						result.contents.push(getDirInfo(loc.bucket, commonPrefix.Prefix));
 					});
 				}
-        // TODO: Add loc field to result which is an fsItem of the current directory
         result.loc = getDirInfo(loc.bucket, loc.key, fsItem);
         
 				res.end(JSON.stringify(result) + '\n');
@@ -223,13 +220,11 @@ function handleFileRequest(req, res) {
 				else {
 					console.log("success");
 					result.contents = [];
-					data.Buckets.forEach(function(bucket) {
-            
-            // TODO: Make location into a fsItem
-						result.contents.push({ name : bucket.Name, location: getDirInfo(bucket.Name, '')});
+					data.Buckets.forEach(function(bucket) {            
+            result.contents.push({ name : bucket.Name, location: getDirInfo(bucket.Name, '')});
 					});
 				}
-
+        
 				res.end(JSON.stringify(result) + '\n');
 			});
 		}
@@ -237,7 +232,7 @@ function handleFileRequest(req, res) {
 			result.error = "Invalid action";
 			result.action = action;
 			result.loc = loc;
-
+      
 			res.end(JSON.stringify(result) + '\n');
 		}
 	}
@@ -246,7 +241,7 @@ function handleFileRequest(req, res) {
 
 		result.error = "Error accessing " + loc;
 		result.exception = ex.toString();
-
+    
 		res.end(JSON.stringify(result) + '\n');
 	}
 }

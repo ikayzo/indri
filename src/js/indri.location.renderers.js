@@ -83,11 +83,11 @@ SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 function BucketLocationRenderer() {}
 BucketLocationRenderer.prototype = jQuery.extend({}, {
 		render : function($elem, fsItem, callback) {
-			if(!fsItem) {
+			if(!fsItem.location) {
 				return;
 			}
 
-			var bucketData = JSON.parse(fsItem);
+			var bucketData = JSON.parse(fsItem.location);
 
 			var parts = splitPath(bucketData.key, '/');
 			var targetLocation = { bucket: bucketData.bucket, key : '' };
