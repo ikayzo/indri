@@ -111,21 +111,23 @@ FileSystemRequestHandler.prototype = {
   routeRequest : function() {
     if(this.action == "navigate") {
       this.navigate();
-    } else if(this.action == "browse") {
+    }
+    else if(this.action == "browse") {
       this.browse();
-    } else if(this.action == "rename") {
+    }
+    else if(this.action == "rename") {
       this.rename();
-    } else if(this.action == "delete") {
+    } 
+    else if(this.action == "delete") {
       this.delete();
     }
     else if(this.action == "makedir") {
       this.makedir();
-    } else if(this.action == 'shortcuts') {
+    } 
+    else if(this.action == 'shortcuts') {
       this.shortcuts();
     }
-    else if(this.action == "getinfo") {
-      this.getinfo();
-    } else {
+    else {
       this.invalidAction();
     }
   },
