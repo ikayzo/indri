@@ -190,74 +190,39 @@ FileSystemRequestHandler.prototype = {
   },
 
   rename : function() {
-    // TODO Implement?
+    // TODO Implement
+    
+   /*
+    if (!parsedQuery.query.loc) {
+      throw "Missing location";
+    }
+
+    var newName = parsedQuery.query.newName;
+    if (!newName) {
+      result.error = "No new name supplied for rename";
+    }
+    else {
+      var oldFile = path.join(rootDir, loc);
+      if (fs.existsSync(oldFile)) {
+        var newFile = path.join(path.dirname(oldFile), newName);
+
+        result.oldFile = oldFile;
+        result.newFile = newFile;
+
+        fs.renameSync(oldFile, newFile);
+        result.contents = [getFileInfo(newFile)];
+      }
+      else {
+        result.error = "File doesn't exist: " + loc;
+      }
+    } 
+    */
   },
   
   delete : function() {
     // TODO Implement?
-  },
-          
-  makedir : function() {
-    // TODO Implement?
-  },
-  
-  invalidAction : function() {
-    this.result.error = "Invalid action";
-    this.result.action = this.action;
-    this.result.loc = this.loc;
-  },
-  
-  shortcuts : function() {
-    var result = this.result;
-    var requestHandler = this;
     
-    var s3 = new AWS.S3();
-    
-    s3.listBuckets(function(err, data) {
-      if (err) {
-        console.log("error: ", err);
-        result.error = err;
-      }
-      else {
-        console.log("success");
-        result.contents = [];
-        data.Buckets.forEach(function(bucket) {
-          result.contents.push({name: bucket.Name, location: getDirInfo(bucket.Name, '')});
-        });
-      }
-
-      requestHandler.endResponse();
-    });
-    this.async = true;
-  }
-}
-/*		
-		else if(action == "rename") {
-			if(!parsedQuery.query.loc) {
-				throw "Missing location";
-			}
-
-			var newName = parsedQuery.query.newName;
-			if(!newName) {
-				result.error = "No new name supplied for rename";
-			}
-			else {
-				var oldFile = path.join(rootDir, loc);
-				if(fs.existsSync(oldFile)) {
-					var newFile = path.join(path.dirname(oldFile), newName);
-
-					result.oldFile = oldFile;
-					result.newFile = newFile;
-
-					fs.renameSync(oldFile, newFile);
-					result.contents = [getFileInfo(newFile)];
-				}
-				else {
-					result.error = "File doesn't exist: " + loc;
-				}
-			}
-		}
-		else if(action == "delete") {
+    /*
 			if(!parsedQuery.query.loc) {
 				throw "Missing location";
 			}
@@ -292,10 +257,14 @@ FileSystemRequestHandler.prototype = {
 						result.failure[fullPath] = ex;
 					}
 				}
-			});
-
-		}
-		else if(action == "makedir") {
+			});     
+     */
+  },
+          
+  makedir : function() {
+    // TODO Implement?
+    
+    /*
 			if(!parsedQuery.query.name) {
 				throw "Missing new folder name";
 			}
@@ -304,9 +273,40 @@ FileSystemRequestHandler.prototype = {
 			result.attemp = fullPath;
 
 			fs.mkdirSync(fullPath);
-			result.contents = [getFileInfo(fullPath)];
-		}
-*/		
+			result.contents = [getFileInfo(fullPath)]; 
+     */
+  },
+  
+  invalidAction : function() {
+    this.result.error = "Invalid action";
+    this.result.action = this.action;
+    this.result.loc = this.loc;
+  },
+  
+  shortcuts : function() {
+    var result = this.result;
+    var requestHandler = this;
+    
+    var s3 = new AWS.S3();
+    
+    s3.listBuckets(function(err, data) {
+      if (err) {
+        console.log("error: ", err);
+        result.error = err;
+      }
+      else {
+        console.log("success");
+        result.contents = [];
+        data.Buckets.forEach(function(bucket) {
+          result.contents.push({name: bucket.Name, location: getDirInfo(bucket.Name, '')});
+        });
+      }
+
+      requestHandler.endResponse();
+    });
+    this.async = true;
+  }
+}
 
 // var serverName = (process.argv.length > 2) ? process.argv[2] : "localhost";
 // var serverPort = (process.argv.length > 3) ? process.argv[3] : 1337;
