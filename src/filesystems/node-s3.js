@@ -75,65 +75,162 @@ function getDirInfo(bucket, prefix, original) {
 	return original;
 }
 
+function FileSystemRequestHandler(req, res) {
+  try {
+    console.log(req.url);
+    this.req = req;
+    this.res = res;
+    this.parseRequest();
+    this.routeRequest();
+  } catch(ex) {
+    this.catchException(ex);
+  }
+  if(!this.async) {
+    this.endResponse();
+  }
+}
 
+FileSystemRequestHandler.prototype = {
+  parseRequest : function() {
+    this.result = {};
+    
+    this.parsedQuery = require('url').parse(this.req.url, true);
+		this.action = this.parsedQuery.query.action || "browse";;
+    
+    // Grab the fsItem
+    this.fsItem = parseFsItem(this.parsedQuery.query.fsItem);
+    
+    // Parse the location from the fsItem
+    this.loc = parseLocation(this.fsItem);
+  },
 
-function handleFileRequest(req, res) {
-	var result = { };
+  routeRequest : function() {
+    if(this.action == "navigate") {
+      this.navigate();
+    } 
+    else if(this.action == "browse") {
+      this.browse();
+    } 
+//    else if(this.action == "rename") {
+//      this.rename();
+//    } 
+//    else if(this.action == "delete") {
+//      this.delete();
+//    }
+//    else if(this.action == "makedir") {
+//      this.makedir();
+//    }
+    else if(this.action == 'shortcuts') {
+      this.shortcuts();
+    }
+    else {
+      this.invalidAction();
+    }
+  },
 
-	try {
-		var parsedQuery = require('url').parse(req.url, true);
+  catchException : function(ex) {
+    console.log("Exception: " + ex);
 
-		//console.log(parsedQuery);
+    this.result.error = "Error accessing " + this.loc;
+    this.result.exception = ex.toString();
+  },
+          
+  endResponse : function() {
+    this.res.end(JSON.stringify(this.result) + '\n');
+  },
+  
+  navigate : function() {
+    var direction = this.parsedQuery.query.direction;
+    console.log("Navigate: ", this.loc, ": ", direction);
 
-		var action = parsedQuery.query.action;
-    var fsItem = parseFsItem(parsedQuery.query.fsItem);
-    var loc = parseLocation(fsItem);
+    if (direction == "parent") {
+      this.loc.key = path.dirname(this.loc.key);
+      if (this.loc.key == '.') {
+        this.loc.key = '';
+      }
+      else {
+        this.loc.key += delimiter;
+      }
+    }
 
-		if(action == "navigate") {
-			var direction = parsedQuery.query.direction;
-			console.log("Navigate: ", loc, ": ", direction);
+    this.result.loc = getDirInfo(this.loc.bucket, this.loc.key);
+  },
+  
+  browse : function() {
+    console.log("Browse: ", this.loc);
+    console.log("Params: ", {Bucket: this.loc.bucket, Prefix: this.loc.key, Delimiter: delimiter});
 
-			if(direction == "parent") {
-				loc.key = path.dirname(loc.key);
-				if(loc.key == '.') {
-					loc.key = '';
-				}
-				else {
-					loc.key += delimiter;
-				}
-			}
+    var result = this.result;
+    var loc = this.loc;
+    var fsItem = this.fsItem;
+    var requestHandler = this;
+    
+    var s3 = new AWS.S3();
+    s3.listObjects({Bucket: loc.bucket, Prefix: loc.key, Delimiter: delimiter}, function(err, data) {
+      if (err) {
+        console.log("error: ", err);
+        result.error = err;
+      }
+      else {
+        console.log("success");
+        result.contents = [];
+        data.Contents.forEach(function(bucketObject) {
+          if (bucketObject.Key != loc.key) {
+            result.contents.push(getFileInfo(loc.bucket, bucketObject));
+          }
+        });
+        data.CommonPrefixes.forEach(function(commonPrefix) {
+          result.contents.push(getDirInfo(loc.bucket, commonPrefix.Prefix));
+        });
+      }
+      result.loc = getDirInfo(loc.bucket, loc.key, fsItem);
+      requestHandler.endResponse();
+    });
+    this.async = true;
+  },
 
-      result.loc = getDirInfo(loc.bucket, loc.key);
+  rename : function() {
+    // TODO Implement?
+  },
+  
+  delete : function() {
+    // TODO Implement?
+  },
+          
+  makedir : function() {
+    // TODO Implement?
+  },
+  
+  invalidAction : function() {
+    this.result.error = "Invalid action";
+    this.result.action = this.action;
+    this.result.loc = this.loc;
+  },
+  
+  shortcuts : function() {
+    var result = this.result;
+    var requestHandler = this;
+    
+    var s3 = new AWS.S3();
+    
+    s3.listBuckets(function(err, data) {
+      if (err) {
+        console.log("error: ", err);
+        result.error = err;
+      }
+      else {
+        console.log("success");
+        result.contents = [];
+        data.Buckets.forEach(function(bucket) {
+          result.contents.push({name: bucket.Name, location: getDirInfo(bucket.Name, '')});
+        });
+      }
 
-      res.end(JSON.stringify(result) + '\n');			
-		}
-		else if(action == "browse") {
-			console.log("Browse: ", loc);
-			console.log("Params: ", { Bucket : loc.bucket, Prefix : loc.key, Delimiter : delimiter });
-
-			var s3 = new AWS.S3();
-			s3.listObjects( { Bucket : loc.bucket, Prefix : loc.key, Delimiter : delimiter }, function(err, data) {
-				if(err) {
-					console.log("error: ", err);
-					result.error = err;
-				}
-				else {
-					console.log("success");
-					result.contents = [];
-					data.Contents.forEach(function(bucketObject) {
-						if(bucketObject.Key != loc.key) {
-							result.contents.push(getFileInfo(loc.bucket, bucketObject));
-						}
-					});
-					data.CommonPrefixes.forEach(function(commonPrefix) {
-						result.contents.push(getDirInfo(loc.bucket, commonPrefix.Prefix));
-					});
-				}
-        result.loc = getDirInfo(loc.bucket, loc.key, fsItem);
-        
-				res.end(JSON.stringify(result) + '\n');
-			});
-		}
+      requestHandler.endResponse();
+    });
+    this.async = true;
+  }
+}
 /*		
 		else if(action == "rename") {
 			if(!parsedQuery.query.loc) {
@@ -210,41 +307,6 @@ function handleFileRequest(req, res) {
 			result.contents = [getFileInfo(fullPath)];
 		}
 */		
-		else if(action == 'shortcuts') {
-			var s3 = new AWS.S3();
-			s3.listBuckets(function(err, data) {
-				if(err) {
-					console.log("error: ", err);
-					result.error = err;
-				}
-				else {
-					console.log("success");
-					result.contents = [];
-					data.Buckets.forEach(function(bucket) {            
-            result.contents.push({ name : bucket.Name, location: getDirInfo(bucket.Name, '')});
-					});
-				}
-        
-				res.end(JSON.stringify(result) + '\n');
-			});
-		}
-		else {
-			result.error = "Invalid action";
-			result.action = action;
-			result.loc = loc;
-      
-			res.end(JSON.stringify(result) + '\n');
-		}
-	}
-	catch(ex) {
-		console.log("Exception: " + ex);
-
-		result.error = "Error accessing " + loc;
-		result.exception = ex.toString();
-    
-		res.end(JSON.stringify(result) + '\n');
-	}
-}
 
 // var serverName = (process.argv.length > 2) ? process.argv[2] : "localhost";
 // var serverPort = (process.argv.length > 3) ? process.argv[3] : 1337;
@@ -281,7 +343,7 @@ fs.readFile(configFile, 'utf8', function (err, data) {
         res.end('not found');
       } else {
         res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
-        handleFileRequest(req, res);
+        new FileSystemRequestHandler (req, res);
       }
     }).listen(config.serverPort, config.serverName);
     console.log('Server running at http://' + config.serverName + ':' + config.serverPort);
