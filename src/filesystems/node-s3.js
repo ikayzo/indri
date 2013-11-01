@@ -105,23 +105,8 @@ FileSystemRequestHandler.prototype = {
   },
 
   routeRequest : function() {
-    if(this.action == "navigate") {
-      this.navigate();
-    } 
-    else if(this.action == "browse") {
-      this.browse();
-    } 
-//    else if(this.action == "rename") {
-//      this.rename();
-//    } 
-//    else if(this.action == "delete") {
-//      this.delete();
-//    }
-//    else if(this.action == "makedir") {
-//      this.makedir();
-//    }
-    else if(this.action == 'shortcuts') {
-      this.shortcuts();
+    if(this[this.action]) {
+      this[this.action]();
     }
     else {
       this.invalidAction();
