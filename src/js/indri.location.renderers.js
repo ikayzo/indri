@@ -83,11 +83,11 @@ SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 function BucketLocationRenderer() {}
 BucketLocationRenderer.prototype = jQuery.extend({}, {
 		render : function($elem, fsItem, callback) {
-			if(!fsItem) {
+			if(!fsItem.location) {
 				return;
 			}
 
-			var bucketData = JSON.parse(fsItem);
+			var bucketData = JSON.parse(fsItem.location);
 
 			var parts = splitPath(bucketData.key, '/');
 			var targetLocation = { bucket: bucketData.bucket, key : '' };
@@ -98,7 +98,7 @@ BucketLocationRenderer.prototype = jQuery.extend({}, {
 			var isEmptyPath = (parts.length == 0);
 			var $rootAnchor = jQuery(document.createElement(isEmptyPath ? "span" : "a")).html(bucketData.bucket).addClass('ind-location-segment');
 			if(!isEmptyPath) {
-				$rootAnchor.click(JSON.stringify(targetLocation), function(evt) {
+				$rootAnchor.click({ location: JSON.stringify(targetLocation) }, function(evt) {
 					callback(evt.data);
 				});
 			}
@@ -115,7 +115,7 @@ BucketLocationRenderer.prototype = jQuery.extend({}, {
 
 				// Only add a click handler if this isn't the last segment
 				if(!isLastSegment) {
-					$anchor.click(JSON.stringify(targetLocation), function(evt) {
+					$anchor.click({ location: JSON.stringify(targetLocation) }, function(evt) {
 						callback(evt.data);
 					});
 				}
