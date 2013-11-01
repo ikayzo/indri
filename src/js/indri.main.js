@@ -211,7 +211,7 @@ FileBrowser.prototype = {
       
       // If not item is selected and you can select directories or the user
       // entered a custom file name
-      else if(this.allowDirsInResults || this.customFilename) {
+      else if(this.allowDirsInResults || this.hasCustomFilename) {
         // Return the current directory by default
         this._returnResults(true);
       }
@@ -318,10 +318,10 @@ FileBrowser.prototype = {
     
     // If there is a new filename string (i.e. the
     // user selected something) or there is no custom file name
-    if(filenameText.length > 0 || !this.customFilename) {
+    if(filenameText.length > 0 || !this.hasCustomFilename) {
       // Set / clear the filename
       this._getUiElem(this.uiNames.filename).val(filenameText);
-      this.customFilename = false;
+      this.hasCustomFilename = false;
     }
 
     // Enabled/disable the buttons
@@ -428,7 +428,7 @@ FileBrowser.prototype = {
     this._initializeFiltering(initializer.filter);
     this._initializeViews(initializer.viewFactory);
     
-    this.customFilename = false;
+    this.hasCustomFilename = false;
 
     // Standard event handlers
     var fileBrowser = this;
@@ -452,13 +452,13 @@ FileBrowser.prototype = {
       var filenameLength = fileBrowser._getUiElem(this).val().length;
       
       // If filename is not empty, the user entered a custom filename
-      if(filenameLength > 0 && !fileBrowser.customFilename) {
-        fileBrowser.customFilename = true;
+      if(filenameLength > 0 && !fileBrowser.hasCustomFilename) {
+        fileBrowser.hasCustomFilename = true;
       }
       
       // Otherwise, there is no custom filename
-      else if(filenameLength == 0 && fileBrowser.customFilename) {
-        fileBrowser.customFilename = false;
+      else if(filenameLength == 0 && fileBrowser.hasCustomFilename) {
+        fileBrowser.hasCustomFilename = false;
       }
       fileBrowser._changeAcceptState();
       
