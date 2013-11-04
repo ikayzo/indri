@@ -106,7 +106,7 @@ DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 
     $tr.append(jQuery(document.createElement("td")).append(this._getIcon(contentItem)));
     var $label = jQuery(document.createElement("span")).addClass("ind-editable-name").html(contentItem.name);
-    if (contentItem.isDir) {
+    if (contentItem.isCollection) {
       $label.addClass("ind-detailitem-dirname");
     }
     $tr.append(jQuery(document.createElement("td")).append($label));
@@ -138,7 +138,7 @@ DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
   _formatDate: function(timestamp) {
     return timestamp ? new Date(timestamp).toDateString() : '--';
   },
-  _fieldNames: ["isDir", "name", "size", "created", "modified"],
+  _fieldNames: ["isCollection", "name", "size", "created", "modified"],
   _columnTitles: ["", "name", "size", "creation date", "last modified date"],
   dateFormatString: "yyyy-MM-dd, hh:mm ",
 });

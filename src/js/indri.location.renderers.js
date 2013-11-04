@@ -15,13 +15,8 @@ function splitPath(path, delimiter) {
 
 function StringLocationRenderer() {}
 StringLocationRenderer.prototype = jQuery.extend({}, {
-		render : function(elem, fsItem) {
-      
-      // TODO Remove?  Is this redundant?
-			if(fsItem.location) {
-				fsItem = JSON.parse(fsItem.location);
-			}
-
+		render : function(elem, fsItem) {      
+      fsItem = JSON.parse(fsItem.location);
 			elem.html(fsItem.toString());
 		},
 	});
@@ -31,15 +26,13 @@ function SegmentedLocationRenderer() {}
 SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 		render : function($elem, fsItem, callback) {
 			if(fsItem.location) {
-        // Replace the \ in Windows paths for the split
-        // TODO: Handle this on the server
-				fsItem = JSON.parse(fsItem.location).replace(/\\/g, "/");
+				fsItem = JSON.parse(fsItem.location);
 			}
 			else {
-				fsItem = '/';
+				fsItem = IndriPaths.ROOT_PATH;
 			}
 
-			var parts = splitPath(fsItem, '/');
+			var parts = splitPath(fsItem, IndriPaths.SEPARATOR);
       
 			$elem.empty();
 
@@ -48,9 +41,7 @@ SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 			var $rootAnchor = jQuery(document.createElement(isEmptyPath ? "span" : "a")).html("(root)").addClass('ind-location-segment');
 			// Only add the click handler to the root path if there weren't any other segments
 			if(!isEmptyPath) {
-        
-        // TODO: Move '/' to Indri.base
-				$rootAnchor.click({ location: JSON.stringify('/')}, function(evt) {
+				$rootAnchor.click({ location: JSON.stringify(IndriPaths.ROOT_PATH)}, function(evt) {
 					callback(evt.data);
 				});
 			}
@@ -60,7 +51,7 @@ SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 			var fullPath = '';
 			parts.forEach(function(segment, index) {
 				$elem.append('<span class="ind-location-divider">&#62;</span>');
-				fullPath += '/' + segment;
+				fullPath += IndriPaths.SEPARATOR + segment;
 
 				var isLastSegment = (index == parts.length - 1);
 				var $anchor = jQuery(document.createElement(isLastSegment ? "span" : "a")).html(segment).addClass('ind-location-segment');
@@ -83,13 +74,13 @@ SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 function BucketLocationRenderer() {}
 BucketLocationRenderer.prototype = jQuery.extend({}, {
 		render : function($elem, fsItem, callback) {
-			if(!fsItem.location) {
+			if(!fsItem || !fsItem.location) {
 				return;
 			}
 
 			var bucketData = JSON.parse(fsItem.location);
 
-			var parts = splitPath(bucketData.key, '/');
+			var parts = splitPath(bucketData.key, IndriPaths.SEPARATOR);
 			var targetLocation = { bucket: bucketData.bucket, key : '' };
 			
 			$elem.empty();
@@ -108,7 +99,7 @@ BucketLocationRenderer.prototype = jQuery.extend({}, {
 
 			// Add all other links
 			parts.forEach(function(segment, index) {
-				targetLocation.key += segment + '/';
+				targetLocation.key += segment + IndriPaths.SEPARATOR;
 
 				var isLastSegment = (index == parts.length - 1);
 				var $anchor = jQuery(document.createElement(isLastSegment ? "span" : "a")).html(segment).addClass('ind-location-segment');
@@ -123,6 +114,5 @@ BucketLocationRenderer.prototype = jQuery.extend({}, {
 				$elem.append($anchor);
 				$elem.append(' / ');
 			});
-
 		},
 	});

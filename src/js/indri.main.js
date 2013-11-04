@@ -112,7 +112,7 @@ FileBrowser.prototype = {
         delete this.currentContents[item.clientId];
       else {
         // Set the clientId of the item if it is new
-        if (typeof item.clientId == 'undefined') {
+        if (!item.clientId) {
           item.clientId = this.nextClientId++;
         }
         this.currentContents[item.clientId] = item;
@@ -209,8 +209,9 @@ FileBrowser.prototype = {
         }
       }
       
-      // If not item is selected and you can select directories
-      else if(this.allowDirsInResults) {
+      // If not item is selected and you can select directories or the user
+      // entered a custom file name
+      else if(this.allowDirsInResults || this.hasCustomFilename) {
         // Return the current directory by default
         this._returnResults(true);
       }
@@ -314,8 +315,14 @@ FileBrowser.prototype = {
         filenameText += prefix + unincludedItem.name;
       }
     }
-
-    this._getUiElem(this.uiNames.filename).val(filenameText);
+    
+    // If there is a new filename string (i.e. the
+    // user selected something) or there is no custom file name
+    if(filenameText.length > 0 || !this.hasCustomFilename) {
+      // Set / clear the filename
+      this._getUiElem(this.uiNames.filename).val(filenameText);
+      this.hasCustomFilename = false;
+    }
 
     // Enabled/disable the buttons
     this._setEnabled(this.uiNames.delete, this.currentSelection.length != 0);
@@ -420,6 +427,8 @@ FileBrowser.prototype = {
 
     this._initializeFiltering(initializer.filter);
     this._initializeViews(initializer.viewFactory);
+    
+    this.hasCustomFilename = false;
 
     // Standard event handlers
     var fileBrowser = this;
@@ -438,8 +447,27 @@ FileBrowser.prototype = {
 
     // Update the accept button enabled state when the user types in the
     // filename field
-    this._getUiElem(this.uiNames.filename).keyup(function() {
+    this._getUiElem(this.uiNames.filename).keyup(function(evt) {
+      
+      var filenameLength = fileBrowser._getUiElem(this).val().length;
+      
+      // If filename is not empty, the user entered a custom filename
+      if(filenameLength > 0 && !fileBrowser.hasCustomFilename) {
+        fileBrowser.hasCustomFilename = true;
+      }
+      
+      // Otherwise, there is no custom filename
+      else if(filenameLength == 0 && fileBrowser.hasCustomFilename) {
+        fileBrowser.hasCustomFilename = false;
+      }
       fileBrowser._changeAcceptState();
+      
+      // If the user presses Enter and there is a file name
+      if(filenameLength > 0 && evt.which == (KeyEvent.KEYCODE_ENTER || KeyEvent.DOM_VK_RETURN)) {
+        
+        // Return the results
+        fileBrowser._returnResults(true);
+      }
     });    
 
     this._getUiElem(this.uiNames.filename).blur(function() {
