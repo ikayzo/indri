@@ -4,8 +4,8 @@
 .ind-wrapper    { 
   position:absolute; 
   left: 0; 
-  right: 0; 
-}
+  right: 0;
+  }
 
 /* --- Center Content --- */
 #contents-panel {
@@ -22,6 +22,7 @@
 #preview-wrapper  { 
   position: absolute; 
   width: 300px;
+  overflow-y: scroll; 
 }
 
 /* Content Window */

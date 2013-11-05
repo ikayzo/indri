@@ -17,6 +17,7 @@ Buttons
 */
 /* Theme Rules and Variables */
 /* --- Universal Styles --- */
+/* line 3, _universal.scss */
 *, *:before, *:after {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -25,54 +26,77 @@ Buttons
   -ms-user-select: none;
   user-select: none;
   /* Remove accidental text highlighting */
-  cursor: default; }
+  cursor: default;
+}
 
+/* line 13, _universal.scss */
 html, body {
   height: 100%;
-  width: 100%; }
+  width: 100%;
+}
 
+/* line 18, _universal.scss */
 img {
   max-width: 100%;
-  max-height: 100%; }
+  max-height: 100%;
+}
 
+/* line 24, _universal.scss */
 a,
 a > * {
-  cursor: pointer; }
+  cursor: pointer;
+}
 
+/* line 28, _universal.scss */
 input {
-  cursor: text; }
+  cursor: text;
+}
 
+/* line 32, _universal.scss */
 .clearfix {
   content: "";
   display: table;
-  clear: both; }
+  clear: both;
+}
 
 /* Universal Styles */
 /* Typography */
+/* line 6, _typography.scss */
 #indriui {
   font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
   font-size: 13px;
   line-height: 1.0;
-  color: #444444; }
+  color: #444444;
+}
 
+/* line 15, _typography.scss */
 ul, ol, dl {
   margin: 0;
   padding: 0;
-  list-style-type: none; }
+  list-style-type: none;
+}
 
 /* breadcrumb */
+/* line 23, _typography.scss */
 a {
   text-decoration: underline;
-  color: #333333; }
-  a:hover {
-    color: #595959; }
+  color: #333333;
+}
+/* line 26, _typography.scss */
+a:hover {
+  color: #595959;
+}
 
+/* line 31, _typography.scss */
 .ind-location-divider, .ind-location-segment {
-  color: #333333; }
+  color: #333333;
+}
 
 /* status display */
+/* line 36, _typography.scss */
 #filename-save label {
-  color: #444444; }
+  color: #444444;
+}
 
 /* Typography */
 /* Icon Font */
@@ -82,33 +106,49 @@ a {
   src: url("fonts/entypo.eot");
   src: url("fonts/entypo.eot?#iefix") format("embedded-opentype"), url("fonts/entypo.woff") format("woff"), url("fonts/entypo.ttf") format("truetype"), url("fonts/entypo.svg#entypo") format("svg");
   font-weight: normal;
-  font-style: normal; }
+  font-style: normal;
+}
 
 /* --- Icons --- */
+/* line 17, _icons.scss */
 .entypo {
   font-family: "entypo";
   line-height: 1.0em;
-  color: #444444; }
-  .ind-filelist .entypo {
-    font-size: 2.9em;
-    line-height: 0.8em; }
-  .ind-iconlist .entypo {
-    font-size: 4.5em;
-    line-height: 0.8em; }
-  .ind-detaillist .entypo {
-    font-size: 2.2em;
-    line-height: 1.0em; }
-  a:hover .entypo {
-    text-decoration: none; }
+  color: #444444;
+}
+/* line 21, _icons.scss */
+.ind-filelist .entypo {
+  font-size: 2.9em;
+  line-height: 0.8em;
+}
+/* line 27, _icons.scss */
+.ind-iconlist .entypo {
+  font-size: 4.5em;
+  line-height: 0.8em;
+}
+/* line 31, _icons.scss */
+.ind-detaillist .entypo {
+  font-size: 2.2em;
+  line-height: 1.0em;
+}
+/* line 35, _icons.scss */
+a:hover .entypo {
+  text-decoration: none;
+}
 
+/* line 39, _icons.scss */
 .ind-icon-file, .ind-icon-folder {
-  vertical-align: baseline !important; }
+  vertical-align: baseline !important;
+}
 
+/* line 43, _icons.scss */
 .ind-icon-folder {
-  color: #e8aa50; }
+  color: #e8aa50;
+}
 
 /* Icon Font (Entypo) */
 /* --- Buttons --- */
+/* line 3, _buttons.scss */
 .ind-btn {
   background: #aad5df;
   padding: 10px 15px;
@@ -121,31 +161,44 @@ a {
   line-height: inherit;
   vertical-align: baseline;
   overflow: hidden;
-  text-decoration: none; }
-  .ind-btn:hover {
-    color: inherit;
-    background: #bddee6;
-    text-decoration: none; }
-  .ind-btn.entypo {
-    width: 35px;
-    height: 35px;
-    padding: 0;
-    font-size: 35px; }
+  text-decoration: none;
+}
+/* line 16, _buttons.scss */
+.ind-btn:hover {
+  color: inherit;
+  background: #bddee6;
+  text-decoration: none;
+}
+/* line 21, _buttons.scss */
+.ind-btn.entypo {
+  width: 35px;
+  height: 35px;
+  padding: 0;
+  font-size: 35px;
+}
 
+/* line 28, _buttons.scss */
 .ind-btn-dis, .ind-btn-dis:hover {
   background: #dddddd;
   color: #aaaaaa !important;
-  cursor: no-drop; }
+  cursor: no-drop;
+}
 
+/* line 33, _buttons.scss */
 .ind-btn-active {
   background: #55b7ce;
   color: #444444 !important;
-  /*#fff*/ }
-  .ind-btn-active:hover {
-    background: #69bfd4;
-    color: white; }
-  .ind-btn-active:active {
-    background: #50bad3; }
+  /*#fff*/
+}
+/* line 36, _buttons.scss */
+.ind-btn-active:hover {
+  background: #69bfd4;
+  color: white;
+}
+/* line 40, _buttons.scss */
+.ind-btn-active:active {
+  background: #50bad3;
+}
 
 /* Button Settings */
 /* General Structure */
@@ -157,65 +210,89 @@ a {
     - Detail Right Column
   Footer*/
 /* --- Overall Content --- */
+/* line 13, _structure.scss */
 .ind-wrapper {
   position: absolute;
   left: 0;
-  right: 0; }
+  right: 0;
+}
 
 /* --- Header --- */
+/* line 20, _structure.scss */
 #header-wrapper {
   border-width: 0 0 1px 0;
   top: 0;
-  height: 100px; }
+  height: 100px;
+}
 
+/* line 27, _structure.scss */
 #header-wrapper,
 #footer-wrapper {
   border-color: #aaaaaa;
   border-style: solid;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 /* --- Content Window --- */
+/* line 36, _structure.scss */
 #shortcuts-wrapper,
 #contents-wrapper,
 #preview-wrapper {
   top: 100px;
-  bottom: 90px; }
+  bottom: 90px;
+}
 
+/* line 41, _structure.scss */
 #shortcuts-wrapper,
 #preview-wrapper {
   position: absolute;
-  width: 300px; }
+  width: 300px;
+}
 
 /* Shortcut Window */
+/* line 47, _structure.scss */
 #shortcuts-wrapper {
   left: 0;
-  border-right: 1px solid #aaaaaa; }
+  border-right: 1px solid #aaaaaa;
+}
 
+/* line 51, _structure.scss */
 .ind-show-preview {
-  margin-right: 300px; }
+  margin-right: 300px;
+}
 
 /* Content Window */
+/* line 56, _structure.scss */
 #contents-wrapper {
-  overflow: auto; }
+  overflow: auto;
+}
 
+/* line 59, _structure.scss */
 #contents-panel {
-  height: 100%; }
+  height: 100%;
+}
 
 /* Preview Window */
+/* line 64, _structure.scss */
 #preview-wrapper {
   right: 0;
   background: white;
   border-left: 1px solid #aaaaaa;
-  padding: 15px 20px; }
+  padding: 15px 20px;
+}
 
+/* line 70, _structure.scss */
 .ind-show-shortcuts {
-  margin-left: 300px; }
+  margin-left: 300px;
+}
 
 /* --- Footer --- */
+/* line 75, _structure.scss */
 #footer-wrapper {
   border-width: 1px 0 0 0;
   bottom: 0;
-  height: 90px; }
+  height: 90px;
+}
 
 /* General Structure */
 /* Panels */
@@ -236,229 +313,351 @@ a {
     - Filename Panel
     - Status Panel*/
 /* --- Header Sections --- */
+/* line 2, modules/_header.scss */
 #title-control {
   font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
   background: #aab25b;
   text-align: center;
   padding: 10px 15px;
   text-transform: uppercase;
-  color: white; }
+  color: white;
+}
 
+/* line 10, modules/_header.scss */
 #header-control-panel {
   padding: 15px;
-  width: 100%; }
+  width: 100%;
+}
 
+/* line 15, modules/_header.scss */
 #header-wrapper {
   border-color: #aaaaaa;
-  background: #e8e8e8; }
+  background: #e8e8e8;
+}
 
+/* line 20, modules/_header.scss */
 #footer-wrapper {
   border-color: #aaaaaa;
-  background: #e8e8e8; }
+  background: #e8e8e8;
+}
 
 /*==================
       controls 
 ===================*/
 /* --- Left --- */
+/* line 33, modules/_header.scss */
 #header-left-panel,
 #shortcuts-panel {
-  float: left; }
+  float: left;
+}
 
 /* Buttons */
+/* line 38, modules/_header.scss */
 #header-navigation-panel {
   float: left;
-  margin: 0 0 0 10px; }
+  margin: 0 0 0 10px;
+}
 
+/* line 39, modules/_header.scss */
 #location-control {
   float: left;
   padding: 10px;
-  font-weight: bold; }
+  font-weight: bold;
+}
 
+/* line 40, modules/_header.scss */
 .ind-location-divider {
-  margin: 0 10px; }
+  margin: 0 10px;
+}
 
 /* --- Right --- */
+/* line 43, modules/_header.scss */
 #header-right-panel {
-  float: right; }
+  float: right;
+}
 
 /* Buttons */
+/* line 49, modules/_header.scss */
 #views-panel {
-  float: left; }
+  float: left;
+}
 
+/* line 50, modules/_header.scss */
 #details-panel {
   float: right;
-  margin: 0 0 0 10px; }
+  margin: 0 0 0 10px;
+}
 
 /* --- Left Shortcut Content --- */
+/* line 2, modules/_shortcuts_panel.scss */
 #shortcuts-wrapper {
-  background: #f0f0f0; }
+  background: #f0f0f0;
+}
 
+/* line 6, modules/_shortcuts_panel.scss */
 .ind-shortcut-list li {
   padding: 15px 15px;
   font-weight: bold;
-  color: #1e1e1e; }
+  color: #1e1e1e;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
+/* line 14, modules/_shortcuts_panel.scss */
 .ind-listitem.ind-shortcut-item {
   background: #e8e8e8;
   border-bottom: 1px solid #e8e8e8;
-  color: #444444; }
-  .ind-listitem.ind-shortcut-item:hover {
-    background: #d9dacc !important;
-    color: #444444 !important; }
+  color: #444444;
+}
+/* line 18, modules/_shortcuts_panel.scss */
+.ind-listitem.ind-shortcut-item:hover {
+  background: #d9dacc !important;
+  color: #444444 !important;
+}
 
+/* line 24, modules/_shortcuts_panel.scss */
 .ind-listitem.ind-shortcut-selected {
-  background: #aab25b !important; }
-  .ind-listitem.ind-shortcut-selected .ind-shortcut-name {
-    color: white; }
-  .ind-listitem.ind-shortcut-selected:hover {
-    background: #bcc27e !important; }
-  .ind-listitem.ind-shortcut-selected:active {
-    background: #ced3a0 !important; }
+  background: #aab25b !important;
+}
+/* line 26, modules/_shortcuts_panel.scss */
+.ind-listitem.ind-shortcut-selected .ind-shortcut-name {
+  color: white;
+}
+/* line 29, modules/_shortcuts_panel.scss */
+.ind-listitem.ind-shortcut-selected:hover {
+  background: #bcc27e !important;
+}
+/* line 32, modules/_shortcuts_panel.scss */
+.ind-listitem.ind-shortcut-selected:active {
+  background: #ced3a0 !important;
+}
 
 /* --- Overall Content --- */
+/* line 4, modules/_contents_panel.scss */
 .ind-wrapper {
   position: absolute;
   left: 0;
-  right: 0; }
+  right: 0;
+}
 
 /* --- Center Content --- */
+/* line 11, modules/_contents_panel.scss */
 #contents-panel {
-  background: white; }
+  background: white;
+}
 
+/* line 17, modules/_contents_panel.scss */
 #shortcuts-wrapper,
 #contents-wrapper,
 #preview-wrapper {
   top: 100px;
-  bottom: 90px; }
+  bottom: 90px;
+}
 
+/* line 22, modules/_contents_panel.scss */
 #shortcuts-wrapper,
 #preview-wrapper {
   position: absolute;
-  width: 300px; }
+  width: 300px;
+  overflow-y: scroll;
+}
 
 /* Content Window */
+/* line 29, modules/_contents_panel.scss */
 #contents-wrapper {
-  overflow: auto; }
+  overflow: auto;
+}
 
+/* line 32, modules/_contents_panel.scss */
 #contents-panel {
-  height: 100%; }
+  height: 100%;
+}
 
+/* line 37, modules/_contents_panel.scss */
 .ind-content {
-  /* Truncates text. Width needs to be set to work properly */ }
-  .ind-content span {
-    display: inline-block;
-    zoom: 1;
-    *display: inline; }
-  .ind-content li {
-    width: 33.333%;
-    overflow: hidden;
-    white-space: nowrap;
-    float: left;
-    /* Sets every 9th element to be slightly darker than bg color. 
-    This is dependent on the width of each LI being 33%. 
-    If it is changed to 25%, everything 9th element needs to be implemented. */ }
-    .ind-content li span:hover {
-      cursor: default;
-      /* Remove text cursor - Add to mobile */ }
-    .ind-content li:nth-child(6n+1), .ind-content li:nth-child(6n+2), .ind-content li:nth-child(6n+3) {
-      background: #f5f5f5; }
-  .ind-content tr:nth-child(odd) {
-    background: #f5f5f5; }
-  .ind-content .ind-editable-name {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 100%;
-    padding: 4px 0;
-    letter-spacing: 0.02em;
-    vertical-align: middle; }
-  .ind-content .ind-content-selected {
-    background: #55b7ce !important; }
-    .ind-content .ind-content-selected td, .ind-content .ind-content-selected .ind-editable-name, .ind-content .ind-content-selected .entypo {
-      color: white !important; }
-    .ind-content .ind-content-selected .ind-icon-folder {
-      color: #e8aa50 !important; }
-    .ind-content .ind-content-selected:hover {
-      background: #7dc8d9 !important; }
+  /* Truncates text. Width needs to be set to work properly */
+}
+/* line 38, modules/_contents_panel.scss */
+.ind-content span {
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+}
+/* line 43, modules/_contents_panel.scss */
+.ind-content li {
+  width: 33.333%;
+  overflow: hidden;
+  white-space: nowrap;
+  float: left;
+  /* Sets every 9th element to be slightly darker than bg color. 
+  This is dependent on the width of each LI being 33%. 
+  If it is changed to 25%, everything 9th element needs to be implemented. */
+}
+/* line 48, modules/_contents_panel.scss */
+.ind-content li span:hover {
+  cursor: default;
+  /* Remove text cursor - Add to mobile */
+}
+/* line 56, modules/_contents_panel.scss */
+.ind-content li:nth-child(6n+1), .ind-content li:nth-child(6n+2), .ind-content li:nth-child(6n+3) {
+  background: whitesmoke;
+}
+/* line 60, modules/_contents_panel.scss */
+.ind-content tr:nth-child(odd) {
+  background: whitesmoke;
+}
+/* line 63, modules/_contents_panel.scss */
+.ind-content .ind-editable-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  padding: 4px 0;
+  letter-spacing: 0.02em;
+  vertical-align: middle;
+}
+/* line 72, modules/_contents_panel.scss */
+.ind-content .ind-content-selected {
+  background: #55b7ce !important;
+}
+/* line 74, modules/_contents_panel.scss */
+.ind-content .ind-content-selected td, .ind-content .ind-content-selected .ind-editable-name, .ind-content .ind-content-selected .entypo {
+  color: white !important;
+}
+/* line 77, modules/_contents_panel.scss */
+.ind-content .ind-content-selected .ind-icon-folder {
+  color: #e8aa50 !important;
+}
+/* line 80, modules/_contents_panel.scss */
+.ind-content .ind-content-selected:hover {
+  background: #7dc8d9 !important;
+}
 
+/* line 86, modules/_contents_panel.scss */
 table tr.even, table tr.alt, table tr:nth-of-type(even) {
-  background: white; }
+  background: white;
+}
 
 /* --- List View --- */
+/* line 91, modules/_contents_panel.scss */
 .ind-listitem {
-  padding: 5px; }
-  .ind-listitem:hover {
-    background: #cce9f0 !important;
-    color: #1e1e1e !important; }
-    .ind-listitem:hover .entypo {
-      color: #1e1e1e; }
-    .ind-listitem:hover .ind-icon-folder {
-      color: #e8aa50 !important; }
-  .ind-listitem .ind-editable-name {
-    margin: 0 0 0 5px;
-    top: -4px;
-    position: relative;
-    width: 75%; }
+  padding: 5px;
+}
+/* line 93, modules/_contents_panel.scss */
+.ind-listitem:hover {
+  background: #cce9f0 !important;
+  color: #1e1e1e !important;
+}
+/* line 96, modules/_contents_panel.scss */
+.ind-listitem:hover .entypo {
+  color: #1e1e1e;
+}
+/* line 99, modules/_contents_panel.scss */
+.ind-listitem:hover .ind-icon-folder {
+  color: #e8aa50 !important;
+}
+/* line 103, modules/_contents_panel.scss */
+.ind-listitem .ind-editable-name {
+  margin: 0 0 0 5px;
+  top: -4px;
+  position: relative;
+  width: 75%;
+}
 
 /* --- Thumbnail View --- */
+/* line 113, modules/_contents_panel.scss */
 .ind-iconlist li {
   padding: 10px 10px 20px;
-  text-align: center; }
+  text-align: center;
+}
 
+/* line 118, modules/_contents_panel.scss */
 .ind-iconitem:hover {
   background: #cce9f0 !important;
-  color: #1e1e1e; }
-  .ind-iconitem:hover .entypo {
-    color: #1e1e1e; }
-  .ind-iconitem:hover .ind-icon-folder {
-    color: #e8aa50; }
+  color: #1e1e1e;
+}
+/* line 121, modules/_contents_panel.scss */
+.ind-iconitem:hover .entypo {
+  color: #1e1e1e;
+}
+/* line 124, modules/_contents_panel.scss */
+.ind-iconitem:hover .ind-icon-folder {
+  color: #e8aa50;
+}
 
 /* --- Detail/Table View --- */
+/* line 133, modules/_contents_panel.scss */
 .ind-detaillist {
   width: 100%;
-  border: none; }
-  .ind-detaillist th {
-    text-transform: uppercase;
-    text-align: left;
-    padding: 7px 10px;
-    position: relative;
-    background: #c2c2c2;
-    color: #1e1e1e;
-    border-left: 1px solid white; }
-    .ind-detaillist th:hover {
-      background: #cce9f0;
-      color: #1e1e1e; }
-    .ind-detaillist th:first-child {
-      border-left: none; }
-  .ind-detaillist tr {
-    background: white; }
-    .ind-detaillist tr:hover {
-      background: #cce9f0 !important; }
-      .ind-detaillist tr:hover td {
-        color: #1e1e1e; }
-        .ind-detaillist tr:hover td .ind-icon-file {
-          color: #1e1e1e; }
-        .ind-detaillist tr:hover td .ind-icon-folder {
-          color: #e8aa50; }
-    .ind-detaillist tr td {
-      padding: 0 10px;
-      height: 32px;
-      /* Min Height */
-      vertical-align: middle;
-      color: #1e1e1e; }
-      .ind-detaillist tr td:first-child {
-        width: 40px;
-        text-align: center; }
+  border: none;
+}
+/* line 136, modules/_contents_panel.scss */
+.ind-detaillist th {
+  text-transform: uppercase;
+  text-align: left;
+  padding: 7px 10px;
+  position: relative;
+  background: #c2c2c2;
+  color: #1e1e1e;
+  border-left: 1px solid white;
+}
+/* line 144, modules/_contents_panel.scss */
+.ind-detaillist th:hover {
+  background: #cce9f0;
+  color: #1e1e1e;
+}
+/* line 148, modules/_contents_panel.scss */
+.ind-detaillist th:first-child {
+  border-left: none;
+}
+/* line 152, modules/_contents_panel.scss */
+.ind-detaillist tr {
+  background: white;
+}
+/* line 154, modules/_contents_panel.scss */
+.ind-detaillist tr:hover {
+  background: #cce9f0 !important;
+}
+/* line 156, modules/_contents_panel.scss */
+.ind-detaillist tr:hover td {
+  color: #1e1e1e;
+}
+/* line 158, modules/_contents_panel.scss */
+.ind-detaillist tr:hover td .ind-icon-file {
+  color: #1e1e1e;
+}
+/* line 161, modules/_contents_panel.scss */
+.ind-detaillist tr:hover td .ind-icon-folder {
+  color: #e8aa50;
+}
+/* line 166, modules/_contents_panel.scss */
+.ind-detaillist tr td {
+  padding: 0 10px;
+  height: 32px;
+  /* Min Height */
+  vertical-align: middle;
+  color: #1e1e1e;
+}
+/* line 171, modules/_contents_panel.scss */
+.ind-detaillist tr td:first-child {
+  width: 40px;
+  text-align: center;
+}
 
 /* Table Sort */
+/* line 183, modules/_contents_panel.scss */
 th.ind-col-sort-asc,
 th.ind-col-sort-desc {
   background: #55b7ce !important;
-  color: white; }
-  th.ind-col-sort-asc:hover,
-  th.ind-col-sort-desc:hover {
-    background: #7dc8d9 !important; }
+  color: white;
+}
+/* line 186, modules/_contents_panel.scss */
+th.ind-col-sort-asc:hover,
+th.ind-col-sort-desc:hover {
+  background: #7dc8d9 !important;
+}
 
+/* line 190, modules/_contents_panel.scss */
 .ind-col-sort {
   display: inline-block;
   zoom: 1;
@@ -467,61 +666,86 @@ th.ind-col-sort-desc {
   top: 0;
   line-height: 0.55em;
   position: absolute;
-  color: white; }
+  color: white;
+}
 
 /* --- Footer Sections --- */
+/* line 2, modules/_footer.scss */
 #footer-control-panel {
   padding: 10px 20px;
-  width: 100%; }
-  #footer-control-panel .ind-btn {
-    margin-left: 10px; }
-    #footer-control-panel .ind-btn:first-child {
-      margin: 0; }
+  width: 100%;
+}
+/* line 5, modules/_footer.scss */
+#footer-control-panel .ind-btn {
+  margin-left: 10px;
+}
+/* line 7, modules/_footer.scss */
+#footer-control-panel .ind-btn:first-child {
+  margin: 0;
+}
 
 /* --- Controls --- */
+/* line 15, modules/_footer.scss */
 #operations-panel,
 #filename-panel {
   float: left;
-  width: 33.3333333%; }
+  width: 33.3333333%;
+}
 
+/* line 20, modules/_footer.scss */
 #action-panel {
   float: right;
-  width: 33.3333333%; }
+  width: 33.3333333%;
+}
 
+/* line 25, modules/_footer.scss */
 #filename-panel {
-  padding: 0; }
+  padding: 0;
+}
 
+/* line 29, modules/_footer.scss */
 #filename-label-control {
   font-size: 10px !important;
   line-height: 11px;
   margin-bottom: 2px;
-  color: #444444; }
+  color: #444444;
+}
 
+/* line 37, modules/_footer.scss */
 #filename-control {
   width: 50%;
   line-height: 14px;
-  height: 20px; }
+  height: 20px;
+}
 
+/* line 42, modules/_footer.scss */
 #filterSelector {
   width: 30%;
   height: 20px;
   font-size: 10px;
-  margin-bottom: 2px; }
+  margin-bottom: 2px;
+}
 
+/* line 49, modules/_footer.scss */
 #action-panel {
-  text-align: right; }
+  text-align: right;
+}
 
+/* line 53, modules/_footer.scss */
 #status-panel {
   background: #c2c2c2;
   bottom: 0px;
   position: absolute;
-  width: 100%; }
+  width: 100%;
+}
 
 /* --- Status --- */
+/* line 61, modules/_footer.scss */
 #status-control {
   padding: 10px;
   text-transform: capitalize;
-  color: #444444; }
+  color: #444444;
+}
 
 /* Panel Styling */
 /* --- */

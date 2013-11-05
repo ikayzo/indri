@@ -1,12 +1,14 @@
 /* --- Left Shortcut Content --- */
 #shortcuts-wrapper {
   background: $panel-shortcut;
-}
+} 
 
 .ind-shortcut-list li 	{ 
   padding: 15px 15px; 
   font-weight: bold; 
   color: $text-dark;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .ind-listitem.ind-shortcut-item {
