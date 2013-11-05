@@ -30,7 +30,7 @@ ListContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
 
 
 /*
- Displays content as a multi-column list with preview icons
+ Displays content as a multi-column list with large icons
  */
 function IconContentRenderer() {
   // Icon View
