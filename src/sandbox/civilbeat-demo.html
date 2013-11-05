@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/reset.css">
+    <script type="text/javascript" src="js/3rdparty/jquery-1.10.2.js"></script>
+
+    <!-- Foundation -->
+    <script type="text/javascript" src="js/3rdparty/foundation.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/foundation.min.css">
+
+    <style type="text/css">
+      /* Foundation specific styles */
+
+      /* Override Foundation Styling for pop up */
+      .reveal-modal 		{ height: 80%; padding: 0px;}
+
+    </style>
+
+    <link rel="stylesheet" type="text/css" href="../css/indri.css">
+  </head>
+
+  <body>
+    <h2>Indri for Civil Beat demo page</h2>
+
+    <div>
+      <button id="openBtn">Open...</button>
+      <button id="saveBtn">Save...</button>
+      <button id="destBtn">Destination...</button>
+    </div>
+
+    <h3>Results:</h3>
+    <div id="results">Dialog not opened yet.</div>
+
+    <hr>
+
+    <div id="indriDialog" class="reveal-modal"></div>
+
+
+    <script type="text/javascript" src="../js/indri.fsm.js"></script>
+    <script type="text/javascript" src="../js/indri.base.js"></script>
+    <script type="text/javascript" src="../js/indri.content.renderer.base.js"></script>
+    <script type="text/javascript" src="../js/indri.content.renderers.js"></script>
+    <script type="text/javascript" src="../js/indri.location.renderers.js"></script>
+    <script type="text/javascript" src="../js/indri.main.js"></script>
+
+    <script type="text/javascript">
+
+      jQuery(document).ready(function() {
+        jQuery(document).foundation();
+
+        function getCivilBeatInitializer(defaults) {
+          var initializer = jQuery.extend(true, {}, defaults);
+
+          initializer.filter.options.push({ value: "\.(htm|html)$", text: "HTML files (*.htm, *.html)"});
+          initializer.filter.options.push({ value: "\.js$", text: "Javascript files (*.js)"});
+          initializer.filter.options.push({ value: "\.(jpg|png)", text: "Image files (*.jpg, *.png)"});
+
+          initializer.viewFactory.views.push(new IconContentRenderer());
+          initializer.viewFactory.views.push(new DetailContentRenderer());
+
+          initializer.visibility.shortcutsWrapper = true;
+          initializer.locationRenderer = new BucketLocationRenderer();
+
+          return initializer;
+        }
+
+        function showDialog(defaults) {
+          jQuery('#indriDialog').load('../templates/indri.html', function() {
+            var $dlg = jQuery(this);
+            var initializer = getCivilBeatInitializer(defaults);
+
+            initializer.resultCallback = function(result) {
+              $dlg.foundation('reveal', 'close');
+
+              console.log(result);
+
+              if (result.success) {
+                var resultText = result.selection[0].fullUrl ? result.selection[0].fullUrl : JSON.stringify(result.selection[0]);
+                jQuery("#results").html("User selection:<br>" + resultText);
+              }
+              else {
+                jQuery("#results").html("Operation cancelled");
+              }
+            };
+
+            FileBrowser.attach($dlg, new FileSystemManager("http://localhost:1337/"), initializer);
+            $dlg.foundation('reveal', 'open');
+          });
+        }
+
+        jQuery("#openBtn").click(function() {
+          showDialog(FileBrowser.prototype.OpenDialogInitializer);
+        });
+        jQuery("#saveBtn").click(function() {
+          showDialog(FileBrowser.prototype.SaveDialogInitializer);
+        });
+        jQuery("#destBtn").click(function() {
+          showDialog(FileBrowser.prototype.DestinationDialogInitializer);
+        });        
+      });
+    </script>
+
+  </body>
+</html>

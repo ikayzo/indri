@@ -302,21 +302,6 @@ FileSystemRequestHandler.prototype = {
   }
 }
 
-// var serverName = (process.argv.length > 2) ? process.argv[2] : "localhost";
-// var serverPort = (process.argv.length > 3) ? process.argv[3] : 1337;
-// if(process.argv.length > 4)
-// 	configurationPath = process.argv[4];
-
-// console.log("Connecting with ", configurationPath);
-// AWS.config.loadFromPath(configurationPath);
-
-// var http = require('http');
-// http.createServer(function (req, res) {
-//   res.writeHead(200, {'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*'});
-//   handleFileRequest(req, res);
-// }).listen(serverPort, serverName);
-// console.log('Server running at http://' + serverName + ':' + serverPort);
-
 
 var configFile = (process.argv.length > 2) ? process.argv[2] : './config-default.json';
 console.log("Parsing settings from: ", configFile);

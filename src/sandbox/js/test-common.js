@@ -37,3 +37,4 @@ function getDialogInitializer(defaults) {
 		initializer.locationRenderer = new BucketLocationRenderer();
 	}
 }
+
