@@ -10,18 +10,16 @@ var previewRegEx = null;
 
 var delimiter = '/';
 
-var defaultLocation = { bucket: "civilbeat_dev", key : ""};
-
 function parseFsItem(fsItem) {
   return fsItem ? JSON.parse(fsItem) : {};
 }
 
 function parseLocation(fsItem) {
-	if(!fsItem.location && !defaultLocation) {
+	if(!fsItem.location && !config.defaultLocation) {
 		throw "Missing location parameter";
 	}
 
-	return fsItem.location ? JSON.parse(fsItem.location) : defaultLocation;
+	return fsItem.location ? JSON.parse(fsItem.location) : config.defaultLocation;
 }
 
 function encodeLocation(bucket, key) {
@@ -40,12 +38,12 @@ function isPreviewable(key) {
 	return key && key.match(previewRegEx);
 }
 
-function getPreviewUrl(key) {
-	return isPreviewable(key) ? getFullUrl(key) : null;
+function getPreviewUrl(bucket, key) {
+	return isPreviewable(key) ? getFullUrl(bucket, key) : null;
 }
 
-function getFullUrl(key) {
-  return config.previewBase + key
+function getFullUrl(bucket, key) {
+  return config.urlBase.replace(/__bucket__/, bucket).replace(/__key__/, key);
 }
 
 function getFileInfo(bucket, bucketObject, original) {
@@ -62,7 +60,7 @@ function getFileInfo(bucket, bucketObject, original) {
   original.created = bucketObject.LastModified;
   original.modified = bucketObject.LastModified;
   original.id = bucketObject.ETag;
-  original.previewUrl = getPreviewUrl(bucketObject.Key);
+  original.previewUrl = getPreviewUrl(bucket, bucketObject.Key);
   original.fullUrl = getFullUrl(bucketObject.Key);
 
   return original;

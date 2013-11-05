@@ -5,5 +5,10 @@
     "credentials" : { 
         "accessKeyId": "YOUR_AWS_ACCESS_KEY_ID", 
         "secretAccessKey": "YOUR_AWS_SECRET_ACCESS_KEY"
-    }
+    },
+    
+    "defaultLocation" : { "bucket": "YOUR_AWS_BUCKET", "key" : ""},
+    
+    "previewTypes" : "\\.(jpg|gif|png)$",
+		"urlBase" : "http://__bucket__.s3.amazonaws.com/__key__"
 }
