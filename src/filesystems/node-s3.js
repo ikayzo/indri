@@ -41,7 +41,11 @@ function isPreviewable(key) {
 }
 
 function getPreviewUrl(key) {
-	return isPreviewable(key) ? (config.previewBase + key) : null;
+	return isPreviewable(key) ? getFullUrl(key) : null;
+}
+
+function getFullUrl(key) {
+  return config.previewBase + key
 }
 
 function getFileInfo(bucket, bucketObject, original) {
@@ -52,10 +56,14 @@ function getFileInfo(bucket, bucketObject, original) {
 	original.location = encodeLocation(bucket, bucketObject.Key);
   original.isCollection = false;
   original.size = bucketObject.Size;
-//  original.created = stats.ctime.getTime();
+  
+  // Created date is the same as the last modified date because S3
+  // only allows whole changes to the files
+  original.created = bucketObject.LastModified;
   original.modified = bucketObject.LastModified;
   original.id = bucketObject.ETag;
   original.previewUrl = getPreviewUrl(bucketObject.Key);
+  original.fullUrl = getFullUrl(bucketObject.Key);
 
   return original;
 }
@@ -67,10 +75,11 @@ function getDirInfo(bucket, prefix, original) {
   original.location = encodeLocation(bucket, prefix);
   original.isCollection = true;
   original.size = null;
-//  original.created = stats.ctime.getTime();
+  original.created = null;
   original.modified = null;
   original.id = prefix;
   original.previewUrl = null;
+  original.fullUrl = null;
   
 	return original;
 }
