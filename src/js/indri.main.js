@@ -102,7 +102,8 @@ FileBrowser.prototype = {
     this.currentLocation = newLocation;
 
     if (this.locationRenderer) {
-      this.locationRenderer.render(this._getUiElem(this.uiNames.location), this.currentLocation, this._makeCallback(this.navigateToLocation));
+      this._getUiElem(this.uiNames.location).empty().append(
+        this.locationRenderer.render(this.currentLocation, this._makeCallback(this.navigateToLocation)));
     }
   },
   
@@ -246,10 +247,8 @@ FileBrowser.prototype = {
   
   _updateStatus: function(status) {
     if (this.statusRenderer) {
-      this.statusRenderer.render(this._getUiElem(this.uiNames.status), status);
-    }
-    else {
-      this._getUiElem(this.uiNames.status).html(status);
+      this._getUiElem(this.uiNames.status).empty().append(
+        this.statusRenderer.render(status));
     }
   },
   
@@ -780,8 +779,8 @@ FileBrowser.prototype.DefaultInitializer = {
   locationRenderer: new StringLocationRenderer(),
   
   statusRenderer: {
-    render: function(elem, status) {
-      elem.html("<strong>" + status + "</strong>");
+    render: function(status) {
+      return jQuery(document.createElement("span")).html("<strong>" + status + "</strong>");
     }
   },
   
@@ -824,11 +823,6 @@ FileBrowser.prototype.DefaultInitializer = {
       return $listContainer;
     }
   },
-  
-  resultCallback: function(results) {
-    console.log(results);
-  }
-  
 };
 
 FileBrowser.prototype.DebugDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
