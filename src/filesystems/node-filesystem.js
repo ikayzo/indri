@@ -70,7 +70,7 @@ function parseFsItem(fsItem) {
 }
 
 function parseLocation(fsItem) {
-  return JSON.parse(fsItem.location || '"/"'); 
+  return JSON.parse(fsItem.location || '"/"' ); 
 }
 
 // Encodes the location field of the fsItem

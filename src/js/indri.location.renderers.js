@@ -19,7 +19,7 @@ function splitPath(path, delimiter) {
 function StringLocationRenderer() {}
 StringLocationRenderer.prototype = jQuery.extend({}, {
 		render : function(fsItem) {      
-      fsItem = JSON.parse(fsItem.location);
+				fsItem = JSON.parse(fsItem.location);
 			return jQuery(document.createElement("span")).html(fsItem.toString());
 		},
 	});
@@ -42,7 +42,7 @@ SegmentedLocationRenderer.prototype = jQuery.extend({}, {
       var $panel = jQuery(document.createElement("div"));
 
 			var parts = splitPath(fsItem, IndriPaths.SEPARATOR);
-
+      
 			// Handle the root path case
 			var isEmptyPath = (parts.length == 0);
 			var $rootAnchor = jQuery(document.createElement(isEmptyPath ? "span" : "a")).html("(root)").addClass('ind-location-segment');
