@@ -8,7 +8,6 @@ function getDialogInitializer(defaults) {
 
 	var fsLookup = {
 		local : initLocalFileSystem,
-		ikayzo : initAwsFileSystem,
 		civilbeat : initCivilBeatFileSystem,
 	};
 
@@ -30,12 +29,6 @@ function getDialogInitializer(defaults) {
 	function initLocalFileSystem(initializer) {
 		initializer.locationRenderer = new SegmentedLocationRenderer();
 		initializer.visibility.shortcutsWrapper = false;
-	}
-
-	function initAwsFileSystem(initializer) {
-		initializer.visibility.shortcutsWrapper = true;
-
-		initializer.locationRenderer = new BucketLocationRenderer();
 	}
 
 	function initCivilBeatFileSystem(initializer) {

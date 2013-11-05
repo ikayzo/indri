@@ -4,7 +4,7 @@
 
 function splitPath(path, delimiter) {
 	var parts = [];
-	path.split(delimiter).forEach(function(item) {
+	path.toString().split(delimiter).forEach(function(item) {
 		if(item.length) {
 			parts.push(item);
 		}
@@ -15,16 +15,16 @@ function splitPath(path, delimiter) {
 
 function StringLocationRenderer() {}
 StringLocationRenderer.prototype = jQuery.extend({}, {
-		render : function(elem, fsItem) {      
+		render : function(fsItem) {      
       fsItem = JSON.parse(fsItem.location);
-			elem.html(fsItem.toString());
+			return jQuery(document.createElement("span")).html(fsItem.toString());
 		},
 	});
 
 
 function SegmentedLocationRenderer() {}
 SegmentedLocationRenderer.prototype = jQuery.extend({}, {
-		render : function($elem, fsItem, callback) {
+		render : function(fsItem, navCallback) {
 			if(fsItem.location) {
 				fsItem = JSON.parse(fsItem.location);
 			}
@@ -32,9 +32,9 @@ SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 				fsItem = IndriPaths.ROOT_PATH;
 			}
 
+      var $panel = jQuery(document.createElement("div"));
+
 			var parts = splitPath(fsItem, IndriPaths.SEPARATOR);
-      
-			$elem.empty();
 
 			// Handle the root path case
 			var isEmptyPath = (parts.length == 0);
@@ -42,15 +42,15 @@ SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 			// Only add the click handler to the root path if there weren't any other segments
 			if(!isEmptyPath) {
 				$rootAnchor.click({ location: JSON.stringify(IndriPaths.ROOT_PATH)}, function(evt) {
-					callback(evt.data);
+					navCallback(evt.data);
 				});
 			}
-			$elem.append($rootAnchor);
+			$panel.append($rootAnchor);
 
 			// Add each other path component
 			var fullPath = '';
 			parts.forEach(function(segment, index) {
-				$elem.append('<span class="ind-location-divider">&#62;</span>');
+				$panel.append('<span class="ind-location-divider">&#62;</span>');
 				fullPath += IndriPaths.SEPARATOR + segment;
 
 				var isLastSegment = (index == parts.length - 1);
@@ -59,12 +59,13 @@ SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 				// Only add a click handler if this isn't the last segment
 				if(!isLastSegment) {
 					$anchor.click({ location : JSON.stringify(fullPath) }, function(evt) {
-						callback(evt.data);
+						navCallback(evt.data);
 					});
 				}
-				$elem.append($anchor);
+				$panel.append($anchor);
 			});
 
+			return $panel;
 		},
 	});
 
@@ -73,7 +74,7 @@ SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 
 function BucketLocationRenderer() {}
 BucketLocationRenderer.prototype = jQuery.extend({}, {
-		render : function($elem, fsItem, callback) {
+		render : function(fsItem, navCallback) {
 			if(!fsItem || !fsItem.location) {
 				return;
 			}
@@ -83,19 +84,19 @@ BucketLocationRenderer.prototype = jQuery.extend({}, {
 			var parts = splitPath(bucketData.key, IndriPaths.SEPARATOR);
 			var targetLocation = { bucket: bucketData.bucket, key : '' };
 			
-			$elem.empty();
+      var $panel = jQuery(document.createElement("div"));
 
 			// Create root link
 			var isEmptyPath = (parts.length == 0);
 			var $rootAnchor = jQuery(document.createElement(isEmptyPath ? "span" : "a")).html(bucketData.bucket).addClass('ind-location-segment');
 			if(!isEmptyPath) {
 				$rootAnchor.click({ location: JSON.stringify(targetLocation) }, function(evt) {
-					callback(evt.data);
+					navCallback(evt.data);
 				});
 			}
-			$elem.append($rootAnchor);
+			$panel.append($rootAnchor);
 
-			$elem.append(' : ');
+			$panel.append(' : ');
 
 			// Add all other links
 			parts.forEach(function(segment, index) {
@@ -107,12 +108,14 @@ BucketLocationRenderer.prototype = jQuery.extend({}, {
 				// Only add a click handler if this isn't the last segment
 				if(!isLastSegment) {
 					$anchor.click({ location: JSON.stringify(targetLocation) }, function(evt) {
-						callback(evt.data);
+						navCallback(evt.data);
 					});
 				}
 				
-				$elem.append($anchor);
-				$elem.append(' / ');
+				$panel.append($anchor);
+				$panel.append(' / ');
 			});
+
+			return $panel;
 		},
 	});
