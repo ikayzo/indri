@@ -13,6 +13,9 @@ function splitPath(path, delimiter) {
 	return parts;
 }
 
+//
+// Displays the string version of a location. Mostly meant for debugging
+//
 function StringLocationRenderer() {}
 StringLocationRenderer.prototype = jQuery.extend({}, {
 		render : function(fsItem) {      
@@ -22,6 +25,10 @@ StringLocationRenderer.prototype = jQuery.extend({}, {
 	});
 
 
+//
+// Displays a hierarchical path as a collection of breadbrumbs, allowing 
+// easy navigation to any parent location
+//
 function SegmentedLocationRenderer() {}
 SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 		render : function(fsItem, navCallback) {
@@ -70,8 +77,11 @@ SegmentedLocationRenderer.prototype = jQuery.extend({}, {
 	});
 
 
-// { bucket: bucket, key : key }
-
+//
+// Displays an Amazon S3 location as a collection of breadbrumbs much
+// like the SegmentedLocationRenderer. This renderer handles the bucket
+// component of the location.
+//
 function BucketLocationRenderer() {}
 BucketLocationRenderer.prototype = jQuery.extend({}, {
 		render : function(fsItem, navCallback) {

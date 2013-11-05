@@ -33,10 +33,10 @@ FileBrowser.prototype = {
   filter: null,
   sorter: null,
   locationRenderer: null,
-  contentRenderer: null,
-  statusRenderer: null,
-  previewRenderer: null,
   shortcutsRenderer: null,
+  contentRenderer: null,
+  previewRenderer: null,
+  statusRenderer: null,
   resultCallback: null,
   nextClientId: 0,
   
@@ -780,7 +780,7 @@ FileBrowser.prototype.DefaultInitializer = {
   
   statusRenderer: {
     render: function(status) {
-      return jQuery(document.createElement("span")).html("<strong>" + status + "</strong>");
+      return jQuery(document.createElement("span")).html("<strong>" + status.toString() + "</strong>");
     }
   },
   
@@ -804,8 +804,7 @@ FileBrowser.prototype.DefaultInitializer = {
   },
   
   shortcutsRenderer: {
-    
-    render: function(shortcuts, callback) {
+    render: function(shortcuts, navCallback) {
       var $listContainer = jQuery(document.createElement("ul")).addClass("ind-shortcut-list");
       shortcuts.forEach(function(shortcut) {
         var $label = jQuery(document.createElement("span")).addClass("ind-shortcut-name").html(shortcut.name);
@@ -815,11 +814,13 @@ FileBrowser.prototype.DefaultInitializer = {
             jQuery(".ind-shortcut-item").removeClass("ind-shortcut-selected");
             jQuery(evt.data).addClass("ind-shortcut-selected");
 
-            callback(shortcut.location);
+            navCallback(shortcut.location);
           }
         });
+
         $listContainer.append($listItem);
       });
+
       return $listContainer;
     }
   },

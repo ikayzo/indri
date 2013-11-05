@@ -1,139 +1,114 @@
-/*! indri-0.5.0 2013-10-11 */
-
+/*! indri-0.5.0 2013-11-05 */
 /*
-	The FileSystemManager provides access to the remote file system.
+ The FileSystemManager provides access to the remote file system.
 
-	The application is responsible for providing this in a usable
-	(i.e., initialized, authenticated) state.
-*/
+ The application is responsible for providing this in a usable
+ (i.e., initialized, authenticated) state.
+ */
 function FileSystemManager(rootUrl) {
-	this.rootUrl = rootUrl;
+  this.rootUrl = rootUrl;
 }
 
 FileSystemManager.prototype = {
-	getShortcuts : function(success, error) {
-		// NOTE: needs trailing '&' or something between here and the server fails silently
-		var url = this.rootUrl + "?action=shortcuts&";
-		this._doQuery(url, success, error);
-	},
+  getShortcuts : function(success, error) {
+    var data = { action: "shortcuts" };
+    this._doQuery(data, success, error);
+  },
 
-	getRootLocation : function(success, error) {
-		// NOTE: needs trailing '&' or something between here and the server fails silently
-		var url = this.rootUrl + "?action=navigate&direction=home&";
-		jQuery.getJSON(url, function(data, textStatus, jqXHR) {
-			success(data.loc);
-		}).fail(function(jqXHR, textStatus, errorThrown) {
-			console.log("FSM Error:", textStatus);
-			error("FSM Error: " + textStatus);
-		});	
-	},
+  getRootLocation : function(success, error) {
+    var data = { action: "navigate", direction: "home" };    
+    this._doQuery(data, success, error);
+  },
 
-	getRelativeLocation : function(location, direction, callback) {
-		var url = this.rootUrl + "?action=navigate&direction=" + direction + "&loc=" + this._encodeLocation(location);
-		jQuery.getJSON(url, function(data, textStatus, jqXHR) {
-			callback(data.loc);
-		});	
-	},
+  getRelativeLocation : function(fsItem, direction, success, error) {
+    var data = { action: "navigate", direction: direction, fsItem: this._encodeFsItem(fsItem) };
+    this._doQuery(data, success, error);
+  },
 
-	getContents : function(location, success, error) {
-		var url = this.rootUrl + "?action=browse";
-		if(location != "" && location != '.')
-			url += "&loc=" + this._encodeLocation(location);
+  getContents : function(fsItem, success, error) {
+    var data = { action: "browse", fsItem: this._encodeFsItem(fsItem) };
+    this._doQuery(data, success, error);
+  },
 
-		this._doQuery(url, success, error);
-	},
+  deleteItems : function(fsItems, success, error) {
+    var encodedFsItems = [];
+    fsItems.forEach(function(fsItem) {
+      encodedFsItems.push(this._encodeFsItem(fsItem));
+    }, this);
+    var data = { action: "delete", fsItems: JSON.stringify(encodedFsItems) };
+    this._doQuery(data, success, error);
+  },
 
-	deleteItems : function(items, success, error) {
-		var locations = [];
-		items.forEach(function(item) { locations.push(item.location); });
-		var url = this.rootUrl + "?action=delete&locs=" + encodeURIComponent(JSON.stringify(locations));
+  renameItem : function(fsItem, newName, success, error) {
+    var data = { action: "rename", newName: newName, fsItem: this._encodeFsItem(fsItem) };
+    this._doQuery(data, success, error);
+  },
 
-		this._doQuery(url, success, error);
-	},
+  createFolder : function(fsItem, name, success, error) {
+    var data = { action: "makedir", name: name, fsItem: this._encodeFsItem(fsItem) };
+    this._doQuery(data, success, error);
+  },
 
-	renameItem : function(item, newName, success, error) {
-		var url = this.rootUrl + "?action=rename&loc=" + this._encodeLocation(item.location) + "&newName=" + newName;
-		this._doQuery(url, success, error);
-	},
+  _doQuery : function(data, success, error) {
 
-	createFolder : function(location, name, success, error) {
-		var url = this.rootUrl + "?action=makedir&loc=" + this._encodeLocation(location) + "&name=" + name;
-		this._doQuery(url, success, error);
-	},
-
-
-	_doQuery : function(url, success, error) {
-		//		console.log("_doQuery: " + url);
-    
     // Disable ajax caching for IE
-    jQuery.ajaxSetup({ cache: false });
-		jQuery.getJSON(url, function(data, textStatus, jqXHR) {
-//			console.log("callback: " + textStatus);
-			if(data.error) {
-				error(data.error);
-			}
-			else {
-				success(data.contents, textStatus);
-			}
-		}).fail(function(jqXHR, textStatus, errorThrown) {
-			console.log("FSM Error:", textStatus);
-			if(error) {
-				error("FSM Error: " + textStatus);
-			}
-		});	
-	},
+    jQuery.ajaxSetup({
+      cache : false
+    });
 
-	_doQuery2 : function(url, success, error) {
-		//		console.log("_doQuery: " + url);
-		jQuery.ajax({
-			url : url,
-			dataType : 'json'
-		}).done(function(jqXHR, textStatus, errorThrown) {
-			console.log(textStatus);
-		}).fail(function(jqXHR, textStatus, errorThrown) {
-			console.log(textStatus);
-		}).always(function(jqXHR, textStatus, errorThrown) {
-			console.log(textStatus);
-		});	
-	},
+    jQuery.getJSON(this.rootUrl, data, function(result, textStatus, jqXHR) {
+      if (result.error) {
+        error(result.error);
+      } else {
+        success(result, textStatus);
+      }
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+      console.log("FSM Error:", textStatus);
+      if (error) {
+        error("FSM Error: " + textStatus);
+      }
+    });
+  },
 
-	_encodeLocation : function(location) {
-		return encodeURIComponent(location);
-	}
+  _encodeFsItem : function(fsItem) {
+    fsItem = fsItem || {};
+    return JSON.stringify(fsItem);
+  }
 }
-
 ;/*
-	Constants and global stuff
-*/
+ Constants and global stuff
+ */
 
 if (typeof KeyEvent == "undefined") {
-    var KeyEvent = {
-    	KEYCODE_ENTER : 13,
-		KEYCODE_ESC : 27,
-    KEYCODE_DELETE : 46
-    };
+  var KeyEvent = {
+    KEYCODE_ENTER: 13,
+    KEYCODE_ESC: 27,
+    KEYCODE_DELETE: 46
+  };
 }
 
 var MouseButtons = {
-	BUTTON_LEFT : 1,
+  BUTTON_LEFT: 1,
 };
 
 var IndriIcons = {
-	ICON_FOLDER : "&#128193;",
-	ICON_DOCUMENT : "&#59190;",
-
-	ICON_LIST_VIEW : "&#9776;",
-	ICON_ICON_VIEW : "&#9871;",
-	ICON_DETAIL_VIEW : "&#57349;",
-
-	ICON_SORT_ASC : "&#59235;",
-	ICON_SORT_DESC : "&#59232;",
+  ICON_FOLDER: "&#128193;",
+  ICON_DOCUMENT: "&#59190;",
+  ICON_LIST_VIEW: "&#9776;",
+  ICON_ICON_VIEW: "&#9871;",
+  ICON_DETAIL_VIEW: "&#57349;",
+  ICON_SORT_ASC: "&#59235;",
+  ICON_SORT_DESC: "&#59232;",
 }
 
 var IndriText = {
-	NEW_FOLDER_TEXT : "New Folder",
+  NEW_FOLDER_TEXT: "New Folder",
+  MULTI_SELECT_ERR: "Error: Multiple selection is not allowed.",
+}
 
-	MULTI_SELECT_ERR : "Error: Multiple selection is not allowed.",
+var IndriPaths = {
+  ROOT_PATH: '/',
+  SEPARATOR: '/'
 };function ContentRenderer() {
 }
 
@@ -168,9 +143,10 @@ ContentRenderer.prototype = {
     // check for Enter -> send evt = "enter"
     if (evt.which == (KeyEvent.KEYCODE_ENTER || KeyEvent.DOM_VK_RETURN)) {
       evt.data._handleKeyEvent("enter");
+      return false;
     }
 
-    // check for delete -> send evt = "delete"
+    // check for Delete -> send evt = "delete"
     else if (evt.which == (KeyEvent.KEYCODE_DELETE || KeyEvent.DOM_VK_DELETE)) {
       evt.data._handleKeyEvent("delete");
     }
@@ -191,6 +167,9 @@ ContentRenderer.prototype = {
     var endEditing = function(renderer) {
       $input.replaceWith($editable);
       renderer._setupNormalEvents($listItem, contentItem);
+      
+      // Reset focus on the file browser so that key press events are detected
+      renderer.callback(contentItem, "refocus");
     };
 
     $input = jQuery(document.createElement("input")).addClass("ind-editbox").attr("type", "text").attr("value", oldText)
@@ -201,6 +180,7 @@ ContentRenderer.prototype = {
         evt.data._setupNormalEvents($listItem, contentItem);
 
         evt.data.callback(contentItem, "rename", newText);
+        return false;
       }
       else if (evt.which == (KeyEvent.KEYCODE_ESC || KeyEvent.DOM_VK_ESCAPE)) {
         endEditing(evt.data);
@@ -244,7 +224,7 @@ ContentRenderer.prototype = {
   },
   _getIcon: function(contentItem) {
     $icon = jQuery(document.createElement("span")).addClass("entypo");
-    if (contentItem.isDir) {
+    if (contentItem.isCollection) {
       $icon.addClass('ind-icon-folder').html(IndriIcons.ICON_FOLDER);
     }
     else {
@@ -255,162 +235,156 @@ ContentRenderer.prototype = {
   }
 }
 ;/*
-	Standard content renderers
-*/
+ Standard content renderers
+ */
 
 /*
-	Displays the content items as a multi-column list with small icons
-*/
+ Displays the content items as a multi-column list with small icons
+ */
 function ListContentRenderer() {
-	// List View
-	this.name = "List";
-	this.text = IndriIcons.ICON_LIST_VIEW;
+  // List View
+  this.name = "List";
+  this.text = IndriIcons.ICON_LIST_VIEW;
 }
 
 ListContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
-		_renderContainer : function() {
-			return jQuery(document.createElement("ul")).addClass("ind-content ind-filelist").click(this, function(evt) { 
-				if(evt.toElement == this) evt.data.callback(null, 'clear');
-			});
-		},
+  _renderContainer: function() {
+    return jQuery(document.createElement("ul")).addClass("ind-content ind-filelist").click(this, function(evt) {
+      if (evt.toElement == this)
+        evt.data.callback(null, 'clear');
+    });
+  },
+  _renderItem: function(contentItem) {
+    var $icon = this._getIcon(contentItem);
+    var $label = jQuery(document.createElement("span")).addClass("ind-editable-name").html(contentItem.name);
+    var $listItem = jQuery(document.createElement("li")).addClass("ind-listitem").append($icon).append($label);
+    this._initItem($listItem, contentItem);
 
-		_renderItem : function(contentItem) {
-			var $icon = this._getIcon(contentItem);
-			var $label = jQuery(document.createElement("span")).addClass("ind-editable-name").html(contentItem.name);
-			var $listItem = jQuery(document.createElement("li")).addClass("ind-listitem").append($icon).append($label);
-			this._initItem($listItem, contentItem);
-
-			return $listItem;
-		}
-	});
+    return $listItem;
+  }
+});
 
 
 /*
-	Displays content as a multi-column list with preview icons
-*/
+ Displays content as a multi-column list with preview icons
+ */
 function IconContentRenderer() {
-	// Icon View
-	this.name = "Icon";
-	this.text = IndriIcons.ICON_ICON_VIEW;
+  // Icon View
+  this.name = "Icon";
+  this.text = IndriIcons.ICON_ICON_VIEW;
 }
 IconContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
-		showIconPreview : false,
+  showIconPreview: false,
+  _renderContainer: function() {
+    return jQuery(document.createElement("ul")).addClass("ind-content ind-iconlist").click(this, function(evt) {
+      if (evt.toElement == this)
+        evt.data.callback(null, 'clear');
+    });
+  },
+  _renderItem: function(contentItem) {
+    var $icon = this._getIcon(contentItem);
+    var $label = jQuery(document.createElement("span")).addClass("ind-editable-name").html(contentItem.name);
+    var $listItem = jQuery(document.createElement("li")).addClass("ind-iconitem").append($icon).append("<br>").append($label);
+    this._initItem($listItem, contentItem);
 
-		_renderContainer : function() {
-			return jQuery(document.createElement("ul")).addClass("ind-content ind-iconlist").click(this, function(evt) {
-				if(evt.toElement == this) evt.data.callback(null, 'clear');
-			});
-		},
+    return $listItem;
+  }
 
-		_renderItem : function(contentItem) {
-			var $icon = this._getIcon(contentItem);
-			var $label = jQuery(document.createElement("span")).addClass("ind-editable-name").html(contentItem.name);
-			var $listItem = jQuery(document.createElement("li")).addClass("ind-iconitem").append($icon).append("<br>").append($label);
-			this._initItem($listItem, contentItem);
-
-			return $listItem;
-		}	
-
-	});
+});
 
 
 /*
-	Displays content in a table with sortable columns
-*/
+ Displays content in a table with sortable columns
+ */
 function DetailContentRenderer() {
-	// Detail View
-	this.name = "Detail";
-	this.text = IndriIcons.ICON_DETAIL_VIEW;
+  // Detail View
+  this.name = "Detail";
+  this.text = IndriIcons.ICON_DETAIL_VIEW;
 }
 DetailContentRenderer.prototype = jQuery.extend({}, new ContentRenderer(), {
+  _renderContainer: function() {
+    var renderer = this;
+    var $tr = jQuery(document.createElement("tr"));
+    this._fieldNames.forEach(function(field, index) {
+      var $th = jQuery(document.createElement("th")).html(renderer._columnTitles[index]);
+      var sortCallback = function(evt) {
+        if (evt.target == this && evt.which == MouseButtons.BUTTON_LEFT) {
+          evt.data.browser.sorter.setSortField(field);
+        }
+      };
+      if (field != '') {
+        $th.click(this, sortCallback);
+      }
 
-		_renderContainer : function() {
-			var renderer = this;
-			var $tr = jQuery(document.createElement("tr"));
-			this._fieldNames.forEach(function(field, index) {
-				var $th = jQuery(document.createElement("th")).html(renderer._columnTitles[index]);
-				if(field != '') {
-					$th.click(this, function(evt){
-						if(evt.target == this && evt.which == MouseButtons.BUTTON_LEFT) {
-							evt.data.browser.sorter.setSortField(field);
-						}
-					});
-				}
+      // If this is the column we're sorting by, add the appropriate indicator
+      if (field == this.browser.sorter.fieldName) {
+        $th.addClass(this.browser.sorter.ascending ? "ind-col-sort-asc" : "ind-col-sort-desc");
+        $sortIndicator = jQuery(document.createElement("span")).addClass("ind-col-sort");
+        $sortIndicator.click(this, sortCallback);
+        if (this.browser.sorter.ascending) {
+          $sortIndicator.addClass("ind-col-sort entypo").html(IndriIcons.ICON_SORT_ASC);
+        }
+        else {
+          $sortIndicator.addClass("ind-col-sort entypo").html(IndriIcons.ICON_SORT_DESC);
+        }
 
-				// If this is the column we're sorting by, add the appropriate indicator
-				if(field == this.browser.sorter.fieldName) {
-					$th.addClass(this.browser.sorter.ascending ? "ind-col-sort-asc" : "ind-col-sort-desc");					
-					$sortIndicator = jQuery(document.createElement("span")).addClass("ind-col-sort");
-					if(this.browser.sorter.ascending) {
-						$sortIndicator.addClass("ind-col-sort entypo").html(IndriIcons.ICON_SORT_ASC);
-					}
-					else {
-						$sortIndicator.addClass("ind-col-sort entypo").html(IndriIcons.ICON_SORT_DESC);
-					}
+        $th.append($sortIndicator)
+      }
 
-					$th.append($sortIndicator)
-				}
+      $tr.append($th);
+    }, this);
 
-				$tr.append($th);
-			}, this);
+    return jQuery(document.createElement("table")).addClass("ind-content ind-detaillist")
+            .append(jQuery(document.createElement("thead")).append($tr));
+  },
+  _renderItem: function(contentItem) {
+    var $tr = jQuery(document.createElement("tr"));
 
-			return jQuery(document.createElement("table")).addClass("ind-content ind-detaillist")
-					.append(jQuery(document.createElement("thead")).append($tr));
-		},
+    $tr.append(jQuery(document.createElement("td")).append(this._getIcon(contentItem)));
+    var $label = jQuery(document.createElement("span")).addClass("ind-editable-name").html(contentItem.name);
+    if (contentItem.isCollection) {
+      $label.addClass("ind-detailitem-dirname");
+    }
+    $tr.append(jQuery(document.createElement("td")).append($label));
 
-		_renderItem : function(contentItem) {
-			var $tr = jQuery(document.createElement("tr"));
+    $tr.append(jQuery(document.createElement("td")).html(this._formatSize(contentItem.size)));
+    $tr.append(jQuery(document.createElement("td")).html(this._formatDate(contentItem.created)));
+    $tr.append(jQuery(document.createElement("td")).html(this._formatDate(contentItem.modified)));
+    this._initItem($tr, contentItem);
 
-			$tr.append(jQuery(document.createElement("td")).append(this._getIcon(contentItem)));
-			var $label = jQuery(document.createElement("span")).addClass("ind-editable-name").html(contentItem.name);
-			if(contentItem.isDir) {
-				$label.addClass("ind-detailitem-dirname");
-			}
-			$tr.append(jQuery(document.createElement("td")).append($label));
+    return $tr;
+  },
+  _formatName: function(contentFile) {
+    return contentFile.name;
+  },
+  _formatSize: function(size) {
+    if (!size) {
+      return "--";
+    }
 
-			$tr.append(jQuery(document.createElement("td")).html(this._formatSize(contentItem.size)));
-			$tr.append(jQuery(document.createElement("td")).html(this._formatDate(contentItem.created)));
-			$tr.append(jQuery(document.createElement("td")).html(this._formatDate(contentItem.modified)));
-			this._initItem($tr, contentItem);
+    if (size < 1024) {
+      return size + " " + ((size == 1) ? "byte" : "bytes");
+    }
+    else if (size < 1024 * 1024) {
+      return (size / 1024).toFixed(1) + " KB";
+    }
 
-			return $tr;
-		},
-
-		_formatName : function(contentFile) {
-			return contentFile.name;
-		},
-
-		_formatSize : function(size) {
-			if(!size) {
-				return "--";
-			}
-
-			if(size < 1024) {
-				return size + " " + ((size == 1) ? "byte" : "bytes");
-			}
-			else if(size < 1024 * 1024) {
-				return (size / 1024).toFixed(1) + " KB";
-			}
-
-			return (size / (1024 * 1024)).toFixed(1) + " MB";
-		},
-
-		_formatDate : function(timestamp) {
-			return timestamp ? new Date(timestamp).toDateString() : '--';
-		},
-
-		_fieldNames : [ "isDir", "name", "size", "created", "modified" ],
-		_columnTitles : [ "", "name", "size", "creation date", "last modified date" ],
-
-		dateFormatString : "yyyy-MM-dd, hh:mm ",
-	});
+    return (size / (1024 * 1024)).toFixed(1) + " MB";
+  },
+  _formatDate: function(timestamp) {
+    return timestamp ? new Date(timestamp).toDateString() : '--';
+  },
+  _fieldNames: ["isCollection", "name", "size", "created", "modified"],
+  _columnTitles: ["", "name", "size", "creation date", "last modified date"],
+  dateFormatString: "yyyy-MM-dd, hh:mm ",
+});
 ;/*
 	Standard location renderers
 */
 
 function splitPath(path, delimiter) {
 	var parts = [];
-	path.split(delimiter).forEach(function(item) {
+	path.toString().split(delimiter).forEach(function(item) {
 		if(item.length) {
 			parts.push(item);
 		}
@@ -419,111 +393,120 @@ function splitPath(path, delimiter) {
 	return parts;
 }
 
+//
+// Displays the string version of a location. Mostly meant for debugging
+//
 function StringLocationRenderer() {}
 StringLocationRenderer.prototype = jQuery.extend({}, {
-		render : function(elem, location) {
-			if(location) {
-				location = JSON.parse(location);
-			}
-
-			elem.html(location.toString());
+		render : function(fsItem) {      
+      fsItem = JSON.parse(fsItem.location);
+			return jQuery(document.createElement("span")).html(fsItem.toString());
 		},
 	});
 
 
+//
+// Displays a hierarchical path as a collection of breadbrumbs, allowing 
+// easy navigation to any parent location
+//
 function SegmentedLocationRenderer() {}
 SegmentedLocationRenderer.prototype = jQuery.extend({}, {
-		render : function($elem, location, callback) {
-			if(location) {
-				location = JSON.parse(location);
+		render : function(fsItem, navCallback) {
+			if(fsItem.location) {
+				fsItem = JSON.parse(fsItem.location);
 			}
 			else {
-				location = '/';
+				fsItem = IndriPaths.ROOT_PATH;
 			}
 
-			var parts = splitPath(location, '/');
+      var $panel = jQuery(document.createElement("div"));
 
-			$elem.empty();
+			var parts = splitPath(fsItem, IndriPaths.SEPARATOR);
 
 			// Handle the root path case
 			var isEmptyPath = (parts.length == 0);
 			var $rootAnchor = jQuery(document.createElement(isEmptyPath ? "span" : "a")).html("(root)").addClass('ind-location-segment');
 			// Only add the click handler to the root path if there weren't any other segments
 			if(!isEmptyPath) {
-				$rootAnchor.click(JSON.stringify('/'), function(evt) {
-					callback(evt.data);
+				$rootAnchor.click({ location: JSON.stringify(IndriPaths.ROOT_PATH)}, function(evt) {
+					navCallback(evt.data);
 				});
 			}
-			$elem.append($rootAnchor);
+			$panel.append($rootAnchor);
 
 			// Add each other path component
 			var fullPath = '';
 			parts.forEach(function(segment, index) {
-				$elem.append('<span class="ind-location-divider">&#62;</span>');
-				fullPath += '/' + segment;
+				$panel.append('<span class="ind-location-divider">&#62;</span>');
+				fullPath += IndriPaths.SEPARATOR + segment;
 
 				var isLastSegment = (index == parts.length - 1);
 				var $anchor = jQuery(document.createElement(isLastSegment ? "span" : "a")).html(segment).addClass('ind-location-segment');
 
 				// Only add a click handler if this isn't the last segment
 				if(!isLastSegment) {
-					$anchor.click(JSON.stringify(fullPath), function(evt) {
-						callback(evt.data);
+					$anchor.click({ location : JSON.stringify(fullPath) }, function(evt) {
+						navCallback(evt.data);
 					});
 				}
-				$elem.append($anchor);
+				$panel.append($anchor);
 			});
 
+			return $panel;
 		},
 	});
 
 
-// { bucket: bucket, key : key }
-
+//
+// Displays an Amazon S3 location as a collection of breadbrumbs much
+// like the SegmentedLocationRenderer. This renderer handles the bucket
+// component of the location.
+//
 function BucketLocationRenderer() {}
 BucketLocationRenderer.prototype = jQuery.extend({}, {
-		render : function($elem, location, callback) {
-			if(!location) {
+		render : function(fsItem, navCallback) {
+			if(!fsItem || !fsItem.location) {
 				return;
 			}
 
-			var bucketData = JSON.parse(location);
+			var bucketData = JSON.parse(fsItem.location);
 
-			var parts = splitPath(bucketData.key, '/');
+			var parts = splitPath(bucketData.key, IndriPaths.SEPARATOR);
 			var targetLocation = { bucket: bucketData.bucket, key : '' };
 			
-			$elem.empty();
+      var $panel = jQuery(document.createElement("div"));
 
 			// Create root link
 			var isEmptyPath = (parts.length == 0);
 			var $rootAnchor = jQuery(document.createElement(isEmptyPath ? "span" : "a")).html(bucketData.bucket).addClass('ind-location-segment');
 			if(!isEmptyPath) {
-				$rootAnchor.click(JSON.stringify(targetLocation), function(evt) {
-					callback(evt.data);
+				$rootAnchor.click({ location: JSON.stringify(targetLocation) }, function(evt) {
+					navCallback(evt.data);
 				});
 			}
-			$elem.append($rootAnchor);
+			$panel.append($rootAnchor);
 
-			$elem.append(' : ');
+			$panel.append(' : ');
 
 			// Add all other links
 			parts.forEach(function(segment, index) {
-				targetLocation.key += segment + '/';
+				targetLocation.key += segment + IndriPaths.SEPARATOR;
 
 				var isLastSegment = (index == parts.length - 1);
 				var $anchor = jQuery(document.createElement(isLastSegment ? "span" : "a")).html(segment).addClass('ind-location-segment');
 
 				// Only add a click handler if this isn't the last segment
 				if(!isLastSegment) {
-					$anchor.click(JSON.stringify(targetLocation), function(evt) {
-						callback(evt.data);
+					$anchor.click({ location: JSON.stringify(targetLocation) }, function(evt) {
+						navCallback(evt.data);
 					});
 				}
 				
-				$elem.append($anchor);
-				$elem.append(' / ');
+				$panel.append($anchor);
+				$panel.append(' / ');
 			});
 
+			return $panel;
 		},
 	});
 ;
@@ -561,91 +544,101 @@ FileBrowser.prototype = {
   filter: null,
   sorter: null,
   locationRenderer: null,
-  contentRenderer: null,
-  statusRenderer: null,
-  previewRenderer: null,
   shortcutsRenderer: null,
+  contentRenderer: null,
+  previewRenderer: null,
+  statusRenderer: null,
   resultCallback: null,
   nextClientId: 0,
+  
   /*
-   Primary API
+   * Primary API
    */
   navigateToRoot: function() {
-    this.fsm.getRootLocation(this._makeCallback(this.navigateToLocation), this._makeCallback(this._updateStatus));
+    var success = function(results) {
+      this.navigateToLocation(results.loc);
+    };
+    this.fsm.getRootLocation(this._makeCallback(success), this._makeCallback(this._updateStatus));
   },
+  
   navigateToLocation: function(location) {
-    var success = this._makeCallback(function(contents, status) {
-      this._updateLocation(location);
-      this._updateContents(contents, status);
+    var success = this._makeCallback(function(result, status) {
+      this._updateCurrentLocation(result.loc);
+      this._updateContents(result.contents, status);
     });
-    this.fsm.getContents(location, success, this._makeCallback(this._updateStatus));
+
+    this.fsm.getContents(location, success, this._makeCallback(this._updateStatus));    
   },
+  
   navigateRelative: function(direction) {
-    this.fsm.getRelativeLocation(this.currentLocation, direction, this._makeCallback(this.navigateToLocation));
+    this.fsm.getRelativeLocation(this.currentLocation, direction, this._makeCallback(function(results) {
+      this.navigateToLocation(results.loc);
+    }));
   },
+  
   clearSelection: function() {
     this.currentSelection.length = 0;
     this._selectionChanged();
   },
+  
   createFolder: function() {
-    var success = this._makeCallback(function(newContents, status) {
+    var success = this._makeCallback(function(results, status) {
+      var newContents = results.contents;
       this._modifyContents(newContents, false, status);
       this._beginEditingContentItem(newContents[0]);
     });
 
     this.fsm.createFolder(this.currentLocation, IndriText.NEW_FOLDER_TEXT, success, this._makeCallback(this._updateStatus));
   },
+  
   renameItem: function(contentItem, newName) {
-    var success = this._makeCallback(function(renamedContent, status) {
-      // Remove the file with the old name from the currentContents
-      this._modifyContents([contentItem], true, status);
-      this._modifyContents(renamedContent, false, status);
+    var success = this._makeCallback(function(results, status) {
+      this._modifyContents(results.contents, false, status);
     });
 
     this.fsm.renameItem(contentItem, newName, success, this._makeCallback(this._updateStatus));
   },
+  
   deleteSelected: function() {
-    var targets = this.currentSelection;
-    var success = this._makeCallback(function(deletedContents, status) {
-      this._modifyContents(targets, true, status);
+    var success = this._makeCallback(function(results, status) {
+      this._modifyContents(results.contents, true, status);
     });
     this.fsm.deleteItems(this.currentSelection, success, this._makeCallback(this._updateStatus));
-  },
+  },      
+  
   /*
-   Internal methods
+   * Internal methods
    */
-  _updateLocation: function(location) {
-    this.currentLocation = location;
+  _updateCurrentLocation: function(newLocation) {
+    this.currentLocation = newLocation;
 
     if (this.locationRenderer) {
-      this.locationRenderer.render(this._getUiElem(this.uiNames.location), this.currentLocation, this._makeCallback(this.navigateToLocation));
-    }
-    else {
-      this._getUiElem(this.uiNames.location).html(this.currentLocation);
+      this._getUiElem(this.uiNames.location).empty().append(
+        this.locationRenderer.render(this.currentLocation, this._makeCallback(this.navigateToLocation)));
     }
   },
+  
   _modifyContents: function(items, isDelete, status) {
     items.forEach(function(item) {
       if (isDelete)
         delete this.currentContents[item.clientId];
       else {
         // Set the clientId of the item if it is new
-        if (typeof item.clientId == 'undefined') {
+        if (!item.clientId) {
           item.clientId = this.nextClientId++;
         }
         this.currentContents[item.clientId] = item;
       }
-
     }, this);
 
     this.currentSelection.length = 0;
     if (!isDelete)
       this.currentSelection.push(items[0]);
 
-
     this._populateContentUI();
     this._updateStatus(status);
   },
+  
   _updateContents: function(contents, status) {
     this.currentContents = {};
     this.nextClientId = 0;
@@ -658,6 +651,7 @@ FileBrowser.prototype = {
     this._populateContentUI();
     this._updateStatus(status);
   },
+  
   _populateContentUI: function() {
     // apply filter and sorter
     var contents = [];
@@ -670,29 +664,42 @@ FileBrowser.prototype = {
     this._getUiElem(this.uiNames.contentsPanel).empty().append(this.contentRenderer.render(contents, this._makeCallback(this._handleContentEvent)));
     this._selectionChanged();
   },
+  
   _handleContentEvent: function(contentItem, evt, newName) {
+
+    // Using both meta (Mac command key) and ctrl key (Windows) as a temporary
+    // solution.
+    // How do you get the meta key to fire on Windows?
+    var multipleSelectKey = evt.metaKey || evt.ctrlKey;
+
     if (evt == "clear") {
       this.clearSelection();
     }
     else if (evt == "rename") {
       this.renameItem(contentItem, newName);
     }
+    else if (evt == "refocus") {
+      // Do nothing, it will automatically be refocused below
+    }
     else if (evt.type == "dblclick") {
-      if (contentItem.isDir) {
-        this.navigateToLocation(contentItem.location);
+      if (contentItem.isCollection) {
+        this.navigateToLocation(contentItem);
       }
       else {
-        this._applySelectionToItem(contentItem, evt.metaKey);
+        this._applySelectionToItem(contentItem, multipleSelectKey);
         this._returnResults(true);
       }
     }
     else if (evt.type == "click") {
-      this._applySelectionToItem(contentItem, evt.metaKey);
+      this._applySelectionToItem(contentItem, multipleSelectKey);
     }
+    
+    // Re-focus the focusTextbox so that key presses can be detected
+    this._setDialogFocus();
   },
+  
+  // Handle dialog-level key events
   _handleKeyEvent: function(evt) {
-    // TODO 2
-
     // catch "delete" evt
     if (evt == "delete") {
 
@@ -704,16 +711,25 @@ FileBrowser.prototype = {
     else if (evt == "enter") {
       var contentItem = this.currentSelection[0];
       if (contentItem) {
-        if (contentItem.isDir) {
-          this.navigateToLocation(contentItem.location);
+        
+        // Navigate to the directory if directories cannot be in the results
+        if (!this.allowDirsInResults && contentItem.isCollection) {
+          this.navigateToLocation(contentItem);
         }
         else {
-          this._applySelectionToItem(contentItem, evt.metaKey);
           this._returnResults(true);
         }
       }
+      
+      // If not item is selected and you can select directories or the user
+      // entered a custom file name
+      else if(this.allowDirsInResults || this.hasCustomFilename) {
+        // Return the current directory by default
+        this._returnResults(true);
+      }
     }
   },
+  
   _beginEditingContentItem: function(contentItem) {
     if (!contentItem && this.currentSelection.length) {
       contentItem = this.currentSelection[0];
@@ -723,6 +739,7 @@ FileBrowser.prototype = {
       this.contentRenderer.editItem(contentItem);
     }
   },
+  
   _updateShortcuts: function(callback) {
     if (!callback) {
       callback = this._makeCallback(this._populateShortcuts);
@@ -731,20 +748,21 @@ FileBrowser.prototype = {
     this.shortcuts = [];
     this.fsm.getShortcuts(callback, this._makeCallback(this._updateStatus));
   },
-  _populateShortcuts: function(shortcuts) {
+  
+  _populateShortcuts: function(results) {
     if (this.shortcutsRenderer) {
       this._getUiElem(this.uiNames.shortcutsPanel).empty().append(
-              this.shortcutsRenderer.render(shortcuts, this._makeCallback(this.navigateToLocation)));
+              this.shortcutsRenderer.render(results.contents, this._makeCallback(this.navigateToLocation)));
     }
   },
+  
   _updateStatus: function(status) {
     if (this.statusRenderer) {
-      this.statusRenderer.render(this._getUiElem(this.uiNames.status), status);
-    }
-    else {
-      this._getUiElem(this.uiNames.status).html(status);
+      this._getUiElem(this.uiNames.status).empty().append(
+        this.statusRenderer.render(status));
     }
   },
+  
   // Component callbacks/support
   _setRenderer: function(renderer) {
     this.contentRenderer = renderer;
@@ -754,8 +772,9 @@ FileBrowser.prototype = {
 
     this._populateContentUI();
   },
+  
   _applySelectionToItem: function(contentItem, metaKey) {
-    var includeInSelection = this.allowItemSelection || contentItem.isDir;
+    var includeInSelection = this.allowItemSelection || contentItem.isCollection;
 
     // See if the item is already in the selection
     var index = jQuery.inArray(contentItem, this.currentSelection);
@@ -783,6 +802,7 @@ FileBrowser.prototype = {
     // Pass the contentItem if we didn't add it to the selection list
     this._selectionChanged(includeInSelection ? null : contentItem);
   },
+  
   // Take a parameter and include it in the text field content
   _selectionChanged: function(unincludedItem) {
     // Have the content renderer update the content area
@@ -791,66 +811,101 @@ FileBrowser.prototype = {
     // Fill in the selected names
     var filenameText = '';
     var prefix = '';
+    
+    var indriMain = this;
 
     this.currentSelection.forEach(function(selectedItem) {
-      filenameText += prefix + selectedItem.name;
-      prefix = ';';
+      if(indriMain.allowDirsInResults || !selectedItem.isCollection) {
+        filenameText += prefix + selectedItem.name;
+        prefix = ';';
+      }
     });
     if (unincludedItem) {
-      filenameText += prefix + unincludedItem.name;
+      if(indriMain.allowDirsInResults || !unincludedItem.isCollection) {
+        filenameText += prefix + unincludedItem.name;
+      }
     }
-
-    this._getUiElem(this.uiNames.filename).val(filenameText);
+    
+    // If there is a new filename string (i.e. the
+    // user selected something) or there is no custom file name
+    if(filenameText.length > 0 || !this.hasCustomFilename) {
+      // Set / clear the filename
+      this._getUiElem(this.uiNames.filename).val(filenameText);
+      this.hasCustomFilename = false;
+    }
 
     // Enabled/disable the buttons
     this._setEnabled(this.uiNames.delete, this.currentSelection.length != 0);
     this._setEnabled(this.uiNames.rename, this.currentSelection.length == 1);
-    this._setEnabled(this.uiNames.accept, (this._getResults().length != 0) || unincludedItem);
+    
+    this._changeAcceptState(unincludedItem);
 
     if (this.previewRenderer) {
       this._getUiElem(this.uiNames.previewWrapper).empty().append(this.previewRenderer.render(this.currentSelection));
     }
   },
+          
+  _setDialogFocus: function() {
+    this._getUiElem(this.uiNames.focusTextbox).focus();
+  },
+  
+  _changeAcceptState: function(unincludedItem) {
+    this._setEnabled(this.uiNames.accept, (this._getResults().length != 0) || (unincludedItem && !unincludedItem.isCollection) || this._getUiElem(this.uiNames.filename).val() != '' || this.allowDirsInResults);
+  },
+            
   _filterChanged: function() {
     this.currentSelection.length = 0;
     this._populateContentUI();
   },
+  
   _applyFilter: function(items) {
     return this.filter ? this.filter.apply(items) : items;
   },
+  
   _sortChanged: function() {
     this._populateContentUI();
   },
+  
   _applySorter: function(items) {
     return this.sorter ? this.sorter.apply(items) : items;
   },
+  
   _makeCallback: function(callback) {
     var fileBrowser = this;
     return function() {
       return callback.apply(fileBrowser, arguments);
     }
   },
+  
   // Get results set from current selection
   _getResults: function() {
     var results = [];
     this.currentSelection.forEach(function(selectedItem) {
-      if (this.allowDirsInResults || !selectedItem.isDir) {
+      if (this.allowDirsInResults || !selectedItem.isCollection) {
         results.push(selectedItem);
       }
     }, this);
     return results;
   },
+  
   _returnResults: function(returnValue) {
+    var results = this._getResults();
+    
+    // If the current directory can be selected and nothing has been selected by the user
+    if (results.length == 0 && this.allowDirsInResults) {
+      results.push(this.currentLocation);
+    }
+
     this.resultCallback({
       success: returnValue,
       location: this.currentLocation,
-      selection: this._getResults(),
+      selection: results,
       filename: this._getUiElem(this.uiNames.filename).val()
     });
   },
+  
   // Initialization methods
   _initialize: function(initializer) {
-    var indriMain = this;
     if (!initializer) {
       initializer = new this.DefaultInitializer();
     }
@@ -882,6 +937,8 @@ FileBrowser.prototype = {
 
     this._initializeFiltering(initializer.filter);
     this._initializeViews(initializer.viewFactory);
+    
+    this.hasCustomFilename = false;
 
     // Standard event handlers
     var fileBrowser = this;
@@ -897,16 +954,36 @@ FileBrowser.prototype = {
         fileBrowser.clearSelection();
       }
     });
-    // Update the accept button enabled state when the user types in the filename field
-    this._getUiElem(this.uiNames.filename).keyup(function() {
-      console.log(jQuery(this).val());
-      fileBrowser._setEnabled(fileBrowser.uiNames.accept, (fileBrowser._getResults().length != 0) || (jQuery(this).val() != ''));
-    });
-    
+
+    // Update the accept button enabled state when the user types in the
+    // filename field
+    this._getUiElem(this.uiNames.filename).keyup(function(evt) {
+      
+      var filenameLength = fileBrowser._getUiElem(this).val().length;
+      
+      // If filename is not empty, the user entered a custom filename
+      if(filenameLength > 0 && !fileBrowser.hasCustomFilename) {
+        fileBrowser.hasCustomFilename = true;
+      }
+      
+      // Otherwise, there is no custom filename
+      else if(filenameLength == 0 && fileBrowser.hasCustomFilename) {
+        fileBrowser.hasCustomFilename = false;
+      }
+      fileBrowser._changeAcceptState();
+      
+      // If the user presses Enter and there is a file name
+      if(filenameLength > 0 && evt.which == (KeyEvent.KEYCODE_ENTER || KeyEvent.DOM_VK_RETURN)) {
+        
+        // Return the results
+        fileBrowser._returnResults(true);
+      }
+    });    
+
     this._getUiElem(this.uiNames.filename).blur(function() {
-      jQuery(indriMain._getUiElem(indriMain.uiNames.focusTextbox)).focus();
+      fileBrowser._setDialogFocus();
     });
-    
+
     this._getUiElem(this.uiNames.preview).click(function() {
       fileBrowser._toggleVisible(fileBrowser.uiNames.previewWrapper);
     });
@@ -923,15 +1000,18 @@ FileBrowser.prototype = {
       fileBrowser._beginEditingContentItem();
     });
     this._getUiElem(this.uiNames.accept).click(function() {
-      fileBrowser._returnResults(true);
+      if(jQuery(this).attr('disabled') != 'disabled') {
+        fileBrowser._returnResults(true);
+      }
     });
     this._getUiElem(this.uiNames.cancel).click(function() {
       fileBrowser._returnResults(false);
     });
 
     if (initializer.visibility['shortcutsPanel']) {
-      this._updateShortcuts(this._makeCallback(function(shortcuts) {
-        this._populateShortcuts(shortcuts);
+      this._updateShortcuts(this._makeCallback(function(results) {
+        var shortcuts = results.contents
+        this._populateShortcuts(results);
         if (shortcuts.length > 0) {
           this.navigateToLocation(shortcuts[0].location);
         } else {
@@ -944,16 +1024,21 @@ FileBrowser.prototype = {
     }
 
     // Bind key handler
-    jQuery(jQuery("#indriui").parent()).on("keydown", this, initializer.viewFactory.views[0].keyHandler);
-    
-    jQuery(this.uiNames.focusTextbox).focus();
+    this.rootElem.on("keydown", this, initializer.viewFactory.views[0].keyHandler);
 
-    jQuery(indriMain.uiNames.contentsPanel + ', ' + indriMain.uiNames.headerWrapper).click(function() {
-      jQuery(indriMain.uiNames.focusTextbox).focus();
+    // Set up focus on the file browser
+    jQuery( document.activeElement ).blur();
+    this._setDialogFocus();
+
+    // Focus the file browser if it is clicked anywhere besides the bottom panel
+    this._getUiElem(this.uiNames.contentsPanel + ', ' 
+           + this.uiNames.headerWrapper + ', ' 
+           + this.uiNames.shortcutsPanel + ', ' 
+           + this.uiNames.previewWrapper).click(function() {
+      fileBrowser._setDialogFocus();
     });
-
-
   },
+  
   _initializeFiltering: function(filter) {
     // set the data member
     this.filter = filter;
@@ -961,11 +1046,13 @@ FileBrowser.prototype = {
     // add selector to the dom
     this._getUiElem(this.uiNames.filter).empty().append(this.filter.render(this._makeCallback(this._filterChanged)));
   },
+  
   _initializeViews: function(viewFactory) {
     viewFactory.render(this._makeCallback(function(view) {
       this._setRenderer(view);
     }), this._getUiElem(this.uiNames.viewsPanel));
   },
+  
   // UI Accessors
   uiNames: {
     title: '#title-control',
@@ -991,9 +1078,11 @@ FileBrowser.prototype = {
     cancel: '#cancel-control',
     focusTextbox: '#ind-focus-textbox'
   },
+  
   _getUiElem: function(name) {
     return this.rootElem.find(name);
   },
+  
   _setVisible: function(name, isVisible) {
     var displayMode = isVisible ? '' : 'none';
     this._getUiElem(name).css('display', displayMode);
@@ -1023,9 +1112,11 @@ FileBrowser.prototype = {
       this._getUiElem(this.uiNames.filenameLabel).css('display', displayMode);
     }
   },
+  
   _toggleVisible: function(name) {
     this._setVisible(name, this._getUiElem(name).css('display') == 'none');
   },
+  
   _setEnabled: function(name, isEnabled) {
     var $uiElem = this._getUiElem(name);
 
@@ -1042,11 +1133,13 @@ FileBrowser.prototype = {
 
 
 FileBrowser.prototype.DefaultInitializer = {
+    
   texts: {
     title: "FileChooser",
     accept: "OK",
     cancel: "Cancel",
   },
+  
   visibility: {
     previewWrapper: false,
     shortcutsPanel: false,
@@ -1056,13 +1149,18 @@ FileBrowser.prototype.DefaultInitializer = {
     filename: false,
     filter: false,
   },
+  
   directoriesOnly: false,
+  
   allowMultipleSelection: false,
   // fileMustExist : false,
 
   sorter: {
+    
     fieldName: "name",
+    
     ascending: true,
+    
     apply: function(items) {
       if (this.fieldName) {
         var fieldName = this.fieldName;
@@ -1091,6 +1189,7 @@ FileBrowser.prototype.DefaultInitializer = {
 
       return items;
     },
+    
     setSortField: function(fieldName) {
       if (this.fieldName == fieldName) {
         this.ascending = !this.ascending;
@@ -1100,10 +1199,11 @@ FileBrowser.prototype.DefaultInitializer = {
         this.ascending = true;
       }
 
-      // TODO  Hmmm...not pleased with this
+      // TODO Hmmm...not pleased with this
       this.browser._sortChanged();
     }
   },
+  
   filter: {
     options: [
       {value: ".*", text: "All files (*.*)"},
@@ -1112,11 +1212,12 @@ FileBrowser.prototype.DefaultInitializer = {
     apply: function(items) {
       var filter = this._selectedFilter;
       var filteredItems = items.filter(function(item) {
-        return item.isDir || item.name.match(filter);
+        return item.isCollection || item.name.match(filter);
       }, this.options);
 
       return filteredItems;
     },
+    
     render: function(callback) {
       // create selector
       var $select = jQuery(document.createElement("select")).attr("id", "filterSelector")
@@ -1137,10 +1238,13 @@ FileBrowser.prototype.DefaultInitializer = {
       return $select;
     }
   },
+  
   viewFactory: {
+    
     views: [
       new ListContentRenderer(),
     ],
+    
     render: function(callback, container) {
       if (container) {
         container.empty();
@@ -1151,7 +1255,7 @@ FileBrowser.prototype.DefaultInitializer = {
 
       var btnId = 0;
       this.views.forEach(function(view) {
-        var $anchor = jQuery(document.createElement("a")).addClass('ind-viewbutton entypo ind-btn').attr('id', 'ind-viewbutton-' + btnId);
+        var $anchor = jQuery(document.createElement("a")).addClass('ind-viewbutton entypo ind-btn').attr('id', 'ind-viewbutton-' + btnId).attr('title', view.name);
         $anchor.click($anchor, function(evt) {
           jQuery('.ind-viewbutton').removeClass('ind-btn-active');
           jQuery(evt.data).addClass('ind-btn-active');
@@ -1182,14 +1286,18 @@ FileBrowser.prototype.DefaultInitializer = {
       return container;
     }
   },
+  
   locationRenderer: new StringLocationRenderer(),
+  
   statusRenderer: {
-    render: function(elem, status) {
-      elem.html("<strong>" + status + "</strong>");
+    render: function(status) {
+      return jQuery(document.createElement("span")).html("<strong>" + status.toString() + "</strong>");
     }
   },
+  
   previewRenderer: {
     render: function(selection) {
+      
       if (selection.length == 0) {
         return jQuery(document.createElement("span")).html("No items selected");
       }
@@ -1203,9 +1311,11 @@ FileBrowser.prototype.DefaultInitializer = {
         return jQuery(document.createElement("img")).attr("src", selection[0].previewUrl);
       }
     },
+    
   },
+  
   shortcutsRenderer: {
-    render: function(shortcuts, callback) {
+    render: function(shortcuts, navCallback) {
       var $listContainer = jQuery(document.createElement("ul")).addClass("ind-shortcut-list");
       shortcuts.forEach(function(shortcut) {
         var $label = jQuery(document.createElement("span")).addClass("ind-shortcut-name").html(shortcut.name);
@@ -1215,26 +1325,28 @@ FileBrowser.prototype.DefaultInitializer = {
             jQuery(".ind-shortcut-item").removeClass("ind-shortcut-selected");
             jQuery(evt.data).addClass("ind-shortcut-selected");
 
-            callback(shortcut.location);
+            navCallback(shortcut.location);
           }
         });
+
         $listContainer.append($listItem);
       });
+
       return $listContainer;
     }
   },
-  resultCallback: function(results) {
-    console.log(results);
-  }
 };
 
 FileBrowser.prototype.DebugDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
+  
   allowItemSelection: true,
   allowMultipleSelection: true,
   allowDirsInResults: false,
+  
   texts: {
     title: "Test Dialog",
   },
+  
   visibility: {
     previewWrapper: true,
     shortcutsPanel: true,
@@ -1247,17 +1359,22 @@ FileBrowser.prototype.DebugDialogInitializer = jQuery.extend(true, {}, FileBrows
 });
 
 FileBrowser.prototype.SaveDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
-  // This combination copies item names to the text field on selection, but doesn't
-  // maintain the selection in the ui. Whatever text ends up in the text field is what 
+  
+  // This combination copies item names to the text field on selection, but
+  // doesn't
+  // maintain the selection in the ui. Whatever text ends up in the text field
+  // is what
   // we use to build the result
   allowItemSelection: false,
   allowMultipleSelection: false,
   allowDirsInResults: false,
+  
   texts: {
     title: "Save File",
     accept: "Save",
     cancel: "Cancel",
   },
+  
   visibility: {
     previewWrapper: false,
     shortcutsPanel: false,
@@ -1270,10 +1387,12 @@ FileBrowser.prototype.SaveDialogInitializer = jQuery.extend(true, {}, FileBrowse
 
 
 FileBrowser.prototype.OpenDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
+  
   // Let the user select any number of existing items
   allowItemSelection: true,
   allowMultipleSelection: true,
   allowDirsInResults: false,
+  
   texts: {
     title: "Open File(s)",
     accept: "Open",
@@ -1286,17 +1405,19 @@ FileBrowser.prototype.OpenDialogInitializer = jQuery.extend(true, {}, FileBrowse
   },
 });
 
-// TODO hide the filename, and add a filter to only show folders
 FileBrowser.prototype.DestinationDialogInitializer = jQuery.extend(true, {}, FileBrowser.prototype.DefaultInitializer, {
-  // Let the user select one director
+  
+  // Let the user select one directory
   allowItemSelection: false,
   allowMultipleSelection: false,
   allowDirsInResults: true,
+  
   texts: {
     title: "Select Target Folder",
     accept: "Select",
     cancel: "Cancel",
   },
+  
   visibility: {
     previewWrapper: false,
     shortcutsPanel: true,
@@ -1306,18 +1427,21 @@ FileBrowser.prototype.DestinationDialogInitializer = jQuery.extend(true, {}, Fil
     filename: false,
     newFolder: true
   },
-  // Put custom filter object here.  Must have apply & render methods.
-  //   - render would be empty (don't need to show since we are only showing directories, no options there...)
-  //   - apply -> if isDir, then keep, otherwise discard
+  
+  // Put custom filter object here. Must have apply & render methods.
+  // - render would be empty (don't need to show since we are only showing
+  // directories, no options there...)
+  // - apply -> if isCollection, then keep, otherwise discard
 
   filter: {
     apply: function(items) {
       var filteredItems = items.filter(function(item) {
-        return item.isDir;
+        return item.isCollection;
       });
 
       return filteredItems;
     },
+    
     render: function() {
       // Do not need to render anything.
     }
