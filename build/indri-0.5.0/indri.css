@@ -452,38 +452,33 @@ a:hover .entypo {
 #preview-wrapper {
   top: 100px;
   bottom: 90px;
+  overflow: auto;
 }
 
-/* line 22, modules/_contents_panel.scss */
+/* line 23, modules/_contents_panel.scss */
 #shortcuts-wrapper,
 #preview-wrapper {
   position: absolute;
   width: 300px;
-  overflow-y: scroll;
 }
 
 /* Content Window */
 /* line 29, modules/_contents_panel.scss */
-#contents-wrapper {
-  overflow: auto;
-}
-
-/* line 32, modules/_contents_panel.scss */
 #contents-panel {
   height: 100%;
 }
 
-/* line 37, modules/_contents_panel.scss */
+/* line 34, modules/_contents_panel.scss */
 .ind-content {
   /* Truncates text. Width needs to be set to work properly */
 }
-/* line 38, modules/_contents_panel.scss */
+/* line 35, modules/_contents_panel.scss */
 .ind-content span {
   display: inline-block;
   zoom: 1;
   *display: inline;
 }
-/* line 43, modules/_contents_panel.scss */
+/* line 40, modules/_contents_panel.scss */
 .ind-content li {
   width: 33.333%;
   overflow: hidden;
@@ -493,20 +488,20 @@ a:hover .entypo {
   This is dependent on the width of each LI being 33%. 
   If it is changed to 25%, everything 9th element needs to be implemented. */
 }
-/* line 48, modules/_contents_panel.scss */
+/* line 45, modules/_contents_panel.scss */
 .ind-content li span:hover {
   cursor: default;
   /* Remove text cursor - Add to mobile */
 }
-/* line 56, modules/_contents_panel.scss */
+/* line 53, modules/_contents_panel.scss */
 .ind-content li:nth-child(6n+1), .ind-content li:nth-child(6n+2), .ind-content li:nth-child(6n+3) {
   background: whitesmoke;
 }
-/* line 60, modules/_contents_panel.scss */
+/* line 57, modules/_contents_panel.scss */
 .ind-content tr:nth-child(odd) {
   background: whitesmoke;
 }
-/* line 63, modules/_contents_panel.scss */
+/* line 60, modules/_contents_panel.scss */
 .ind-content .ind-editable-name {
   white-space: nowrap;
   overflow: hidden;
@@ -516,47 +511,47 @@ a:hover .entypo {
   letter-spacing: 0.02em;
   vertical-align: middle;
 }
-/* line 72, modules/_contents_panel.scss */
+/* line 69, modules/_contents_panel.scss */
 .ind-content .ind-content-selected {
   background: #55b7ce !important;
 }
-/* line 74, modules/_contents_panel.scss */
+/* line 71, modules/_contents_panel.scss */
 .ind-content .ind-content-selected td, .ind-content .ind-content-selected .ind-editable-name, .ind-content .ind-content-selected .entypo {
   color: white !important;
 }
-/* line 77, modules/_contents_panel.scss */
+/* line 74, modules/_contents_panel.scss */
 .ind-content .ind-content-selected .ind-icon-folder {
   color: #e8aa50 !important;
 }
-/* line 80, modules/_contents_panel.scss */
+/* line 77, modules/_contents_panel.scss */
 .ind-content .ind-content-selected:hover {
   background: #7dc8d9 !important;
 }
 
-/* line 86, modules/_contents_panel.scss */
+/* line 83, modules/_contents_panel.scss */
 table tr.even, table tr.alt, table tr:nth-of-type(even) {
   background: white;
 }
 
 /* --- List View --- */
-/* line 91, modules/_contents_panel.scss */
+/* line 88, modules/_contents_panel.scss */
 .ind-listitem {
   padding: 5px;
 }
-/* line 93, modules/_contents_panel.scss */
+/* line 90, modules/_contents_panel.scss */
 .ind-listitem:hover {
   background: #cce9f0 !important;
   color: #1e1e1e !important;
 }
-/* line 96, modules/_contents_panel.scss */
+/* line 93, modules/_contents_panel.scss */
 .ind-listitem:hover .entypo {
   color: #1e1e1e;
 }
-/* line 99, modules/_contents_panel.scss */
+/* line 96, modules/_contents_panel.scss */
 .ind-listitem:hover .ind-icon-folder {
   color: #e8aa50 !important;
 }
-/* line 103, modules/_contents_panel.scss */
+/* line 100, modules/_contents_panel.scss */
 .ind-listitem .ind-editable-name {
   margin: 0 0 0 5px;
   top: -4px;
@@ -565,33 +560,33 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
 }
 
 /* --- Thumbnail View --- */
-/* line 113, modules/_contents_panel.scss */
+/* line 110, modules/_contents_panel.scss */
 .ind-iconlist li {
   padding: 10px 10px 20px;
   text-align: center;
 }
 
-/* line 118, modules/_contents_panel.scss */
+/* line 115, modules/_contents_panel.scss */
 .ind-iconitem:hover {
   background: #cce9f0 !important;
   color: #1e1e1e;
 }
-/* line 121, modules/_contents_panel.scss */
+/* line 118, modules/_contents_panel.scss */
 .ind-iconitem:hover .entypo {
   color: #1e1e1e;
 }
-/* line 124, modules/_contents_panel.scss */
+/* line 121, modules/_contents_panel.scss */
 .ind-iconitem:hover .ind-icon-folder {
   color: #e8aa50;
 }
 
 /* --- Detail/Table View --- */
-/* line 133, modules/_contents_panel.scss */
+/* line 130, modules/_contents_panel.scss */
 .ind-detaillist {
   width: 100%;
   border: none;
 }
-/* line 136, modules/_contents_panel.scss */
+/* line 133, modules/_contents_panel.scss */
 .ind-detaillist th {
   text-transform: uppercase;
   text-align: left;
@@ -601,36 +596,36 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
   color: #1e1e1e;
   border-left: 1px solid white;
 }
-/* line 144, modules/_contents_panel.scss */
+/* line 141, modules/_contents_panel.scss */
 .ind-detaillist th:hover {
   background: #cce9f0;
   color: #1e1e1e;
 }
-/* line 148, modules/_contents_panel.scss */
+/* line 145, modules/_contents_panel.scss */
 .ind-detaillist th:first-child {
   border-left: none;
 }
-/* line 152, modules/_contents_panel.scss */
+/* line 149, modules/_contents_panel.scss */
 .ind-detaillist tr {
   background: white;
 }
-/* line 154, modules/_contents_panel.scss */
+/* line 151, modules/_contents_panel.scss */
 .ind-detaillist tr:hover {
   background: #cce9f0 !important;
 }
-/* line 156, modules/_contents_panel.scss */
+/* line 153, modules/_contents_panel.scss */
 .ind-detaillist tr:hover td {
   color: #1e1e1e;
 }
-/* line 158, modules/_contents_panel.scss */
+/* line 155, modules/_contents_panel.scss */
 .ind-detaillist tr:hover td .ind-icon-file {
   color: #1e1e1e;
 }
-/* line 161, modules/_contents_panel.scss */
+/* line 158, modules/_contents_panel.scss */
 .ind-detaillist tr:hover td .ind-icon-folder {
   color: #e8aa50;
 }
-/* line 166, modules/_contents_panel.scss */
+/* line 163, modules/_contents_panel.scss */
 .ind-detaillist tr td {
   padding: 0 10px;
   height: 32px;
@@ -638,26 +633,26 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
   vertical-align: middle;
   color: #1e1e1e;
 }
-/* line 171, modules/_contents_panel.scss */
+/* line 168, modules/_contents_panel.scss */
 .ind-detaillist tr td:first-child {
   width: 40px;
   text-align: center;
 }
 
 /* Table Sort */
-/* line 183, modules/_contents_panel.scss */
+/* line 180, modules/_contents_panel.scss */
 th.ind-col-sort-asc,
 th.ind-col-sort-desc {
   background: #55b7ce !important;
   color: white;
 }
-/* line 186, modules/_contents_panel.scss */
+/* line 183, modules/_contents_panel.scss */
 th.ind-col-sort-asc:hover,
 th.ind-col-sort-desc:hover {
   background: #7dc8d9 !important;
 }
 
-/* line 190, modules/_contents_panel.scss */
+/* line 187, modules/_contents_panel.scss */
 .ind-col-sort {
   display: inline-block;
   zoom: 1;

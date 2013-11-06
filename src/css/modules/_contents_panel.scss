@@ -16,19 +16,16 @@
 #contents-wrapper,
 #preview-wrapper  { 
   top: 100px; 
-  bottom: 90px; 
+  bottom: 90px;
+  overflow: auto; 
 }
 #shortcuts-wrapper,
 #preview-wrapper  { 
   position: absolute; 
   width: 300px;
-  overflow-y: scroll; 
 }
 
 /* Content Window */
-#contents-wrapper { 
-  overflow: auto; 
-}
 #contents-panel { 
   height: 100%;
 }
